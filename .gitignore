@@ -1,0 +1,7 @@
+# Firebase cache y logs
+.firebase/
+firebase-debug.log*
+
+# Dependencias (por si en el futuro usamos npm)
+node_modules/
+.env
