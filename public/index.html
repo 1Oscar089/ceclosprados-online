@@ -1,89 +1,695 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Welcome to Firebase Hosting</title>
-
-    <!-- update the version number as needed -->
-    <script defer src="/__/firebase/12.13.0/firebase-app-compat.js"></script>
-    <!-- include only the Firebase features as you need -->
-    <script defer src="/__/firebase/12.13.0/firebase-auth-compat.js"></script>
-    <script defer src="/__/firebase/12.13.0/firebase-database-compat.js"></script>
-    <script defer src="/__/firebase/12.13.0/firebase-firestore-compat.js"></script>
-    <script defer src="/__/firebase/12.13.0/firebase-functions-compat.js"></script>
-    <script defer src="/__/firebase/12.13.0/firebase-messaging-compat.js"></script>
-    <script defer src="/__/firebase/12.13.0/firebase-storage-compat.js"></script>
-    <script defer src="/__/firebase/12.13.0/firebase-analytics-compat.js"></script>
-    <script defer src="/__/firebase/12.13.0/firebase-remote-config-compat.js"></script>
-    <script defer src="/__/firebase/12.13.0/firebase-performance-compat.js"></script>
-    <!-- 
-      initialize the SDK after all desired features are loaded, set useEmulator to false
-      to avoid connecting the SDK to running emulators.
-    -->
-    <script defer src="/__/firebase/init.js?useEmulator=true"></script>
-
-    <style media="screen">
-      body { background: #ECEFF1; color: rgba(0,0,0,0.87); font-family: Roboto, Helvetica, Arial, sans-serif; margin: 0; padding: 0; }
-      #message { background: white; max-width: 360px; margin: 100px auto 16px; padding: 32px 24px; border-radius: 3px; }
-      #message h2 { color: #ffa100; font-weight: bold; font-size: 16px; margin: 0 0 8px; }
-      #message h1 { font-size: 22px; font-weight: 300; color: rgba(0,0,0,0.6); margin: 0 0 16px;}
-      #message p { line-height: 140%; margin: 16px 0 24px; font-size: 14px; }
-      #message a { display: block; text-align: center; background: #039be5; text-transform: uppercase; text-decoration: none; color: white; padding: 16px; border-radius: 4px; }
-      #message, #message a { box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24); }
-      #load { color: rgba(0,0,0,0.4); text-align: center; font-size: 13px; }
-      @media (max-width: 600px) {
-        body, #message { margin-top: 0; background: white; box-shadow: none; }
-        body { border-top: 16px solid #ffa100; }
-      }
-    </style>
-  </head>
-  <body>
-    <div id="message">
-      <h2>Welcome</h2>
-      <h1>Firebase Hosting Setup Complete</h1>
-      <p>You're seeing this because you've successfully setup Firebase Hosting. Now it's time to go build something extraordinary!</p>
-      <a target="_blank" href="https://firebase.google.com/docs/hosting/">Open Hosting Documentation</a>
-    </div>
-    <p id="load">Firebase SDK Loading&hellip;</p>
-
-    <script>
-      document.addEventListener('DOMContentLoaded', function() {
-        const loadEl = document.querySelector('#load');
-        // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
-        // // The Firebase SDK is initialized and available here!
-        //
-        // firebase.auth().onAuthStateChanged(user => { });
-        // firebase.database().ref('/path/to/ref').on('value', snapshot => { });
-        // firebase.firestore().doc('/foo/bar').get().then(() => { });
-        // firebase.functions().httpsCallable('yourFunction')().then(() => { });
-        // firebase.messaging().requestPermission().then(() => { });
-        // firebase.storage().ref('/path/to/ref').getDownloadURL().then(() => { });
-        // firebase.analytics(); // call to activate
-        // firebase.analytics().logEvent('tutorial_completed');
-        // firebase.performance(); // call to activate
-        //
-        // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
-
-        try {
-          let app = firebase.app();
-          let features = [
-            'auth', 
-            'database', 
-            'firestore',
-            'functions',
-            'messaging', 
-            'storage', 
-            'analytics', 
-            'remoteConfig',
-            'performance',
-          ].filter(feature => typeof app[feature] === 'function');
-          loadEl.textContent = `Firebase SDK loaded with ${features.join(', ')}`;
-        } catch (e) {
-          console.error(e);
-          loadEl.textContent = 'Error loading the Firebase SDK, check the console.';
+<html lang="es" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Portal de Acceso | C.E. Cantón Los Prados</title>
+    
+    <!-- Boxicons para Iconografía Inmersiva -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/boxicons/2.1.4/css/boxicons.min.css" rel="stylesheet">
+    
+    <style>
+        /* =========================================================================
+           SISTEMA DE DISEÑO AVANZADO: "CYBER-BENTO GLASS" (Modo Inmersivo)
+           ========================================================================= */
+        :root {
+            /* VIBRANT LIGHT MODE */
+            --bg-base: #EEF2F6;
+            --bg-mesh-1: #E0E7FF;
+            --bg-mesh-2: #FAE8FF;
+            --card-bg: rgba(255, 255, 255, 0.65);
+            --card-border: rgba(255, 255, 255, 0.6);
+            --card-inner: #FFFFFF;
+            
+            --primary: #4F46E5;
+            --primary-gradient: linear-gradient(135deg, #6366F1 0%, #4F46E5 100%);
+            --primary-glow: rgba(79, 70, 229, 0.25);
+            --secondary: #0EA5E9;
+            --accent: #F43F5E;
+            --accent-glow: rgba(244, 63, 94, 0.15);
+            
+            --text-main: #0F172A;
+            --text-muted: #475569;
+            --input-border: #CBD5E1;
+            --input-bg: #F8FAFC;
+            --glass-blur: blur(25px);
+            --shadow-premium: 0 25px 50px -12px rgba(15, 23, 42, 0.08);
         }
-      });
+
+        [data-theme="dark"] {
+            /* HIGH-CONTRAST NEON DARK MODE */
+            --bg-base: #060814;
+            --bg-mesh-1: #0B1536;
+            --bg-mesh-2: #1E0B30;
+            --card-bg: rgba(15, 23, 42, 0.55);
+            --card-border: rgba(255, 255, 255, 0.05);
+            --card-inner: #0B1120;
+            
+            --primary: #6366F1;
+            --primary-gradient: linear-gradient(135deg, #818CF8 0%, #6366F1 100%);
+            --primary-glow: rgba(99, 102, 241, 0.4);
+            --secondary: #38BDF8;
+            --accent: #FB7185;
+            --accent-glow: rgba(251, 113, 133, 0.25);
+            
+            --text-main: #F8FAFC;
+            --text-muted: #94A3B8;
+            --input-border: #334155;
+            --input-bg: #070A13;
+            --shadow-premium: 0 30px 60px -15px rgba(0, 0, 0, 0.6);
+        }
+
+        /* Reset e Inmunidad Absoluta a Scrollbars */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+            transition: background 0.3s cubic-bezier(0.4, 0, 0.2, 1), 
+                        border-color 0.3s ease, 
+                        color 0.3s ease, 
+                        box-shadow 0.3s ease,
+                        transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        *::-webkit-scrollbar { display: none; }
+
+        body {
+            background-color: var(--bg-base);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow-x: hidden;
+            position: relative;
+            padding: 1.5rem;
+        }
+
+        /* Nubes de Color Orgánicas y Animadas de Fondo (Cero impacto en RAM) */
+        body::before, body::after {
+            content: '';
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(140px);
+            pointer-events: none;
+            z-index: 1;
+            animation: floatMesh 12s infinite alternate ease-in-out;
+        }
+        body::before {
+            width: 400px;
+            height: 400px;
+            background: var(--bg-mesh-1);
+            top: -5%;
+            left: -5%;
+        }
+        body::after {
+            width: 350px;
+            height: 350px;
+            background: var(--bg-mesh-2);
+            bottom: -5%;
+            right: -5%;
+            animation-delay: -6s;
+        }
+
+        @keyframes floatMesh {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(40px, 30px) scale(1.15); }
+        }
+
+        /* =========================================================================
+           BOTÓN ORBE INTERACTIVO (SOL / LUNA)
+           ========================================================================= */
+        .theme-orb {
+            position: absolute;
+            top: 2rem;
+            right: 2rem;
+            background: var(--card-bg);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            border: 1px solid var(--card-border);
+            color: var(--text-main);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5rem;
+            box-shadow: var(--shadow-premium);
+            z-index: 100;
+        }
+        .theme-orb:hover {
+            transform: scale(1.1) rotate(15deg);
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        /* =========================================================================
+           BLOQUE MAESTRO BENTO ASIMÉTRICO (FULL DISEÑO)
+           ========================================================================= */
+        .master-bento {
+            display: flex;
+            width: 100%;
+            max-width: 1050px;
+            min-height: 640px;
+            background: var(--card-bg);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            border: 1px solid var(--card-border);
+            border-radius: 36px;
+            overflow: hidden;
+            box-shadow: var(--shadow-premium);
+            z-index: 10;
+        }
+
+        /* Bloque de Exhibición Izquierdo (Mural Interactivo) */
+        .showcase-grid {
+            flex: 1.1;
+            background: linear-gradient(135deg, rgba(255,255,255,0.01) 0%, rgba(255,255,255,0.04) 100%);
+            padding: 4rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            border-right: 1px solid var(--card-border);
+        }
+
+        .showcase-top {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            font-weight: 800;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--primary);
+        }
+        .showcase-top i { font-size: 1.3rem; }
+
+        .mural-content h1 {
+            font-size: clamp(2.2rem, 4vw, 3rem);
+            font-weight: 900;
+            line-height: 1.1;
+            letter-spacing: -0.05em;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, var(--text-main) 30%, var(--text-muted) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Bento Miniboxes Internos (Efecto de profundidad) */
+        .bento-subgrid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.25rem;
+            margin-top: 2rem;
+        }
+        .mini-box {
+            background: var(--card-inner);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+        }
+        .mini-box i {
+            font-size: 1.8rem;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .mini-box h3 { font-size: 1.1rem; font-weight: 800; letter-spacing: -0.02em; }
+        .mini-box p { font-size: 0.85rem; font-weight: 600; color: var(--text-muted); line-height: 1.4; }
+
+        /* Bloque de Autenticación Derecho */
+        .interactive-auth-panel {
+            flex: 0.9;
+            padding: 4rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            background: var(--card-inner);
+            position: relative;
+        }
+
+        .form-core-wrapper {
+            width: 100%;
+            max-width: 320px;
+            margin: 0 auto;
+        }
+
+        .form-core-wrapper h2 {
+            font-size: 2rem;
+            font-weight: 900;
+            letter-spacing: -0.04em;
+            margin-bottom: 0.5rem;
+        }
+        .form-core-wrapper p.desc {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            margin-bottom: 2.5rem;
+        }
+
+        /* Botón de Google Estilo Premium Cromo/Glow */
+        .btn-google-premium {
+            width: 100%;
+            background: var(--bg-base);
+            color: var(--text-main);
+            border: 1px solid var(--border-color);
+            padding: 1.1rem 1.5rem;
+            border-radius: 18px;
+            font-size: 1rem;
+            font-weight: 800;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.8rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
+            position: relative;
+            overflow: hidden;
+        }
+        .btn-google-premium::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(rgba(255,255,255,0.15), transparent);
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+        .btn-google-premium:hover {
+            transform: translateY(-2px);
+            border-color: var(--primary);
+            box-shadow: 0 10px 25px var(--primary-glow);
+        }
+        .btn-google-premium:hover::before { opacity: 1; }
+        .btn-google-premium svg { width: 22px; height: 22px; flex-shrink: 0; }
+
+        /* Formulario Onboarding Dinámico */
+        #register-form {
+            display: none;
+            animation: smoothSlideUp 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        @keyframes smoothSlideUp {
+            from { opacity: 0; transform: translateY(16px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .input-capsule {
+            margin-bottom: 1.5rem;
+        }
+        .input-capsule label {
+            display: block;
+            font-size: 0.75rem;
+            font-weight: 800;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: 0.6rem;
+        }
+        .input-capsule input, .input-capsule select {
+            width: 100%;
+            background: var(--bg-base);
+            border: 2px solid var(--border-color);
+            border-radius: 16px;
+            padding: 1rem 1.2rem;
+            font-size: 1rem;
+            color: var(--text-main);
+            font-weight: 700;
+            outline: none;
+        }
+        .input-capsule input:focus, .input-capsule select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 5px var(--primary-glow);
+            background: var(--card-inner);
+        }
+
+        .btn-submit-premium {
+            width: 100%;
+            background: var(--primary-gradient);
+            color: #FFFFFF;
+            border: none;
+            padding: 1.1rem;
+            border-radius: 16px;
+            font-size: 1rem;
+            font-weight: 800;
+            cursor: pointer;
+            box-shadow: 0 8px 24px var(--primary-glow);
+            letter-spacing: 0.02em;
+        }
+        .btn-submit-premium:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 30px var(--primary-glow);
+            filter: brightness(1.1);
+        }
+        .btn-submit-premium:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        /* Contenedor de Errores Animado */
+        .error-capsule {
+            min-height: 28px;
+            margin-top: 1.25rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.4rem;
+            color: var(--accent);
+            background: var(--accent-glow);
+            padding: 0.5rem;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            font-weight: 800;
+            opacity: 0;
+            transform: scale(0.95);
+            transition: all 0.3s ease;
+        }
+        .error-capsule.active-error { opacity: 1; transform: scale(1); }
+
+        /* Loader Espejo Completo */
+        .panel-loader {
+            display: none;
+            position: absolute;
+            inset: 0;
+            background: var(--card-inner);
+            z-index: 90;
+            justify-content: center;
+            align-items: center;
+        }
+        .cyber-spinner {
+            width: 44px;
+            height: 44px;
+            border: 4px solid var(--bg-base);
+            border-top-color: var(--primary);
+            border-bottom-color: var(--secondary);
+            border-radius: 50%;
+            animation: spinDual 1s cubic-bezier(0.68, -0.55, 0.27, 1.55) infinite;
+        }
+        @keyframes spinDual { to { transform: rotate(360deg); } }
+
+        /* =========================================================================
+           ADAPTACIÓN RESPONSIVA TOTAL (PC / CELULAR)
+           ========================================================================= */
+        @media (max-width: 960px) {
+            .master-bento {
+                flex-direction: column;
+                max-width: 460px;
+                min-height: auto;
+                border-radius: 28px;
+            }
+            .showcase-grid {
+                padding: 2.5rem 2rem;
+                border-right: none;
+                border-bottom: 1px solid var(--card-border);
+            }
+            .bento-subgrid { display: none; } /* Ocultar subcuadrículas para optimizar scroll */
+            .interactive-auth-panel { padding: 3rem 2rem; }
+            .mural-content h1 { font-size: 2rem; margin-bottom: 0.5rem; }
+        }
+
+        @media (max-width: 400px) {
+            .master-bento { border-radius: 22px; }
+            .interactive-auth-panel { padding: 2.5rem 1.25rem; }
+            .form-core-wrapper h2 { font-size: 1.7rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Selector de Entorno Sol / Luna -->
+    <button class="theme-orb" id="theme-btn" aria-label="Cambiar modo de pantalla">
+        <i class='bx bx-moon' id="theme-icon"></i>
+    </button>
+
+    <div class="master-bento">
+        <!-- Bloque Izquierdo: Presentación Temática Bento -->
+        <section class="showcase-grid">
+            <div class="showcase-top">
+                <i class='bx bxs-graduation'></i>
+                <span>C.E. Los Prados</span>
+            </div>
+            
+            <div class="mural-content">
+                <h1>Aprende.<br>Comprueba.<br>Crea.</h1>
+                
+                <!-- Bento boxes integrados en el diseño estructural -->
+                <div class="bento-subgrid">
+                    <div class="mini-box">
+                        <i class='bx bx-math'></i>
+                        <h3>Matemática</h3>
+                        <p>Análisis y gráficas interactivas en tiempo real.</p>
+                    </div>
+                    <div class="mini-box">
+                        <i class='bx bx-atom'></i>
+                        <h3>Ciencias</h3>
+                        <p>Simulaciones y laboratorios mecánicos.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div></div>
+        </section>
+
+        <!-- Bloque Derecho: Formulario e Interacción Eficiente -->
+        <section class="interactive-auth-panel">
+            <div class="panel-loader" id="loader">
+                <div class="cyber-spinner"></div>
+            </div>
+
+            <div class="form-core-wrapper">
+                <div id="login-section">
+                    <h2>Ingresar</h2>
+                    <p class="desc">Usa tu cuenta digital @clases.edu.sv</p>
+                    
+                    <button class="btn-google-premium" id="btn-login">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+                            <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+                            <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+                            <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.47 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+                        </svg>
+                        Cuenta institucional
+                    </button>
+                </div>
+
+                <!-- Formulario Onboarding Condicional -->
+                <form id="register-form">
+                    <h2>Tu Perfil</h2>
+                    <p class="desc">Ajustemos tu espacio antes de entrar.</p>
+                    
+                    <div class="input-capsule">
+                        <label for="school-code">Código del Centro Escolar</label>
+                        <input type="number" id="school-code" placeholder="Ej. 10856" required autocomplete="off">
+                    </div>
+                    
+                    <div class="input-capsule">
+                        <label for="student-grade">Nivel de Aula</label>
+                        <select id="student-grade" required>
+                            <option value="" disabled selected>Elige tu grado...</option>
+                            <option value="7">Séptimo Grado (7°)</option>
+                            <option value="8">Octavo Grado (8°)</option>
+                            <option value="9">Noveno Grado (9°)</option>
+                        </select>
+                    </div>
+                    
+                    <button type="submit" class="btn-submit-premium" id="btn-submit">Acceder al Aula</button>
+                </form>
+
+                <div class="error-capsule" id="error-box"></div>
+            </div>
+        </section>
+    </div>
+
+    <script type="module">
+        import { auth, provider, db } from './js/initFirebase.js';
+        import { signInWithPopup, signOut, onAuthStateChanged, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+        import { doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+        const loader = document.getElementById('loader');
+        const errorBox = document.getElementById('error-box');
+        const themeBtn = document.getElementById('theme-btn');
+        const themeIcon = document.getElementById('theme-icon');
+        let tempUser = null;
+
+        const showLoading = (state) => { loader.style.display = state ? 'flex' : 'none'; };
+        
+        const displayError = (msg) => { 
+            if (msg) {
+                errorBox.innerHTML = `<i class='bx bx-error-circle'></i> ${msg}`;
+                errorBox.classList.add('active-error');
+            } else {
+                errorBox.innerHTML = '';
+                errorBox.classList.remove('active-error');
+            }
+        };
+
+        // =========================================================================
+        // MOTOR DE PREFERENCIA DE TEMAS DE LA GEM (LUNA / SOL)
+        // =========================================================================
+        const currentTheme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', currentTheme);
+        themeIcon.className = currentTheme === 'dark' ? 'bx bx-sun' : 'bx bx-moon';
+
+        themeBtn.addEventListener('click', () => {
+            let theme = document.documentElement.getAttribute('data-theme');
+            let newTheme = theme === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            themeIcon.className = newTheme === 'dark' ? 'bx bx-sun' : 'bx bx-moon';
+        });
+
+        // Extrae las iniciales de manera limpia para el ID del Documento solicitado
+        const getInitials = (name) => {
+            if (!name) return "USR";
+            return name.trim().split(/\s+/).map(w => w[0].toUpperCase()).join('');
+        };
+
+        // =========================================================================
+        // COMANDO DE CONSOLA PARA PRUEBAS RÁPIDAS COMO ESTUDIANTE DEMO (9° GRADO)
+        // =========================================================================
+        window.loginDemo = async () => {
+            console.log("🛠️ Inicializando bypass de cuenta estudiantil anónima...");
+            showLoading(true);
+            try {
+                await signInAnonymously(auth);
+            } catch (err) {
+                console.error("Error al arrancar cuenta demo:", err);
+                showLoading(false);
+            }
+        };
+        console.log("💻 DEV CONSOLE: Ejecuta loginDemo() para saltar directo como alumno de prueba.");
+
+        // Escuchador de Estado Centralizado
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                showLoading(true);
+                await verifyAndRoute(user);
+            } else {
+                showLoading(false);
+            }
+        });
+
+        const verifyAndRoute = async (user) => {
+            displayError('');
+            
+            // Atrapador de Bypass de Cuenta Demo
+            if (user.isAnonymous) {
+                const demoStudent = {
+                    name: "Estudiante Demo",
+                    email: "2026999@clases.edu.sv",
+                    role: 'estudiante',
+                    grade: '9',
+                    schoolCode: '10856'
+                };
+                // Inserción limpia en users usando las iniciales (ED) como ID
+                await setDoc(doc(db, "users", "ED"), demoStudent);
+                localStorage.setItem('user_meta', JSON.stringify(demoStudent));
+                window.location.href = './pages/home.html';
+                return;
+            }
+            
+            if (!user.email || !user.email.endsWith('@clases.edu.sv')) {
+                await signOut(auth);
+                localStorage.removeItem('user_meta');
+                displayError("Usa tu correo institucional @clases.edu.sv");
+                showLoading(false);
+                return;
+            }
+
+            const prefix = user.email.split('@')[0];
+            const isStudent = /^\d+$/.test(prefix);
+            const docId = getInitials(user.displayName);
+            
+            // Verificación por caché RAM local para optimizar lecturas
+            const localCache = localStorage.getItem('user_meta');
+            if (localCache) {
+                const cache = JSON.parse(localCache);
+                if (cache.email === user.email) {
+                    window.location.href = isStudent ? './pages/home.html' : './admin/admin.html';
+                    return;
+                }
+            }
+
+            try {
+                // CONSERVACIÓN ESTRICTA DEL FLUJO SOLICITADO EN LA COLECCIÓN USERS
+                const userRef = doc(db, "users", docId);
+                const userSnap = await getDoc(userRef);
+
+                if (userSnap.exists()) {
+                    const data = userSnap.data();
+                    localStorage.setItem('user_meta', JSON.stringify({ name: data.name, email: user.email, role: data.role, grade: data.grade || null }));
+                    window.location.href = isStudent ? './pages/home.html' : './admin/admin.html';
+                } else {
+                    if (!isStudent) {
+                        // Docente: Inserción directa de nombre, correo y rol
+                        const teacherData = { name: user.displayName, email: user.email, role: 'docente' };
+                        await setDoc(userRef, teacherData);
+                        localStorage.setItem('user_meta', JSON.stringify(teacherData));
+                        window.location.href = './admin/admin.html';
+                    } else {
+                        // Estudiante: Apertura del panel Bento de datos faltantes
+                        tempUser = { uid: docId, name: user.displayName, email: user.email };
+                        document.getElementById('login-section').style.display = 'none';
+                        document.getElementById('register-form').style.display = 'block';
+                        showLoading(false);
+                    }
+                }
+            } catch (err) {
+                displayError("Error de comunicación con la base de datos.");
+                showLoading(false);
+            }
+        };
+
+        document.getElementById('btn-login').addEventListener('click', async () => {
+            displayError('');
+            showLoading(true);
+            try {
+                const result = await signInWithPopup(auth, provider);
+                await verifyAndRoute(result.user);
+            } catch (err) {
+                displayError("Autenticación cancelada.");
+                showLoading(false);
+            }
+        });
+
+        document.getElementById('register-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            displayError('');
+            
+            const codeInput = document.getElementById('school-code').value.trim();
+            const gradeInput = document.getElementById('student-grade').value;
+            const submitBtn = document.getElementById('btn-submit');
+            
+            submitBtn.disabled = true;
+            showLoading(true);
+
+            try {
+                const studentData = {
+                    name: tempUser.name,
+                    email: tempUser.email,
+                    grade: gradeInput,
+                    schoolCode: codeInput,
+                    role: 'estudiante'
+                };
+
+                await setDoc(doc(db, "users", tempUser.uid), studentData);
+                localStorage.setItem('user_meta', JSON.stringify(studentData));
+                window.location.href = './pages/home.html';
+            } catch (err) {
+                displayError("No se pudo completar el registro.");
+                submitBtn.disabled = false;
+                showLoading(false);
+            }
+        });
     </script>
-  </body>
+</body>
 </html>

@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Aula Virtual | C.E. Cantón Los Prados</title>
+    
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/boxicons/2.1.4/css/boxicons.min.css" rel="stylesheet">
+    
+    <style>
+        /* =========================================================================
+           SISTEMA DE VARIABLES DINÁMICAS: "CYBER-BENTO GLASS V3" (Panel de Aula)
+           ========================================================================= */
+        :root {
+            /* VIBRANT LIGHT MODE */
+            --bg-base: #EEF2F6;
+            --bg-mesh-1: #E0E7FF;
+            --bg-mesh-2: #FAE8FF;
+            --card-bg: rgba(255, 255, 255, 0.65);
+            --card-border: rgba(255, 255, 255, 0.6);
+            --card-inner: #FFFFFF;
+            
+            --primary: #4F46E5;
+            --primary-gradient: linear-gradient(135deg, #6366F1 0%, #4F46E5 100%);
+            --primary-glow: rgba(79, 70, 229, 0.15);
+            --secondary: #0EA5E9;
+            --accent: #F43F5E;
+            --text-main: #0F172A;
+            --text-muted: #475569;
+            --glass-blur: blur(25px);
+            --shadow-premium: 0 25px 50px -12px rgba(15, 23, 42, 0.08);
+        }
+
+        [data-theme="dark"] {
+            /* HIGH-CONTRAST NEON DARK MODE */
+            --bg-base: #060814;
+            --bg-mesh-1: #0B1536;
+            --bg-mesh-2: #1E0B30;
+            --card-bg: rgba(15, 23, 42, 0.55);
+            --card-border: rgba(255, 255, 255, 0.05);
+            --card-inner: #0B1120;
+            
+            --primary: #6366F1;
+            --primary-gradient: linear-gradient(135deg, #818CF8 0%, #6366F1 100%);
+            --primary-glow: rgba(99, 102, 241, 0.3);
+            --secondary: #38BDF8;
+            --text-main: #F8FAFC;
+            --text-muted: #94A3B8;
+            --shadow-premium: 0 30px 60px -15px rgba(0, 0, 0, 0.6);
+        }
+
+        /* Reset Absoluto sin Scrollbars */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+            transition: background 0.3s cubic-bezier(0.4, 0, 0.2, 1), 
+                        border-color 0.3s ease, 
+                        color 0.3s ease, 
+                        box-shadow 0.3s ease,
+                        transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        *::-webkit-scrollbar { display: none; }
+
+        body {
+            background-color: var(--bg-base);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+            overflow-y: auto;
+            position: relative;
+            padding: 0;
+            opacity: 0;
+        }
+        body.loaded { opacity: 1; }
+
+        /* Nubes Orgánicas Animadas de Fondo */
+        body::before, body::after {
+            content: '';
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(140px);
+            pointer-events: none;
+            z-index: 1;
+            animation: floatMesh 12s infinite alternate ease-in-out;
+        }
+        body::before { width: 450px; height: 450px; background: var(--bg-mesh-1); top: -10%; left: -10%; }
+        body::after { width: 400px; height: 400px; background: var(--bg-mesh-2); bottom: -10%; right: -10%; animation-delay: -6s; }
+
+        @keyframes floatMesh {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(40px, 30px) scale(1.12); }
+        }
+
+        /* Anclaje Superior de la Userbar */
+        #userbar-root {
+            width: 100%;
+            z-index: 50;
+        }
+
+        /* =========================================================================
+           ESTRUCTURA DE CONTENIDO FLUIDO EN ANCHO COMPLETO
+           ========================================================================= */
+        .layout-core {
+            width: 100%;
+            max-width: none; /* Apertura panorámica completa */
+            
+            /* REQUISITO: 1cm (1rem) de margen superior (abajo de la userbar) */
+            margin: 1rem 0 2rem 0;
+            
+            /* REQUISITO: Margen lateral de 2cm (2rem) por cada lado */
+            padding: 0 2rem;
+            
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+            z-index: 10;
+        }
+
+        /* Cabecera del Aula: Navegación de Retorno y Título Integrado */
+        .classroom-header-panel {
+            width: 100%;
+            background: var(--card-bg);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            border: 1px solid var(--card-border);
+            border-radius: 24px;
+            padding: 2rem 2.5rem;
+            box-shadow: var(--shadow-premium);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+        }
+
+        .header-left-block {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        /* Botón Inmersivo de Retorno */
+        .btn-back-nav {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            background: var(--card-inner);
+            border: 1px solid var(--card-border);
+            color: var(--text-main);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.4rem;
+            text-decoration: none;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.01);
+        }
+        .btn-back-nav:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            transform: translateX(-3px);
+        }
+
+        .title-meta h1 {
+            font-size: clamp(1.6rem, 4vw, 2.2rem);
+            font-weight: 900;
+            letter-spacing: -0.04em;
+            line-height: 1.1;
+            color: var(--text-main);
+        }
+
+        /* Indicador Dinámico de Sección Escolar */
+        .classroom-badge {
+            background: var(--primary-gradient);
+            color: #FFFFFF;
+            padding: 0.55rem 1.1rem;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 800;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            box-shadow: 0 4px 12px var(--primary-glow);
+        }
+
+        /* Contenedor Vertical de Módulos (Estructura Lineal de Filas Horizontales) */
+        .modules-stack {
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+            width: 100%;
+        }
+
+        /* Fila del Módulo Académico */
+        .module-row-panel {
+            width: 100%;
+            background: var(--card-bg);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            border: 1px solid var(--card-border);
+            border-radius: 24px;
+            padding: 2rem 2.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: var(--shadow-premium);
+            text-decoration: none;
+            position: relative;
+        }
+        .module-row-panel::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(90deg, rgba(255,255,255,0.05), transparent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+        }
+        .module-row-panel:hover::before { opacity: 1; }
+
+        .module-meta-left {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            min-width: 0;
+        }
+
+        .module-icon-orb {
+            width: 56px;
+            height: 56px;
+            border-radius: 14px;
+            background: var(--card-inner);
+            border: 1px solid var(--card-border);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.6rem;
+            color: var(--primary);
+            flex-shrink: 0;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.01);
+        }
+        .module-row-panel:hover .module-icon-orb {
+            transform: scale(1.1) rotate(-6deg);
+            background: var(--primary-gradient);
+            color: #FFFFFF;
+            border-color: transparent;
+        }
+
+        .module-text-block {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+        .module-text-block h2 {
+            font-size: 1.5rem;
+            font-weight: 900;
+            letter-spacing: -0.03em;
+            color: var(--text-main);
+        }
+        .module-text-block p {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text-muted);
+        }
+
+        /* Orbe de Flecha de Acción */
+        .action-arrow-orb {
+            width: 46px;
+            height: 46px;
+            border-radius: 50%;
+            background: var(--card-inner);
+            border: 1px solid var(--card-border);
+            color: var(--text-main);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.4rem;
+            flex-shrink: 0;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.01);
+        }
+        .module-row-panel:hover .action-arrow-orb {
+            background: var(--primary-gradient);
+            color: #FFFFFF;
+            border-color: transparent;
+            transform: scale(1.08) translateX(4px);
+        }
+
+        footer {
+            width: 100%;
+            text-align: center;
+            padding: 2rem 1rem 1rem 1rem;
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            opacity: 0.4;
+            z-index: 10;
+        }
+
+        /* Adaptación Responsiva Eficiente */
+        @media (max-width: 768px) {
+            .layout-core { padding: 0 1rem; margin-top: 0.5rem; }
+            .classroom-header-panel { padding: 1.5rem; border-radius: 20px; }
+            .header-left-block { gap: 1rem; }
+            .btn-back-nav { width: 38px; height: 38px; font-size: 1.2rem; border-radius: 10px; }
+            .classroom-badge { padding: 0.45rem 0.85rem; font-size: 0.75rem; border-radius: 10px; }
+            .module-row-panel { padding: 1.5rem; border-radius: 22px; }
+            .module-meta-left { gap: 1.25rem; }
+            .module-icon-orb { width: 44px; height: 44px; border-radius: 12px; font-size: 1.3rem; }
+            .module-text-block h2 { font-size: 1.25rem; }
+            .module-text-block p { font-size: 0.8rem; }
+            .action-arrow-orb { width: 38px; height: 38px; font-size: 1.2rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="userbar-root"></div>
+
+    <div class="layout-core">
+        <section class="classroom-header-panel">
+            <div class="header-left-block">
+                <a href="./home.html" class="btn-back-nav" aria-label="Volver al menú de inicio">
+                    <i class='bx bx-left-arrow-alt'></i>
+                </a>
+                <div class="title-meta">
+                    <h1 id="classroom-title">Cargando Aula...</h1>
+                </div>
+            </div>
+            <div class="classroom-badge" id="classroom-badge-text">Sección Escolar</div>
+        </section>
+
+        <nav class="modules-stack" id="modules-container" aria-label="Contenidos Académicos"></nav>
+    </div>
+
+    <footer>&copy; 2026 Centro Escolar Cantón Los Prados.</footer>
+
+    <script type="module">
+        import { auth } from '../js/initFirebase.js';
+        import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+        import { initUserBar } from '../js/userbar.js';
+
+        // Capturar parámetros de la URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const gradeId = urlParams.get('grado') || '7';
+
+        const gradeNames = {
+            '7': 'Séptimo Grado',
+            '8': 'Octavo Grado',
+            '9': 'Noveno Grado'
+        };
+
+        // Renderizado Dinámico de las Filas de Navegación de Ancho Completo
+        const renderClassroomModules = () => {
+            const modules = [
+                {
+                    title: 'Material de Clases',
+                    desc: 'Unidades de aprendizaje, lecturas dirigidas y guías conceptuales.',
+                    link: `./clases.html?grado=${gradeId}`,
+                    icon: "<i class='bx bx-book-open'></i>"
+                },
+                {
+                    title: 'Buzón de Tareas',
+                    desc: 'Entrega de laboratorios, proyectos prácticos y seguimiento de notas.',
+                    link: `./tareas.html?grado=${gradeId}`,
+                    icon: "<i class='bx bx-task'></i>"
+                },
+                {
+                    title: 'Evaluaciones Oficiales',
+                    desc: 'Exámenes trimestrales, cuestionarios rápidos y pruebas de validación.',
+                    link: `./examenes.html?grado=${gradeId}`,
+                    icon: "<i class='bx bx-edit-alt'></i>"
+                }
+            ];
+
+            const container = document.getElementById('modules-container');
+            container.innerHTML = '';
+            const fragment = document.createDocumentFragment();
+
+            modules.forEach(mod => {
+                const a = document.createElement('a');
+                a.href = mod.link;
+                a.className = 'module-row-panel';
+
+                a.innerHTML = `
+                    <div class="module-meta-left">
+                        <div class="module-icon-orb">${mod.icon}</div>
+                        <div class="module-text-block">
+                            <h2>${mod.title}</h2>
+                            <p>${mod.desc}</p>
+                        </div>
+                    </div>
+                    <div class="action-arrow-orb"><i class='bx bx-right-arrow-alt'></i></div>
+                `;
+                fragment.appendChild(a);
+            });
+            container.appendChild(fragment);
+        };
+
+        // Inicializar barra de usuario y renderizar estados
+        initUserBar('userbar-root');
+
+        // Revelar layout suavemente sin parpadeos
+        setTimeout(() => {
+            document.body.classList.add('loaded');
+        }, 50);
+
+        onAuthStateChanged(auth, (user) => {
+            if (!user) {
+                window.location.href = '../index.html';
+                return;
+            }
+
+            // Inyectar etiquetas dinámicas basadas en el Grado Activo
+            const currentGradeName = gradeNames[gradeId] || 'Aula Virtual';
+            document.getElementById('classroom-title').textContent = currentGradeName;
+            document.getElementById('classroom-badge-text').textContent = `${gradeId}° Grado`;
+
+            renderClassroomModules();
+        });
+    </script>
+</body>
+</html>
