@@ -1,464 +1,98 @@
 <!DOCTYPE html>
 <html lang="es" data-theme="light">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Inicio | C.E. Cantón Los Prados</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+  <title>Inicio | CENTRO ESCOLAR CANTÓN LOS PRADOS</title>
+  <link rel="stylesheet" href="../css/styles.css">
+  <style>
+    .page-header { padding-top: 1rem; padding-bottom: 0; }
+    .modules-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.25rem;
+      padding: 1.5rem 0 3rem;
+    }
+    .module-card {
+      display: flex; flex-direction: column; align-items: center; text-align: center;
+      padding: 1.75rem 1.25rem; text-decoration: none; color: var(--text);
+      transition: transform 0.2s, box-shadow 0.2s; position: relative; overflow: hidden;
+      border-top: 4px solid var(--card-accent, var(--primary));
+    }
+    .module-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+    .module-icon { font-size: 2.5rem; margin-bottom: 0.75rem; line-height: 1; }
+    .module-title { font-size: 1.2rem; font-weight: 700; margin-bottom: 0.4rem; }
+    .module-desc { font-size: 0.9rem; color: var(--text-muted); margin: 0; line-height: 1.4; }
     
-    <!-- Boxicons para Iconografía Inmersiva -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/boxicons/2.1.4/css/boxicons.min.css" rel="stylesheet">
-    
-    <style>
-        /* =========================================================================
-           SISTEMA DE VARIABLES DINÁMICAS: "CYBER-BENTO GLASS V3"
-           ========================================================================= */
-        :root {
-            /* VIBRANT LIGHT MODE */
-            --bg-base: #EEF2F6;
-            --bg-mesh-1: #E0E7FF;
-            --bg-mesh-2: #FAE8FF;
-            --card-bg: rgba(255, 255, 255, 0.65);
-            --card-border: rgba(255, 255, 255, 0.6);
-            --card-inner: #FFFFFF;
-            
-            --primary: #4F46E5;
-            --primary-gradient: linear-gradient(135deg, #6366F1 0%, #4F46E5 100%);
-            --primary-glow: rgba(79, 70, 229, 0.15);
-            --secondary: #0EA5E9;
-            --accent: #F43F5E;
-            --text-main: #0F172A;
-            --text-muted: #475569;
-            --glass-blur: blur(25px);
-            --shadow-premium: 0 25px 50px -12px rgba(15, 23, 42, 0.08);
-
-            /* Colores de Identificación de Grados */
-            --g7-color: #E59D5C;
-            --g7-glow: rgba(229, 157, 92, 0.2);
-            --g8-color: #38BDF8;
-            --g8-glow: rgba(56, 189, 248, 0.2);
-            --g9-color: #A99F3C;
-            --g9-glow: rgba(169, 159, 60, 0.2);
-        }
-
-        [data-theme="dark"] {
-            /* HIGH-CONTRAST NEON DARK MODE */
-            --bg-base: #060814;
-            --bg-mesh-1: #0B1536;
-            --bg-mesh-2: #1E0B30;
-            --card-bg: rgba(15, 23, 42, 0.55);
-            --card-border: rgba(255, 255, 255, 0.05);
-            --card-inner: #0B1120;
-            
-            --primary: #6366F1;
-            --primary-gradient: linear-gradient(135deg, #818CF8 0%, #6366F1 100%);
-            --primary-glow: rgba(99, 102, 241, 0.3);
-            --secondary: #38BDF8;
-            --text-main: #F8FAFC;
-            --text-muted: #94A3B8;
-            --shadow-premium: 0 30px 60px -15px rgba(0, 0, 0, 0.6);
-        }
-
-        /* Reset Absoluto sin Scrollbars */
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            -webkit-tap-highlight-color: transparent;
-            transition: background 0.3s cubic-bezier(0.4, 0, 0.2, 1), 
-                        border-color 0.3s ease, 
-                        color 0.3s ease, 
-                        box-shadow 0.3s ease,
-                        transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
-        *::-webkit-scrollbar { display: none; }
-
-        body {
-            background-color: var(--bg-base);
-            color: var(--text-main);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            overflow-x: hidden;
-            overflow-y: auto;
-            position: relative;
-            padding: 0;
-            opacity: 0;
-        }
-        body.loaded { opacity: 1; }
-
-        /* Nubes Orgánicas Animadas de Fondo */
-        body::before, body::after {
-            content: '';
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(140px);
-            pointer-events: none;
-            z-index: 1;
-            animation: floatMesh 12s infinite alternate ease-in-out;
-        }
-        body::before {
-            width: 450px;
-            height: 450px;
-            background: var(--bg-mesh-1);
-            top: -10%;
-            left: -10%;
-        }
-        body::after {
-            width: 400px;
-            height: 400px;
-            background: var(--bg-mesh-2);
-            bottom: -10%;
-            right: -10%;
-            animation-delay: -6s;
-        }
-
-        @keyframes floatMesh {
-            0% { transform: translate(0, 0) scale(1); }
-            100% { transform: translate(40px, 30px) scale(1.12); }
-        }
-
-        /* Contenedor de Anclaje de la Userbar Pura */
-        #userbar-root {
-            width: 100%;
-            z-index: 50;
-        }
-
-        /* =========================================================================
-           ESTRUCTURA CORE PERFECTAMENTE ALINEADA CON EL ANCHO DE LA USERBAR
-           ========================================================================= */
-                .layout-core {
-            width: 100%;
-            /* ELIMINACIÓN ABSOLUTA DEL LÍMITE DE ANCHO: Ahora llenará la pantalla al igual que la Userbar */
-            max-width: none; 
-            
-            /* REQUISITO: 1cm (1rem) de margen superior debajo de la userbar */
-            margin: 1rem 0 2rem 0;
-            
-            /* REQUISITO: Margen lateral de 2cm (2rem) por cada lado */
-            padding: 0 2rem;
-            
-            display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
-            z-index: 10;
-        }
-
-        /* Panel Superior: Hero Banner Integrado */
-        .hero-banner {
-            width: 100%;
-            background: var(--card-bg);
-            backdrop-filter: var(--glass-blur);
-            -webkit-backdrop-filter: var(--glass-blur);
-            border: 1px solid var(--card-border);
-            border-radius: 24px;
-            padding: 2.2rem 3rem;
-            box-shadow: var(--shadow-premium);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 2rem;
-        }
-
-        .welcome-meta h1 {
-            font-size: clamp(1.8rem, 4.5vw, 2.5rem);
-            font-weight: 900;
-            letter-spacing: -0.05em;
-            line-height: 1.1;
-            margin-bottom: 0.4rem;
-            color: var(--text-main);
-        }
-        .welcome-meta p {
-            font-size: 1rem;
-            font-weight: 600;
-            color: var(--text-muted);
-        }
-
-        /* Cuadro de Mandos de Estados Rápidos */
-        .quick-status-panel {
-            display: flex;
-            gap: 0.75rem;
-        }
-        .status-pill {
-            background: var(--card-inner);
-            border: 1px solid var(--card-border);
-            padding: 0.55rem 0.95rem;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-size: 0.8rem;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            color: var(--text-main);
-            box-shadow: 0 4px 10px rgba(0,0,0,0.01);
-        }
-        .status-pill i { font-size: 1.1rem; color: var(--primary); }
-
-        /* Contenedor de Filas: Estructura Lineal Inmersiva Alternada */
-        .grade-rows-stack {
-            display: flex;
-            flex-direction: column;
-            gap: 1.25rem;
-            width: 100%;
-        }
-
-        /* Fila del Grado (Estructura Horizontal Detallada de Ancho Completo) */
-        .grade-row-panel {
-            width: 100%;
-            background: var(--card-bg);
-            backdrop-filter: var(--glass-blur);
-            -webkit-backdrop-filter: var(--glass-blur);
-            border: 1px solid var(--card-border);
-            border-radius: 24px;
-            padding: 2rem 2.5rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: var(--shadow-premium);
-            text-decoration: none;
-            position: relative;
-        }
-        .grade-row-panel::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(90deg, rgba(255,255,255,0.05), transparent);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            pointer-events: none;
-        }
-        .grade-row-panel:hover::before { opacity: 1; }
-
-        .grade-left-meta {
-            display: flex;
-            align-items: center;
-            gap: 2rem;
-            min-width: 0;
-        }
-
-        .grade-avatar-orb {
-            width: 56px;
-            height: 56px;
-            border-radius: 14px;
-            background: var(--card-inner);
-            border: 1px solid var(--card-border);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 1.6rem;
-            flex-shrink: 0;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.01);
-        }
-        .grade-row-panel:hover .grade-avatar-orb {
-            transform: scale(1.1) rotate(-6deg);
-        }
-
-        .grade-details-text {
-            display: flex;
-            flex-direction: column;
-            gap: 0.25rem;
-        }
-        .grade-details-text h2 {
-            font-size: 1.5rem;
-            font-weight: 900;
-            letter-spacing: -0.04em;
-            color: var(--text-main);
-        }
-        .grade-details-text p {
-            font-size: 0.95rem;
-            font-weight: 600;
-            color: var(--text-muted);
-        }
-
-        /* Botón de Acción Circular Flotante */
-        .action-arrow-orb {
-            width: 46px;
-            height: 46px;
-            border-radius: 50%;
-            background: var(--card-inner);
-            border: 1px solid var(--card-border);
-            color: var(--text-main);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 1.4rem;
-            flex-shrink: 0;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.01);
-        }
-
-        /* Reactividad de Neón Estructurada por Grado */
-        .row-g7 .grade-avatar-orb i { color: var(--g7-color); }
-        .row-g7:hover { border-color: var(--g7-color); box-shadow: 0 15px 35px var(--g7-glow); }
-        .row-g7:hover .action-arrow-orb { background: var(--g7-color); color: #060814; border-color: transparent; transform: scale(1.08) translateX(4px); }
-
-        .row-g8 .grade-avatar-orb i { color: var(--g8-color); }
-        .row-g8:hover { border-color: var(--g8-color); box-shadow: 0 15px 35px var(--g8-glow); }
-        .row-g8:hover .action-arrow-orb { background: var(--g8-color); color: #060814; border-color: transparent; transform: scale(1.08) translateX(4px); }
-
-        .row-g9 .grade-avatar-orb i { color: var(--g9-color); }
-        .row-g9:hover { border-color: var(--g9-color); box-shadow: 0 15px 35px var(--g9-glow); }
-        .row-g9:hover .action-arrow-orb { background: var(--g9-color); color: #060814; border-color: transparent; transform: scale(1.08) translateX(4px); }
-
-        footer {
-            width: 100%;
-            text-align: center;
-            padding: 2rem 1rem 1rem 1rem;
-            font-size: 0.8rem;
-            font-weight: 700;
-            color: var(--text-muted);
-            opacity: 0.4;
-            z-index: 10;
-        }
-
-        /* =========================================================================
-           ADAPTACIÓN RESPONSIVA
-           ========================================================================= */
-        @media (max-width: 768px) {
-                    .layout-core {
-            width: 100%;
-            /* ELIMINACIÓN ABSOLUTA DEL LÍMITE DE ANCHO: Ahora llenará la pantalla al igual que la Userbar */
-            max-width: none; 
-            
-            /* REQUISITO: 1cm (1rem) de margen superior debajo de la userbar */
-            margin: 1rem 0 2rem 0;
-            
-            /* REQUISITO: Margen lateral de 2cm (2rem) por cada lado */
-            padding: 0 2rem;
-            
-            display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
-            z-index: 10;
-        }
-            .hero-banner { padding: 2rem; gap: 1.5rem; }
-            .quick-status-panel { width: 100%; justify-content: flex-start; }
-            .grade-row-panel { padding: 1.5rem; border-radius: 22px; }
-            .grade-left-meta { gap: 1.25rem; }
-            .grade-avatar-orb { width: 44px; height: 44px; border-radius: 12px; font-size: 1.3rem; }
-            .grade-details-text h2 { font-size: 1.3rem; }
-            .grade-details-text p { font-size: 0.8rem; }
-            .action-arrow-orb { width: 38px; height: 38px; font-size: 1.2rem; }
-        }
-    </style>
+    @media (max-width: 768px) { .modules-grid { gap: 1rem; } }
+    @media (max-width: 375px) {
+      .modules-grid { grid-template-columns: 1fr; }
+      .module-card { padding: 1.4rem 1rem; }
+      .module-icon { font-size: 2.2rem; }
+    }
+  </style>
 </head>
 <body>
+  <header class="page-header app-container flex justify-between items-center">
+    <h2 class="text-lg font-bold">📖 Mi Espacio de Aprendizaje</h2>
+    <button id="theme-toggle" class="btn btn-outline btn-icon" aria-label="Cambiar tema">🌓</button>
+  </header>
 
-    <!-- Contenedor Maestro de la Userbar Pura -->
-    <div id="userbar-root"></div>
+  <div id="userbar"></div>
 
-    <div class="layout-core">
-        <!-- Panel Superior: Hero Banner -->
-        <section class="hero-banner">
-            <div class="welcome-meta">
-                <h1 id="welcome-message">Cargando...</h1>
-                <p id="sub-message">Despliega tus asignaturas e itinerarios de estudio.</p>
-            </div>
-            
-            <!-- Cuadro de Mandos de Estados Rápidos -->
-            <div class="quick-status-panel">
-                <div class="status-pill"><i class='bx bx-calendar-check'></i> 2026</div>
-                <div class="status-pill"><i class='bx bx-shield-quarter'></i> Oficial</div>
-            </div>
-        </section>
+  <main class="app-container">
+    <section id="modules-grid" class="modules-grid" aria-label="Módulos principales"></section>
+  </main>
 
-        <!-- Bloque de Filas Alternas Estructurales -->
-        <nav class="grade-rows-stack" aria-label="Aulas Escolares">
-            <a href="./grados.html?grado=7" class="grade-row-panel row-g7">
-                <div class="grade-left-meta">
-                    <div class="grade-avatar-orb"><i class='bx bx-book-bookmark'></i></div>
-                    <div class="grade-details-text">
-                        <h2>Séptimo Grado</h2>
-                        <p>Matemática y Datos • Ciencia y Tecnología • Inglés</p>
-                    </div>
-                </div>
-                <div class="action-arrow-orb"><i class='bx bx-right-arrow-alt'></i></div>
-            </a>
+  <script type="module">
+    // ===== TEMA PERSISTENTE =====
+    const html = document.documentElement;
+    const themeToggle = document.getElementById('theme-toggle');
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    html.setAttribute('data-theme', savedTheme);
+    
+    themeToggle.addEventListener('click', () => {
+      const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      html.setAttribute('data-theme', next);
+      localStorage.setItem('theme', next);
+    });
 
-            <a href="./grados.html?grado=8" class="grade-row-panel row-g8">
-                <div class="grade-left-meta">
-                    <div class="grade-avatar-orb"><i class='bx bx-atom'></i></div>
-                    <div class="grade-details-text">
-                        <h2>Octavo Grado</h2>
-                        <p>Matemática y Datos • Ciencia y Tecnología • Inglés</p>
-                    </div>
-                </div>
-                <div class="action-arrow-orb"><i class='bx bx-right-arrow-alt'></i></div>
-            </a>
+    // ===== USERBAR =====
+    import { initUserBar } from '../js/userbar.js';
+    initUserBar('#userbar');
 
-            <a href="./grados.html?grado=9" class="grade-row-panel row-g9">
-                <div class="grade-left-meta">
-                    <div class="grade-avatar-orb"><i class='bx bx-layer'></i></div>
-                    <div class="grade-details-text">
-                        <h2>Noveno Grado</h2>
-                        <p>Matemática y Datos • Ciencia y Tecnología • Inglés</p>
-                    </div>
-                </div>
-                <div class="action-arrow-orb"><i class='bx bx-right-arrow-alt'></i></div>
-            </a>
-        </nav>
-    </div>
+    // ===== CONFIGURACIÓN DE TARJETAS (MODIFICAR AQUÍ) =====
+    // Orden alfabético aplicado. Para agregar/quitar: solo edita este array.
+    const MODULES = [
+      { id: 'clases',   title: 'Clases',   icon: '📚', desc: 'Material, lecciones y recursos', route: 'clases/', accent: 'var(--primary)' },
+      { id: 'examenes', title: 'Exámenes', icon: '📝', desc: 'Evaluaciones y pruebas en línea', route: 'examenes/', accent: 'var(--danger)' },
+      { id: 'juegos',   title: 'Juegos',   icon: '🎮', desc: 'Aprende jugando y gana puntos', route: 'juegos/', accent: 'var(--secondary)' },
+      { id: 'perfil',   title: 'Perfil',   icon: '👤', desc: 'Tu información, logros y stats', route: 'perfil/', accent: 'var(--accent)' },
+      { id: 'tareas',   title: 'Tareas',   icon: '📁', desc: 'Entregas, revisiones y feedback', route: 'tareas/', accent: 'var(--success)' },
+      { id: 'tienda',   title: 'Tienda',   icon: '🛒', desc: 'Canjea puntos por recompensas', route: 'tienda/', accent: '#8b5cf6' }
+    ];
 
-    <footer>&copy; 2026 Centro Escolar Cantón Los Prados.</footer>
+    // ===== RENDERIZADO =====
+    const grid = document.getElementById('modules-grid');
+    MODULES.forEach(mod => {
+      const card = document.createElement('a');
+      card.href = `../${mod.route}`;
+      card.className = 'module-card card';
+      card.style.setProperty('--card-accent', mod.accent);
+      card.innerHTML = `
+        <div class="module-icon">${mod.icon}</div>
+        <h3 class="module-title">${mod.title}</h3>
+        <p class="module-desc">${mod.desc}</p>
+      `;
+      // Prevenir navegación si el módulo aún no está listo
+      card.addEventListener('click', (e) => {
+        if (mod.route === '#') { e.preventDefault(); alert('Módulo en desarrollo 🚧'); }
+      });
+      grid.appendChild(card);
+    });
 
-    <script type="module">
-        import { auth, db } from '../js/initFirebase.js';
-        import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-        import { query, collection, where, getDocs, getDocsFromCache } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-        import { initUserBar } from '../js/userbar.js';
-
-        const welcomeMsg = document.getElementById('welcome-message');
-        const subMsg = document.getElementById('sub-message');
-
-        // Renderizado instantáneo usando RAM local para mitigar el lag de Firebase
-        const localCache = localStorage.getItem('user_meta');
-        if (localCache) {
-            const cache = JSON.parse(localCache);
-            const firstName = cache.name.split(' ')[0];
-            welcomeMsg.textContent = `¡Hola, ${firstName}! 👋`;
-            if (cache.grade) {
-                subMsg.textContent = `Sección configurada para tu nivel académico de ${cache.grade}° Grado.`;
-            }
-        }
-
-        // Inicializamos puramente el userbar
-        initUserBar('userbar-root');
-        
-        // Revelar suavemente la interfaz
-        setTimeout(() => {
-            document.body.classList.add('loaded');
-        }, 50);
-
-        // Sincronización asíncrona de seguridad
-        onAuthStateChanged(auth, async (user) => {
-            if (!user) { 
-                window.location.href = '../index.html'; 
-                return; 
-            }
-
-            if (!localCache) {
-                try {
-                    const q = query(collection(db, "users"), where("email", "==", user.email));
-                    let snapshot;
-                    try { snapshot = await getDocsFromCache(q); } catch(e) {}
-                    if (!snapshot || snapshot.empty) { snapshot = await getDocs(q); }
-                    
-                    if (!snapshot.empty) {
-                        const userData = snapshot.docs[0].data();
-                        const firstName = userData.name.split(' ')[0];
-                        welcomeMsg.textContent = `¡Hola, ${firstName}! 👋`;
-                        if (userData.grade) {
-                            subMsg.textContent = `Sección configurada para tu nivel académico de ${userData.grade}° Grado.`;
-                        }
-                        localStorage.setItem('user_meta', JSON.stringify(userData));
-                    }
-                } catch (error) { 
-                    console.error("Error de red al sincronizar perfil:", error); 
-                }
-            }
-        });
-    </script>
+    // Exponer config global para futuros scripts
+    window.MODULES = MODULES;
+  </script>
 </body>
 </html>

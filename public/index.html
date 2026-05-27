@@ -1,695 +1,198 @@
 <!DOCTYPE html>
-<html lang="es" data-theme="light">
+<html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Portal de Acceso | C.E. Cantón Los Prados</title>
-    
-    <!-- Boxicons para Iconografía Inmersiva -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/boxicons/2.1.4/css/boxicons.min.css" rel="stylesheet">
-    
-    <style>
-        /* =========================================================================
-           SISTEMA DE DISEÑO AVANZADO: "CYBER-BENTO GLASS" (Modo Inmersivo)
-           ========================================================================= */
-        :root {
-            /* VIBRANT LIGHT MODE */
-            --bg-base: #EEF2F6;
-            --bg-mesh-1: #E0E7FF;
-            --bg-mesh-2: #FAE8FF;
-            --card-bg: rgba(255, 255, 255, 0.65);
-            --card-border: rgba(255, 255, 255, 0.6);
-            --card-inner: #FFFFFF;
-            
-            --primary: #4F46E5;
-            --primary-gradient: linear-gradient(135deg, #6366F1 0%, #4F46E5 100%);
-            --primary-glow: rgba(79, 70, 229, 0.25);
-            --secondary: #0EA5E9;
-            --accent: #F43F5E;
-            --accent-glow: rgba(244, 63, 94, 0.15);
-            
-            --text-main: #0F172A;
-            --text-muted: #475569;
-            --input-border: #CBD5E1;
-            --input-bg: #F8FAFC;
-            --glass-blur: blur(25px);
-            --shadow-premium: 0 25px 50px -12px rgba(15, 23, 42, 0.08);
-        }
-
-        [data-theme="dark"] {
-            /* HIGH-CONTRAST NEON DARK MODE */
-            --bg-base: #060814;
-            --bg-mesh-1: #0B1536;
-            --bg-mesh-2: #1E0B30;
-            --card-bg: rgba(15, 23, 42, 0.55);
-            --card-border: rgba(255, 255, 255, 0.05);
-            --card-inner: #0B1120;
-            
-            --primary: #6366F1;
-            --primary-gradient: linear-gradient(135deg, #818CF8 0%, #6366F1 100%);
-            --primary-glow: rgba(99, 102, 241, 0.4);
-            --secondary: #38BDF8;
-            --accent: #FB7185;
-            --accent-glow: rgba(251, 113, 133, 0.25);
-            
-            --text-main: #F8FAFC;
-            --text-muted: #94A3B8;
-            --input-border: #334155;
-            --input-bg: #070A13;
-            --shadow-premium: 0 30px 60px -15px rgba(0, 0, 0, 0.6);
-        }
-
-        /* Reset e Inmunidad Absoluta a Scrollbars */
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            -webkit-tap-highlight-color: transparent;
-            transition: background 0.3s cubic-bezier(0.4, 0, 0.2, 1), 
-                        border-color 0.3s ease, 
-                        color 0.3s ease, 
-                        box-shadow 0.3s ease,
-                        transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
-        *::-webkit-scrollbar { display: none; }
-
-        body {
-            background-color: var(--bg-base);
-            color: var(--text-main);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            overflow-x: hidden;
-            position: relative;
-            padding: 1.5rem;
-        }
-
-        /* Nubes de Color Orgánicas y Animadas de Fondo (Cero impacto en RAM) */
-        body::before, body::after {
-            content: '';
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(140px);
-            pointer-events: none;
-            z-index: 1;
-            animation: floatMesh 12s infinite alternate ease-in-out;
-        }
-        body::before {
-            width: 400px;
-            height: 400px;
-            background: var(--bg-mesh-1);
-            top: -5%;
-            left: -5%;
-        }
-        body::after {
-            width: 350px;
-            height: 350px;
-            background: var(--bg-mesh-2);
-            bottom: -5%;
-            right: -5%;
-            animation-delay: -6s;
-        }
-
-        @keyframes floatMesh {
-            0% { transform: translate(0, 0) scale(1); }
-            100% { transform: translate(40px, 30px) scale(1.15); }
-        }
-
-        /* =========================================================================
-           BOTÓN ORBE INTERACTIVO (SOL / LUNA)
-           ========================================================================= */
-        .theme-orb {
-            position: absolute;
-            top: 2rem;
-            right: 2rem;
-            background: var(--card-bg);
-            backdrop-filter: var(--glass-blur);
-            -webkit-backdrop-filter: var(--glass-blur);
-            border: 1px solid var(--card-border);
-            color: var(--text-main);
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            cursor: pointer;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 1.5rem;
-            box-shadow: var(--shadow-premium);
-            z-index: 100;
-        }
-        .theme-orb:hover {
-            transform: scale(1.1) rotate(15deg);
-            border-color: var(--primary);
-            color: var(--primary);
-        }
-
-        /* =========================================================================
-           BLOQUE MAESTRO BENTO ASIMÉTRICO (FULL DISEÑO)
-           ========================================================================= */
-        .master-bento {
-            display: flex;
-            width: 100%;
-            max-width: 1050px;
-            min-height: 640px;
-            background: var(--card-bg);
-            backdrop-filter: var(--glass-blur);
-            -webkit-backdrop-filter: var(--glass-blur);
-            border: 1px solid var(--card-border);
-            border-radius: 36px;
-            overflow: hidden;
-            box-shadow: var(--shadow-premium);
-            z-index: 10;
-        }
-
-        /* Bloque de Exhibición Izquierdo (Mural Interactivo) */
-        .showcase-grid {
-            flex: 1.1;
-            background: linear-gradient(135deg, rgba(255,255,255,0.01) 0%, rgba(255,255,255,0.04) 100%);
-            padding: 4rem;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            position: relative;
-            border-right: 1px solid var(--card-border);
-        }
-
-        .showcase-top {
-            display: flex;
-            align-items: center;
-            gap: 0.6rem;
-            font-weight: 800;
-            font-size: 0.85rem;
-            text-transform: uppercase;
-            letter-spacing: 0.15em;
-            color: var(--primary);
-        }
-        .showcase-top i { font-size: 1.3rem; }
-
-        .mural-content h1 {
-            font-size: clamp(2.2rem, 4vw, 3rem);
-            font-weight: 900;
-            line-height: 1.1;
-            letter-spacing: -0.05em;
-            margin-bottom: 1.5rem;
-            background: linear-gradient(135deg, var(--text-main) 30%, var(--text-muted) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        /* Bento Miniboxes Internos (Efecto de profundidad) */
-        .bento-subgrid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1.25rem;
-            margin-top: 2rem;
-        }
-        .mini-box {
-            background: var(--card-inner);
-            border: 1px solid var(--card-border);
-            border-radius: 20px;
-            padding: 1.5rem;
-            display: flex;
-            flex-direction: column;
-            gap: 0.6rem;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.02);
-        }
-        .mini-box i {
-            font-size: 1.8rem;
-            background: var(--primary-gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        .mini-box h3 { font-size: 1.1rem; font-weight: 800; letter-spacing: -0.02em; }
-        .mini-box p { font-size: 0.85rem; font-weight: 600; color: var(--text-muted); line-height: 1.4; }
-
-        /* Bloque de Autenticación Derecho */
-        .interactive-auth-panel {
-            flex: 0.9;
-            padding: 4rem;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            background: var(--card-inner);
-            position: relative;
-        }
-
-        .form-core-wrapper {
-            width: 100%;
-            max-width: 320px;
-            margin: 0 auto;
-        }
-
-        .form-core-wrapper h2 {
-            font-size: 2rem;
-            font-weight: 900;
-            letter-spacing: -0.04em;
-            margin-bottom: 0.5rem;
-        }
-        .form-core-wrapper p.desc {
-            font-size: 0.95rem;
-            font-weight: 600;
-            color: var(--text-muted);
-            margin-bottom: 2.5rem;
-        }
-
-        /* Botón de Google Estilo Premium Cromo/Glow */
-        .btn-google-premium {
-            width: 100%;
-            background: var(--bg-base);
-            color: var(--text-main);
-            border: 1px solid var(--border-color);
-            padding: 1.1rem 1.5rem;
-            border-radius: 18px;
-            font-size: 1rem;
-            font-weight: 800;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.8rem;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
-            position: relative;
-            overflow: hidden;
-        }
-        .btn-google-premium::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(rgba(255,255,255,0.15), transparent);
-            opacity: 0;
-            transition: opacity 0.2s;
-        }
-        .btn-google-premium:hover {
-            transform: translateY(-2px);
-            border-color: var(--primary);
-            box-shadow: 0 10px 25px var(--primary-glow);
-        }
-        .btn-google-premium:hover::before { opacity: 1; }
-        .btn-google-premium svg { width: 22px; height: 22px; flex-shrink: 0; }
-
-        /* Formulario Onboarding Dinámico */
-        #register-form {
-            display: none;
-            animation: smoothSlideUp 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
-
-        @keyframes smoothSlideUp {
-            from { opacity: 0; transform: translateY(16px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .input-capsule {
-            margin-bottom: 1.5rem;
-        }
-        .input-capsule label {
-            display: block;
-            font-size: 0.75rem;
-            font-weight: 800;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
-            margin-bottom: 0.6rem;
-        }
-        .input-capsule input, .input-capsule select {
-            width: 100%;
-            background: var(--bg-base);
-            border: 2px solid var(--border-color);
-            border-radius: 16px;
-            padding: 1rem 1.2rem;
-            font-size: 1rem;
-            color: var(--text-main);
-            font-weight: 700;
-            outline: none;
-        }
-        .input-capsule input:focus, .input-capsule select:focus {
-            border-color: var(--primary);
-            box-shadow: 0 0 0 5px var(--primary-glow);
-            background: var(--card-inner);
-        }
-
-        .btn-submit-premium {
-            width: 100%;
-            background: var(--primary-gradient);
-            color: #FFFFFF;
-            border: none;
-            padding: 1.1rem;
-            border-radius: 16px;
-            font-size: 1rem;
-            font-weight: 800;
-            cursor: pointer;
-            box-shadow: 0 8px 24px var(--primary-glow);
-            letter-spacing: 0.02em;
-        }
-        .btn-submit-premium:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 12px 30px var(--primary-glow);
-            filter: brightness(1.1);
-        }
-        .btn-submit-premium:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
-        }
-
-        /* Contenedor de Errores Animado */
-        .error-capsule {
-            min-height: 28px;
-            margin-top: 1.25rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.4rem;
-            color: var(--accent);
-            background: var(--accent-glow);
-            padding: 0.5rem;
-            border-radius: 10px;
-            font-size: 0.85rem;
-            font-weight: 800;
-            opacity: 0;
-            transform: scale(0.95);
-            transition: all 0.3s ease;
-        }
-        .error-capsule.active-error { opacity: 1; transform: scale(1); }
-
-        /* Loader Espejo Completo */
-        .panel-loader {
-            display: none;
-            position: absolute;
-            inset: 0;
-            background: var(--card-inner);
-            z-index: 90;
-            justify-content: center;
-            align-items: center;
-        }
-        .cyber-spinner {
-            width: 44px;
-            height: 44px;
-            border: 4px solid var(--bg-base);
-            border-top-color: var(--primary);
-            border-bottom-color: var(--secondary);
-            border-radius: 50%;
-            animation: spinDual 1s cubic-bezier(0.68, -0.55, 0.27, 1.55) infinite;
-        }
-        @keyframes spinDual { to { transform: rotate(360deg); } }
-
-        /* =========================================================================
-           ADAPTACIÓN RESPONSIVA TOTAL (PC / CELULAR)
-           ========================================================================= */
-        @media (max-width: 960px) {
-            .master-bento {
-                flex-direction: column;
-                max-width: 460px;
-                min-height: auto;
-                border-radius: 28px;
-            }
-            .showcase-grid {
-                padding: 2.5rem 2rem;
-                border-right: none;
-                border-bottom: 1px solid var(--card-border);
-            }
-            .bento-subgrid { display: none; } /* Ocultar subcuadrículas para optimizar scroll */
-            .interactive-auth-panel { padding: 3rem 2rem; }
-            .mural-content h1 { font-size: 2rem; margin-bottom: 0.5rem; }
-        }
-
-        @media (max-width: 400px) {
-            .master-bento { border-radius: 22px; }
-            .interactive-auth-panel { padding: 2.5rem 1.25rem; }
-            .form-core-wrapper h2 { font-size: 1.7rem; }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+  <title>Acceso | CENTRO ESCOLAR CANTÓN LOS PRADOS</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <style>
+    body {
+      margin: 0; min-height: 100vh; overflow-x: hidden;
+      background: radial-gradient(ellipse at 20% 10%, rgba(124,58,237,0.15) 0%, transparent 50%),
+                  radial-gradient(ellipse at 80% 90%, rgba(79,70,229,0.12) 0%, transparent 50%),
+                  linear-gradient(135deg, #4f46e5 0%, #6366f1 35%, #7c3aed 70%, #8b5cf8 100%);
+      font-family: system-ui, -apple-system, 'Segoe UI', sans-serif; color: #1e1b4b;
+    }
+    body::before {
+      content: ''; position: fixed; inset: 0; z-index: 0; opacity: 0.04;
+      background-image: radial-gradient(circle at 25% 25%, #fff 2px, transparent 3px),
+                        radial-gradient(circle at 75% 75%, #fff 2px, transparent 3px);
+      background-size: 60px 60px; pointer-events: none;
+    }
+    .deco { position: fixed; z-index: 1; opacity: 0.5; pointer-events: none; }
+    .deco-1 { width: 200px; height: 200px; border-radius: 30% 70% 70% 30%/30% 30% 70% 70%; background: linear-gradient(135deg, rgba(255,255,255,0.3), rgba(255,255,255,0.1)); top: -50px; right: -30px; animation: morph 18s ease-in-out infinite; }
+    .deco-2 { width: 140px; height: 140px; border-radius: 60% 40% 30% 70%/60% 30% 70% 40%; background: linear-gradient(135deg, rgba(251,191,36,0.4), rgba(245,158,11,0.2)); bottom: 8%; left: -40px; animation: morph 22s ease-in-out infinite reverse; }
+    .deco-3 { width: 100px; height: 100px; border-radius: 50%; background: radial-gradient(circle, rgba(56,189,248,0.5), transparent 70%); top: 55%; right: 12%; animation: pulse 4s ease-in-out infinite; }
+    .deco-4 { width: 160px; height: 160px; border-radius: 40% 60% 60% 40%/40% 40% 60% 60%; background: linear-gradient(135deg, rgba(16,185,129,0.3), transparent); bottom: -60px; left: 35%; animation: morph 20s ease-in-out infinite; }
+    @keyframes morph { 0%,100% { border-radius: 30% 70% 70% 30%/30% 30% 70% 70%; } 33% { border-radius: 60% 40% 30% 70%/60% 30% 70% 40%; } 66% { border-radius: 40% 60% 60% 40%/40% 40% 60% 60%; } }
+    @keyframes pulse { 0%,100% { transform: scale(1); opacity: 0.5; } 50% { transform: scale(1.15); opacity: 0.7; } }
+    .login-wrapper { position: relative; z-index: 10; min-height: 100vh; display: grid; place-items: center; padding: 1rem 1rem 2rem; }
+    .login-card { background: rgba(255,255,255,0.96); border: 1px solid rgba(255,255,255,0.6); border-radius: 24px; padding: 2.25rem 2rem; max-width: 480px; width: 100%; box-shadow: 0 20px 60px rgba(0,0,0,0.18), 0 8px 24px rgba(79,70,229,0.12); backdrop-filter: blur(12px); animation: cardEntrance 0.5s cubic-bezier(0.2,0.8,0.2,1); }
+    @keyframes cardEntrance { from { opacity: 0; transform: translateY(24px) scale(0.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
+    .school-header { text-align: center; margin-bottom: 1.75rem; position: relative; }
+    .school-header::after { content: ''; display: block; width: 60px; height: 4px; background: linear-gradient(90deg, #4f46e5, #7c3aed); margin: 0.8rem auto 0; border-radius: 2px; }
+    .school-logo { font-size: 1.65rem; font-weight: 800; line-height: 1.2; background: linear-gradient(135deg, #4f46e5, #7c3aed, #a78bfa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-shadow: 0 2px 4px rgba(0,0,0,0.08); }
+    .school-subtitle { color: #475569; font-size: 1.05rem; font-weight: 500; margin-top: 0.3rem; }
+    .badge-exclusivo { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.35rem 0.85rem; background: linear-gradient(135deg, #f0f9ff, #e0f2fe); color: #0369a1; border-radius: 999px; font-size: 0.8rem; font-weight: 600; margin-top: 0.75rem; border: 1px solid #bae6fd; box-shadow: 0 2px 8px rgba(3,105,161,0.08); }
+    .btn-google { width: 100%; padding: 1rem; border: 1px solid #cbd5e1; border-radius: 16px; background: linear-gradient(135deg, #fff, #f8fafc); color: #0f172a; font-weight: 600; font-size: 1.05rem; display: flex; align-items: center; justify-content: center; gap: 0.9rem; cursor: pointer; transition: all 0.25s; min-height: 52px; position: relative; overflow: hidden; }
+    .btn-google::before { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(79,70,229,0.06), rgba(124,58,237,0.06)); opacity: 0; transition: opacity 0.25s; }
+    .btn-google:hover::before { opacity: 1; }
+    .btn-google:hover { border-color: #94a3b8; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.12); }
+    .btn-google:active { transform: translateY(0); }
+    .btn-google img { width: 24px; height: 24px; flex-shrink: 0; }
+    .step { display: none; animation: fadeSlide 0.35s ease; }
+    .step.active { display: block; }
+    @keyframes fadeSlide { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+    .grade-select { width: 100%; padding: 0.95rem; border: 2px solid #cbd5e1; border-radius: 14px; font-size: 1.05rem; background: #fff; margin: 1.1rem 0; cursor: pointer; transition: all 0.2s; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 1rem center; }
+    .grade-select:focus { outline: none; border-color: #4f46e5; box-shadow: 0 0 0 4px rgba(79,70,229,0.15); }
+    .btn-primary { width: 100%; padding: 1rem; border: none; border-radius: 16px; background: linear-gradient(135deg, #4f46e5, #7c3aed); color: #fff; font-weight: 700; font-size: 1.05rem; cursor: pointer; transition: all 0.25s; min-height: 52px; margin-top: 0.4rem; box-shadow: 0 6px 20px rgba(79,70,229,0.35); position: relative; overflow: hidden; }
+    .btn-primary::after { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(255,255,255,0.2), transparent); opacity: 0; transition: opacity 0.25s; }
+    .btn-primary:hover::after { opacity: 1; }
+    .btn-primary:hover { filter: brightness(1.05); transform: translateY(-2px); box-shadow: 0 10px 28px rgba(79,70,229,0.5); }
+    .btn-primary:active { transform: translateY(0); }
+    .error { color: #dc2626; font-size: 0.9rem; margin-top: 0.7rem; padding: 0.65rem 1rem; background: linear-gradient(135deg, #fef2f2, #fee2e2); border-radius: 12px; border-left: 3px solid #dc2626; display: none; animation: shake 0.4s ease; }
+    .error.show { display: block; }
+    @keyframes shake { 25%, 75% { transform: translateX(4px); } 0%, 100% { transform: translateX(0); } }
+    .success-msg { color: #047857; font-size: 0.9rem; margin-top: 0.7rem; padding: 0.65rem 1rem; background: linear-gradient(135deg, #ecfdf5, #d1fae5); border-radius: 12px; border-left: 3px solid #10b981; display: none; }
+    .success-msg.show { display: block; animation: fadeSlide 0.3s; }
+    .loading-wrap { text-align: center; padding: 1.5rem 0; }
+    .loading-spinner { width: 52px; height: 52px; border: 4px solid rgba(79,70,229,0.15); border-top-color: #4f46e5; border-radius: 50%; animation: spin 0.9s linear infinite; margin: 0 auto 1rem; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .loading-text { font-weight: 600; color: #1e293b; margin-bottom: 0.3rem; }
+    .loading-sub { color: #64748b; font-size: 0.92rem; }
+    .login-footer { text-align: center; margin-top: 1.75rem; color: rgba(255,255,255,0.9); font-size: 0.9rem; font-weight: 500; }
+    .demo-banner { position: fixed; top: 0; left: 0; right: 0; z-index: 9999; background: linear-gradient(135deg, #f59e0b, #f97316); color: #fff; padding: 0.6rem 1rem; font-size: 0.85rem; font-weight: 600; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.15); display: none; animation: slideDown 0.3s ease; }
+    .demo-banner.show { display: block; }
+    @keyframes slideDown { from { transform: translateY(-100%); } to { transform: translateY(0); } }
+    .demo-stats { display: flex; justify-content: center; gap: 1rem; margin-top: 0.4rem; font-size: 0.85rem; color: #475569; }
+    .demo-stat { display: flex; align-items: center; gap: 0.3rem; }
+    @media (max-width: 480px) { .login-card { padding: 1.75rem 1.25rem; border-radius: 20px; } .school-logo { font-size: 1.45rem; } .school-subtitle { font-size: 0.98rem; } .btn-google, .btn-primary { padding: 0.9rem; font-size: 1rem; } .deco { display: none; } }
+    @media (max-width: 375px) { .login-card { padding: 1.4rem 1rem; } .school-logo { font-size: 1.3rem; } .badge-exclusivo { font-size: 0.75rem; padding: 0.3rem 0.7rem; } .grade-select { padding: 0.85rem; font-size: 1rem; } }
+  </style>
 </head>
 <body>
+  <div class="deco deco-1"></div><div class="deco deco-2"></div>
+  <div class="deco deco-3"></div><div class="deco deco-4"></div>
+  <div id="demo-banner" class="demo-banner">
+    🎮 Modo demostración activo • <span id="demo-stats" class="demo-stats"></span> • <button id="demo-exit" style="background:none;border:none;color:#fff;font-weight:700;cursor:pointer;margin-left:0.5rem;text-decoration:underline">Salir</button>
+  </div>
 
-    <!-- Selector de Entorno Sol / Luna -->
-    <button class="theme-orb" id="theme-btn" aria-label="Cambiar modo de pantalla">
-        <i class='bx bx-moon' id="theme-icon"></i>
-    </button>
-
-    <div class="master-bento">
-        <!-- Bloque Izquierdo: Presentación Temática Bento -->
-        <section class="showcase-grid">
-            <div class="showcase-top">
-                <i class='bx bxs-graduation'></i>
-                <span>C.E. Los Prados</span>
-            </div>
-            
-            <div class="mural-content">
-                <h1>Aprende.<br>Comprueba.<br>Crea.</h1>
-                
-                <!-- Bento boxes integrados en el diseño estructural -->
-                <div class="bento-subgrid">
-                    <div class="mini-box">
-                        <i class='bx bx-math'></i>
-                        <h3>Matemática</h3>
-                        <p>Análisis y gráficas interactivas en tiempo real.</p>
-                    </div>
-                    <div class="mini-box">
-                        <i class='bx bx-atom'></i>
-                        <h3>Ciencias</h3>
-                        <p>Simulaciones y laboratorios mecánicos.</p>
-                    </div>
-                </div>
-            </div>
-            
-            <div></div>
-        </section>
-
-        <!-- Bloque Derecho: Formulario e Interacción Eficiente -->
-        <section class="interactive-auth-panel">
-            <div class="panel-loader" id="loader">
-                <div class="cyber-spinner"></div>
-            </div>
-
-            <div class="form-core-wrapper">
-                <div id="login-section">
-                    <h2>Ingresar</h2>
-                    <p class="desc">Usa tu cuenta digital @clases.edu.sv</p>
-                    
-                    <button class="btn-google-premium" id="btn-login">
-                        <svg viewBox="0 0 24 24">
-                            <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
-                            <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
-                            <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
-                            <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.47 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
-                        </svg>
-                        Cuenta institucional
-                    </button>
-                </div>
-
-                <!-- Formulario Onboarding Condicional -->
-                <form id="register-form">
-                    <h2>Tu Perfil</h2>
-                    <p class="desc">Ajustemos tu espacio antes de entrar.</p>
-                    
-                    <div class="input-capsule">
-                        <label for="school-code">Código del Centro Escolar</label>
-                        <input type="number" id="school-code" placeholder="Ej. 10856" required autocomplete="off">
-                    </div>
-                    
-                    <div class="input-capsule">
-                        <label for="student-grade">Nivel de Aula</label>
-                        <select id="student-grade" required>
-                            <option value="" disabled selected>Elige tu grado...</option>
-                            <option value="7">Séptimo Grado (7°)</option>
-                            <option value="8">Octavo Grado (8°)</option>
-                            <option value="9">Noveno Grado (9°)</option>
-                        </select>
-                    </div>
-                    
-                    <button type="submit" class="btn-submit-premium" id="btn-submit">Acceder al Aula</button>
-                </form>
-
-                <div class="error-capsule" id="error-box"></div>
-            </div>
-        </section>
+  <main class="login-wrapper">
+    <div class="login-card">
+      <div class="school-header">
+        <h1 class="school-logo">CENTRO ESCOLAR<br>CANTÓN LOS PRADOS</h1>
+        <p class="school-subtitle">Plataforma de Aprendizaje Digital</p>
+        <span class="badge-exclusivo">🔒 Acceso institucional</span>
+      </div>
+      <div id="step-login" class="step active">
+        <button id="btn-google" class="btn-google" aria-label="Iniciar con Google">
+          <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="G">
+          Continuar con Google
+        </button>
+        <p id="login-error" class="error"></p>
+      </div>
+      <div id="step-grade" class="step">
+        <h2 style="text-align:center;font-weight:800;font-size:1.5rem;margin-bottom:0.3rem">¡Bienvenido! 🎓</h2>
+        <p style="text-align:center;color:#475569;margin-bottom:0.9rem">Selecciona tu grado actual:</p>
+        <select id="select-grado" class="grade-select"><option value="">-- Elige tu grado --</option><option value="7">✨ Séptimo Grado</option><option value="8">🚀 Octavo Grado</option><option value="9">🏆 Noveno Grado</option></select>
+        <p id="grade-error" class="error">Debes seleccionar un grado para continuar</p>
+        <button id="btn-save-grade" class="btn-primary">Continuar</button>
+      </div>
+      <div id="step-loading" class="step"><div class="loading-wrap"><div class="loading-spinner"></div><p class="loading-text">Preparando tu espacio...</p><p class="loading-sub">Un momento, por favor ✨</p></div></div>
     </div>
+    <footer class="login-footer">© <span id="year"></span> Centro Escolar Cantón Los Prados</footer>
+  </main>
 
-    <script type="module">
-        import { auth, provider, db } from './js/initFirebase.js';
-        import { signInWithPopup, signOut, onAuthStateChanged, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-        import { doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+  <script type="module">
+    import { initFirebase, getAuthInstance, getDbInstance } from './js/initFirebase.js';
+    import { GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-auth.js";
+    import { doc, getDoc, setDoc, updateDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js";
 
-        const loader = document.getElementById('loader');
-        const errorBox = document.getElementById('error-box');
-        const themeBtn = document.getElementById('theme-btn');
-        const themeIcon = document.getElementById('theme-icon');
-        let tempUser = null;
+    const { auth, db } = initFirebase();
+    const provider = new GoogleAuthProvider();
+    const $ = (id) => document.getElementById(id);
+    $('year').textContent = new Date().getFullYear();
 
-        const showLoading = (state) => { loader.style.display = state ? 'flex' : 'none'; };
-        
-        const displayError = (msg) => { 
-            if (msg) {
-                errorBox.innerHTML = `<i class='bx bx-error-circle'></i> ${msg}`;
-                errorBox.classList.add('active-error');
-            } else {
-                errorBox.innerHTML = '';
-                errorBox.classList.remove('active-error');
-            }
-        };
+    const GAME_CONFIG = { puntosInicio: 0, energiaInicio: 5, energiaMax: 5 };
 
-        // =========================================================================
-        // MOTOR DE PREFERENCIA DE TEMAS DE LA GEM (LUNA / SOL)
-        // =========================================================================
-        const currentTheme = localStorage.getItem('theme') || 'light';
-        document.documentElement.setAttribute('data-theme', currentTheme);
-        themeIcon.className = currentTheme === 'dark' ? 'bx bx-sun' : 'bx bx-moon';
+    function validateEmail(email) {
+      if (!email?.endsWith('@clases.edu.sv')) return { valid: false, error: 'Solo correos @clases.edu.sv' };
+      return { valid: true, isStudent: /^\d+$/.test(email.split('@')[0]), local: email.split('@')[0] };
+    }
+    function getInitials(name) { return (name || 'USR').split(' ').map(n => n[0]).join('').slice(0, 3).toUpperCase(); }
+    function showStep(id) { document.querySelectorAll('.step').forEach(e => e.classList.remove('active')); $(id)?.classList.add('active'); }
+    function showError(id, msg) { const e=$(id); if(!e)return; e.textContent=msg; e.classList.add('show'); setTimeout(()=>e.classList.remove('show'), 4000); }
 
-        themeBtn.addEventListener('click', () => {
-            let theme = document.documentElement.getAttribute('data-theme');
-            let newTheme = theme === 'dark' ? 'light' : 'dark';
-            document.documentElement.setAttribute('data-theme', newTheme);
-            localStorage.setItem('theme', newTheme);
-            themeIcon.className = newTheme === 'dark' ? 'bx bx-sun' : 'bx bx-moon';
-        });
+    // ===== FLUJO LOGIN NORMAL =====
+    $('btn-google')?.addEventListener('click', async () => {
+      try {
+        const r = await signInWithPopup(auth, provider);
+        const u = r.user, email = u.email;
+        const v = validateEmail(email);
+        if (!v.valid) { await auth.signOut(); showError('login-error', v.error); return; }
+        const initials = getInitials(u.displayName);
+        const docId = v.isStudent ? `est_${v.local}_${initials}` : `doc_${initials}_0`;
+        const snap = await getDoc(doc(db, 'users', docId));
+        if (snap.exists()) {
+          if (v.isStudent) await updateDoc(doc(db, 'users', docId), { lastLogin: serverTimestamp() });
+          window.location.href = v.isStudent ? `pages/home.html?grado=${snap.data().grado}` : 'public/admin/admin.html';
+        } else {
+          if (v.isStudent) { window._tempUser = { uid: u.uid, email, name: u.displayName, initials, docId }; showStep('step-grade'); }
+          else { await setDoc(doc(db, 'users', docId), { uid: u.uid, name: u.displayName, email, rol: 'docente', grado: 0, initials, createdAt: serverTimestamp(), lastLogin: serverTimestamp() }); showStep('step-loading'); setTimeout(() => window.location.href = 'public/admin/admin.html', 700); }
+        }
+      } catch (err) { showError('login-error', err.code === 'auth/popup-closed-by-user' ? 'Inicio cancelado' : 'Error. Intenta de nuevo'); }
+    });
 
-        // Extrae las iniciales de manera limpia para el ID del Documento solicitado
-        const getInitials = (name) => {
-            if (!name) return "USR";
-            return name.trim().split(/\s+/).map(w => w[0].toUpperCase()).join('');
-        };
+    $('btn-save-grade')?.addEventListener('click', async () => {
+      const g = $('select-grado')?.value;
+      if (!g) { showError('grade-error', 'Selecciona tu grado'); return; }
+      const { uid, email, name, initials, docId } = window._tempUser || {};
+      if (!uid) return showError('grade-error', 'Sesión inválida');
+      showStep('step-loading');
+      try {
+        await setDoc(doc(db, 'users', docId), { uid, name, email, rol: 'estudiante', grado: parseInt(g), initials, createdAt: serverTimestamp(), lastLogin: serverTimestamp(), puntos: GAME_CONFIG.puntosInicio, energia: GAME_CONFIG.energiaInicio, nivel: 1 });
+        window.location.href = `pages/home.html?grado=${g}`;
+      } catch (e) { showError('grade-error', 'Error guardando. Reintentando...'); setTimeout(() => showStep('step-grade'), 1500); }
+    });
 
-        // =========================================================================
-        // COMANDO DE CONSOLA PARA PRUEBAS RÁPIDAS COMO ESTUDIANTE DEMO (9° GRADO)
-        // =========================================================================
-        window.loginDemo = async () => {
-            console.log("🛠️ Inicializando bypass de cuenta estudiantil anónima...");
-            showLoading(true);
-            try {
-                await signInAnonymously(auth);
-            } catch (err) {
-                console.error("Error al arrancar cuenta demo:", err);
-                showLoading(false);
-            }
-        };
-        console.log("💻 DEV CONSOLE: Ejecuta loginDemo() para saltar directo como alumno de prueba.");
+    // ===== COMANDO CONSOLA: INICIAR SESIÓN DEMO =====
+    window.iniciarSesionDemo = async function(grado) {
+      if (![7,8,9].includes(grado)) { console.warn('⚠️ Grado debe ser 7, 8 o 9'); return; }
+      console.log('🎮 Iniciando sesión demo...');
+      const email = '123456@clases.edu.sv', name = 'juan perez', initials = 'JP', docId = `est_123456_${initials}`;
+      try {
+        const snap = await getDoc(doc(db, 'users', docId));
+        let userData;
+        if (!snap.exists()) {
+          console.log('📝 Usuario demo no existe. Creando por primera vez...');
+          userData = { uid: 'demo_123456', name, email, rol: 'estudiante', grado, initials, createdAt: serverTimestamp(), lastLogin: serverTimestamp(), puntos: GAME_CONFIG.puntosInicio, energia: GAME_CONFIG.energiaInicio, nivel: 1, rachas: { tareas: 0, examenes: 0 }, logros: [], isDemo: true };
+          await setDoc(doc(db, 'users', docId), userData);
+        } else {
+          console.log('📂 Usuario demo encontrado. Actualizando grado...');
+          userData = snap.data();
+          await updateDoc(doc(db, 'users', docId), { grado, lastLogin: serverTimestamp() });
+          userData.grado = grado;
+        }
+        sessionStorage.setItem('demoUser', JSON.stringify(userData));
+        console.log(`✅ Sesión iniciada en grado ${grado}`);
+        console.log(`📊 Stats: ⭐ ${userData.puntos} pts | ❤️ ${userData.energia} vidas | 🔷 Nv.${userData.nivel}`);
+        console.log('🔗 Redirigiendo...');
+        updateDemoBannerUI(userData);
+        setTimeout(() => window.location.href = `pages/home.html?grado=${grado}&demo=true`, 600);
+      } catch (err) { console.error('❌ Error demo:', err); }
+    };
 
-        // Escuchador de Estado Centralizado
-        onAuthStateChanged(auth, async (user) => {
-            if (user) {
-                showLoading(true);
-                await verifyAndRoute(user);
-            } else {
-                showLoading(false);
-            }
-        });
+    // ===== BANNER & UTILS =====
+    function updateDemoBannerUI(data) {
+      const el = $('demo-stats');
+      if (el) el.innerHTML = `<span class="demo-stat">⭐ <strong>${data.puntos ?? 0}</strong> pts</span><span class="demo-stat">❤️ <strong>${data.energia ?? 5}</strong> vidas</span><span class="demo-stat">🔷 Nv.${data.nivel ?? 1}</span>`;
+    }
+    $('demo-exit')?.addEventListener('click', () => { sessionStorage.removeItem('demoUser'); $('demo-banner')?.classList.remove('show'); window.location.href = '/'; });
+    if (sessionStorage.getItem('demoUser')) { updateDemoBannerUI(JSON.parse(sessionStorage.getItem('demoUser'))); $('demo-banner')?.classList.add('show'); }
 
-        const verifyAndRoute = async (user) => {
-            displayError('');
-            
-            // Atrapador de Bypass de Cuenta Demo
-            if (user.isAnonymous) {
-                const demoStudent = {
-                    name: "Estudiante Demo",
-                    email: "2026999@clases.edu.sv",
-                    role: 'estudiante',
-                    grade: '9',
-                    schoolCode: '10856'
-                };
-                // Inserción limpia en users usando las iniciales (ED) como ID
-                await setDoc(doc(db, "users", "ED"), demoStudent);
-                localStorage.setItem('user_meta', JSON.stringify(demoStudent));
-                window.location.href = './pages/home.html';
-                return;
-            }
-            
-            if (!user.email || !user.email.endsWith('@clases.edu.sv')) {
-                await signOut(auth);
-                localStorage.removeItem('user_meta');
-                displayError("Usa tu correo institucional @clases.edu.sv");
-                showLoading(false);
-                return;
-            }
-
-            const prefix = user.email.split('@')[0];
-            const isStudent = /^\d+$/.test(prefix);
-            const docId = getInitials(user.displayName);
-            
-            // Verificación por caché RAM local para optimizar lecturas
-            const localCache = localStorage.getItem('user_meta');
-            if (localCache) {
-                const cache = JSON.parse(localCache);
-                if (cache.email === user.email) {
-                    window.location.href = isStudent ? './pages/home.html' : './admin/admin.html';
-                    return;
-                }
-            }
-
-            try {
-                // CONSERVACIÓN ESTRICTA DEL FLUJO SOLICITADO EN LA COLECCIÓN USERS
-                const userRef = doc(db, "users", docId);
-                const userSnap = await getDoc(userRef);
-
-                if (userSnap.exists()) {
-                    const data = userSnap.data();
-                    localStorage.setItem('user_meta', JSON.stringify({ name: data.name, email: user.email, role: data.role, grade: data.grade || null }));
-                    window.location.href = isStudent ? './pages/home.html' : './admin/admin.html';
-                } else {
-                    if (!isStudent) {
-                        // Docente: Inserción directa de nombre, correo y rol
-                        const teacherData = { name: user.displayName, email: user.email, role: 'docente' };
-                        await setDoc(userRef, teacherData);
-                        localStorage.setItem('user_meta', JSON.stringify(teacherData));
-                        window.location.href = './admin/admin.html';
-                    } else {
-                        // Estudiante: Apertura del panel Bento de datos faltantes
-                        tempUser = { uid: docId, name: user.displayName, email: user.email };
-                        document.getElementById('login-section').style.display = 'none';
-                        document.getElementById('register-form').style.display = 'block';
-                        showLoading(false);
-                    }
-                }
-            } catch (err) {
-                displayError("Error de comunicación con la base de datos.");
-                showLoading(false);
-            }
-        };
-
-        document.getElementById('btn-login').addEventListener('click', async () => {
-            displayError('');
-            showLoading(true);
-            try {
-                const result = await signInWithPopup(auth, provider);
-                await verifyAndRoute(result.user);
-            } catch (err) {
-                displayError("Autenticación cancelada.");
-                showLoading(false);
-            }
-        });
-
-        document.getElementById('register-form').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            displayError('');
-            
-            const codeInput = document.getElementById('school-code').value.trim();
-            const gradeInput = document.getElementById('student-grade').value;
-            const submitBtn = document.getElementById('btn-submit');
-            
-            submitBtn.disabled = true;
-            showLoading(true);
-
-            try {
-                const studentData = {
-                    name: tempUser.name,
-                    email: tempUser.email,
-                    grade: gradeInput,
-                    schoolCode: codeInput,
-                    role: 'estudiante'
-                };
-
-                await setDoc(doc(db, "users", tempUser.uid), studentData);
-                localStorage.setItem('user_meta', JSON.stringify(studentData));
-                window.location.href = './pages/home.html';
-            } catch (err) {
-                displayError("No se pudo completar el registro.");
-                submitBtn.disabled = false;
-                showLoading(false);
-            }
-        });
-    </script>
+    console.log('🎓 Comandos útiles:');
+    console.log('• iniciarSesionDemo(7) | iniciarSesionDemo(8) | iniciarSesionDemo(9)');
+    console.log('  → Crea usuario "juan perez" una sola vez. Luego solo cambia grado y login.');
+  </script>
 </body>
 </html>

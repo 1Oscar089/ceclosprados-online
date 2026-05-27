@@ -1,74 +1,53 @@
-// =========================================================================
-// public/js/initFirebase.js
-// Configuración Central de Firebase para la plataforma C.E. Los Prados
-// =========================================================================
+// Public/js/initFirebase.js
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-app.js";
+import { getAnalytics, isSupported } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-analytics.js";
+import { getAuth, indexedDBLocalPersistence, initializeAuth, browserPopupRedirectResolver } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-auth.js";
+import { initializeFirestore, persistentLocalCache, persistentMultipleTabManager, getFirestore } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js";
+import { getStorage } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-storage.js";
 
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { 
-    getAuth, 
-    GoogleAuthProvider, 
-    signInWithPopup, 
-    signInAnonymously, 
-    signOut, 
-    onAuthStateChanged 
-} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-import { 
-    initializeFirestore, 
-    persistentLocalCache, 
-    persistentMultipleTabManager, 
-    doc, 
-    getDoc, 
-    getDocFromCache, 
-    setDoc, 
-    collection, 
-    query, 
-    where, 
-    getDocs, 
-    getDocsFromCache,
-    updateDoc,
-    arrayUnion
-} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-
-// Configuración oficial de tu proyecto Firebase
 const firebaseConfig = {
-    apiKey: "AIzaSyCm3JTxcaK5iNw4jikevlb8jKda1TexyHM",
-    authDomain: "ceclosprados-online.firebaseapp.com",
-    projectId: "ceclosprados-online",
-    storageBucket: "ceclosprados-online.firebasestorage.app",
-    messagingSenderId: "81400223246",
-    appId: "1:81400223246:web:5e8a976bcfa567af410e5f",
-    measurementId: "G-347HPXZHHE"
+  apiKey: "AIzaSyCm3JTxcaK5iNw4jikevlb8jKda1TexyHM",
+  authDomain: "ceclosprados-online.firebaseapp.com",
+  projectId: "ceclosprados-online",
+  storageBucket: "ceclosprados-online.firebasestorage.app",
+  messagingSenderId: "81400223246",
+  appId: "1:81400223246:web:5e8a976bcfa567af410e5f",
+  measurementId: "G-347HPXZHHE"
 };
 
-// 1. Inicializar la Aplicación
-const app = initializeApp(firebaseConfig);
+// Singleton
+let app, auth, db, analytics, storage;
 
-// 2. Inicializar Autenticación (Google y Anónima para la demo)
-export const auth = getAuth(app);
-export const provider = new GoogleAuthProvider();
+export function initFirebase() {
+  if (app) return { auth, db, analytics, storage };
+  
+  app = initializeApp(firebaseConfig);
+  
+  // Auth con persistencia IndexedDB
+  auth = initializeAuth(app, {
+    persistence: indexedDBLocalPersistence,
+    popupRedirectResolver: browserPopupRedirectResolver
+  });
+  
+  // Firestore con nueva API de cache (reemplaza enableIndexedDbPersistence)
+  db = initializeFirestore(app, {
+    cache: persistentLocalCache({
+      tabManager: persistentMultipleTabManager()
+    })
+  });
+  
+  // Storage para archivos
+  storage = getStorage(app);
+  
+  // Analytics (opcional, con fallback)
+  analytics = null;
+  isSupported().then(yes => { if (yes) analytics = getAnalytics(app); });
+  
+  return { auth, db, analytics, storage };
+}
 
-// 3. Inicializar Firestore con OPTIMIZACIÓN EXTREMA
-// Esto activa la caché offline y sincroniza la memoria entre varias pestañas abiertas
-export const db = initializeFirestore(app, { 
-    localCache: persistentLocalCache({ tabManager: persistentMultipleTabManager() }) 
-});
-
-// 4. Exportamos las herramientas para usarlas en otras páginas (Login, Clases, Tareas)
-// Exportarlas desde aquí nos evita tener que escribir URLs largas en cada archivo HTML.
-export { 
-    signInWithPopup, 
-    signInAnonymously, 
-    signOut, 
-    onAuthStateChanged, 
-    doc, 
-    getDoc, 
-    getDocFromCache, 
-    setDoc,
-    updateDoc,
-    arrayUnion,
-    collection, 
-    query, 
-    where, 
-    getDocs, 
-    getDocsFromCache 
-};
+// Export directo para imports rápidos
+export const getAuthInstance = () => auth;
+export const getDbInstance = () => db;
+export const getStorageInstance = () => storage;
+export const getAnalyticsInstance = () => analytics;
