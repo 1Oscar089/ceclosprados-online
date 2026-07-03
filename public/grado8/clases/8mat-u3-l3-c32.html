@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+  <title>3.2 Aplicaciones de la función lineal, parte 2 | Matemática 8°</title>
+  <link rel="stylesheet" href="../../css/styles.css">
+
+  <script defer src="https://cdn.jsdelivr.net/npm/mathlive@0.98.0/dist/mathlive.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mathlive@0.98.0/dist/mathlive-fonts.css">
+  <script>
+    MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] } };
+  </script>
+  <script id="MathJax-script" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js"></script>
+
+  <style>
+    .back-btn { display: inline-flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem; color: var(--text-muted); font-weight: 500; }
+    .back-btn:hover { color: var(--primary); text-decoration: none; }
+    .class-header { margin-bottom: 2rem; }
+    .class-title { font-size: 1.4rem; margin-bottom: 0.5rem; color: var(--primary); }
+    .class-meta { font-size: 0.9rem; color: var(--text-muted); }
+    
+    .section { margin-bottom: 2.5rem; }
+    .section-title { font-size: 1.2rem; font-weight: 700; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; border-bottom: 2px solid var(--border); padding-bottom: 0.5rem; }
+    .section-P .section-title { color: #f59e0b; }
+    .section-S .section-title { color: #10b981; }
+    .section-E .section-title { color: #ef4444; }
+
+    .content-box { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.5rem; margin-bottom: 1.5rem; line-height: 1.8; }
+    
+    /* Layout para Esquemas y Texto */
+    .layout-split { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; align-items: start; }
+    @media (max-width: 768px) { .layout-split { grid-template-columns: 1fr; } }
+    
+    /* Contenedor de Gráficas Estáticas (Bloqueadas) */
+    .graph-container { background: white; border: 2px solid var(--border); border-radius: 0.5rem; padding: 1rem; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.05); overflow-x: auto;}
+    [data-theme="dark"] .graph-container { background: #f8fafc; } /* Fondo claro siempre para la gráfica para contraste */
+
+    /* Ejercicios */
+    .exercise-box { background: rgba(255,255,255,0.85); border: 2px solid rgba(167,139,250,0.2); border-radius: 1rem; padding: 2rem; margin-bottom: 2rem; }
+    [data-theme="dark"] .exercise-box { background: rgba(30,27,75,0.85); }
+    .problem { background: var(--surface-hover); border: 2px solid var(--border); border-radius: 0.75rem; padding: 1.5rem; margin-bottom: 1.5rem; transition: border-color 0.2s; }
+    .problem:hover { border-color: var(--primary); }
+    
+    .input-wrapper { display: flex; align-items: center; gap: 0.8rem; margin-top: 0.5rem; flex-wrap: wrap; }
+    math-field { min-width: 150px; font-size: 1.2rem; padding: 0.5rem 0.8rem; border: 2px solid var(--border); border-radius: 0.5rem; background: white; outline: none; text-align: center;}
+    math-field:focus-within { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(167, 139, 250, 0.2); }
+    [data-theme="dark"] math-field { background: #1e1b4b; border-color: #4f46e5; color: white; }
+    
+    .btn-submit { display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 1rem 2.5rem; background: linear-gradient(135deg, #a78bfa, #8b5cf6); color: white; border: none; border-radius: 0.75rem; font-weight: 800; font-size: 1.1rem; cursor: pointer; margin: 2rem auto; width: 100%; max-width: 400px; transition: transform 0.2s; }
+    .btn-submit:hover { transform: translateY(-3px); box-shadow: 0 6px 16px rgba(139, 92, 246, 0.4); }
+    .btn-submit:disabled { opacity: 0.6; cursor: not-allowed; }
+
+    .result-summary { text-align: center; padding: 3rem; background: var(--surface); border: 2px solid var(--border); border-radius: 1rem; margin: 2rem auto; }
+    .grade { font-size: 5rem; font-weight: 900; color: var(--primary); margin: 1rem 0; line-height: 1; }
+    
+    .loading { position: fixed; inset: 0; background: rgba(255,255,255,0.9); display: flex; justify-content: center; align-items: center; z-index: 9999; }
+    [data-theme="dark"] .loading { background: rgba(11,17,32,0.9); }
+  </style>
+</head>
+<body>
+  <div id="userbar"></div>
+  <div id="loading" class="loading">Cargando...</div>
+
+  <header class="app-container mt-4">
+    <a href="../../pages/clases.html" class="btn btn-ghost back-btn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><path d="M19 12H5"/><polyline points="12 19 5 12 12 5"/></svg>
+      Volver a Clases
+    </a>
+    <div class="class-header">
+      <h1 class="class-title">📈 3.2 Aplicaciones de la función lineal, parte 2</h1>
+      <p class="class-meta">Unidad 3: Función Lineal • Matemática 8°</p>
+    </div>
+  </header>
+
+  <main class="app-container">
+
+    <section class="section section-P">
+      <h2 class="section-title">🎯 Problema Inicial</h2>
+      <div class="content-box">
+        <div class="layout-split">
+          <div>
+            <p>Mario participó en una carrera, después de $5$ minutos tuvo dificultades e hizo una parada, luego de $3$ minutos se restableció y retomó la carrera, para recuperar el tiempo perdido aumentó la velocidad. Considerando $y$ kilómetros recorridos en $x$ minutos, responde:</p>
+            <ol style="margin-left: 1.5rem; margin-top: 1rem;">
+              <li style="margin-bottom: 0.8rem;">¿A qué distancia del punto de partida hizo la parada Mario?</li>
+              <li>Expresa la distancia recorrida $y$ después de transcurridos $x$ minutos en el recorrido, tanto antes como después de la parada.</li>
+            </ol>
+          </div>
+          <div class="graph-container">
+            <svg viewBox="0 0 350 350" style="width: 100%; max-width: 350px; font-family: sans-serif;">
+              <defs>
+                <marker id="arrow" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                  <path d="M 0 0 L 10 5 L 0 10 z" fill="#333" />
+                </marker>
+              </defs>
+              
+              <g stroke="#e5e7eb" stroke-width="1">
+                <line x1="30" y1="30" x2="330" y2="30"/> <line x1="30" y1="70" x2="330" y2="70"/> <line x1="30" y1="110" x2="330" y2="110"/> <line x1="30" y1="150" x2="330" y2="150"/> <line x1="30" y1="190" x2="330" y2="190"/> <line x1="30" y1="230" x2="330" y2="230"/> <line x1="30" y1="270" x2="330" y2="270"/> <line x1="30" y1="310" x2="330" y2="310"/> <line x1="30" y1="350" x2="330" y2="350"/> <line x1="30" y1="30" x2="30" y2="350"/> <line x1="70" y1="30" x2="70" y2="350"/> <line x1="110" y1="30" x2="110" y2="350"/> <line x1="150" y1="30" x2="150" y2="350"/> <line x1="190" y1="30" x2="190" y2="350"/> <line x1="230" y1="30" x2="230" y2="350"/> <line x1="270" y1="30" x2="270" y2="350"/> <line x1="310" y1="30" x2="310" y2="350"/> </g>
+
+              <line x1="30" y1="310" x2="340" y2="310" stroke="#333" stroke-width="1.5" marker-end="url(#arrow)"/>
+              <line x1="70" y1="350" x2="70" y2="20" stroke="#333" stroke-width="1.5" marker-end="url(#arrow)"/>
+              
+              <text x="330" y="325" font-size="12" font-style="italic" fill="#333">x</text>
+              <text x="310" y="335" font-size="12" font-style="italic" fill="#333">min</text>
+              <text x="55" y="30" font-size="12" font-style="italic" fill="#333">y</text>
+              <text x="80" y="45" font-size="12" font-style="italic" fill="#333">km</text>
+              
+              <text x="60" y="74" font-size="10" text-anchor="end" fill="#666">12</text>
+              <text x="60" y="114" font-size="10" text-anchor="end" fill="#666">10</text>
+              <text x="60" y="154" font-size="10" text-anchor="end" fill="#666">8</text>
+              <text x="60" y="194" font-size="10" text-anchor="end" fill="#666">6</text>
+              <text x="60" y="234" font-size="10" text-anchor="end" fill="#666">4</text>
+              <text x="60" y="274" font-size="10" text-anchor="end" fill="#666">2</text>
+              <text x="60" y="354" font-size="10" text-anchor="end" fill="#666">-2</text>
+              
+              <text x="30" y="325" font-size="10" text-anchor="middle" fill="#666">-2</text>
+              <text x="60" y="325" font-size="10" text-anchor="middle" fill="#666">O</text>
+              <text x="110" y="325" font-size="10" text-anchor="middle" fill="#666">2</text>
+              <text x="150" y="325" font-size="10" text-anchor="middle" fill="#666">4</text>
+              <text x="190" y="325" font-size="10" text-anchor="middle" fill="#666">6</text>
+              <text x="230" y="325" font-size="10" text-anchor="middle" fill="#666">8</text>
+              <text x="270" y="325" font-size="10" text-anchor="middle" fill="#666">10</text>
+              <text x="310" y="325" font-size="10" text-anchor="middle" fill="#666">12</text>
+
+              <line x1="70" y1="310" x2="170" y2="210" stroke="#0284c7" stroke-width="2"/>
+              <line x1="170" y1="210" x2="230" y2="210" stroke="#ef4444" stroke-width="2"/>
+              <line x1="230" y1="210" x2="310" y2="50" stroke="#333" stroke-width="2"/>
+
+              <circle cx="70" cy="310" r="4" fill="#0284c7"/>
+              <text x="80" y="325" font-size="12" fill="#0284c7" font-weight="bold">A</text>
+              
+              <circle cx="170" cy="210" r="4" fill="#0284c7"/>
+              <text x="170" y="225" font-size="12" text-anchor="middle" fill="#0284c7" font-weight="bold">B</text>
+              
+              <circle cx="230" cy="210" r="4" fill="#333"/>
+              <text x="230" y="225" font-size="12" text-anchor="middle" fill="#333" font-weight="bold">C</text>
+              
+              <circle cx="310" cy="50" r="4" fill="#333"/>
+              <text x="310" y="40" font-size="12" text-anchor="middle" fill="#333" font-weight="bold">D</text>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-S">
+      <h2 class="section-title">💡 Solución</h2>
+      <div class="content-box" style="border-left: 4px solid var(--success);">
+        <p><strong>1.</strong> Para determinar a qué distancia se encontraba Mario, se traza una línea paralela al eje $x$ y que pase por el punto en que se detuvo. Se puede observar que Mario paró a <strong>$5\text{ km}$</strong> del punto de partida.</p>
+        
+        <p style="margin-top: 1.5rem;"><strong>2. Distancia antes y después de la parada:</strong></p>
+        <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+          <li style="margin-bottom: 1rem;">Al determinar la razón de cambio antes de la parada, se observa que por cada minuto que pasa, Mario recorre $1\text{ km}$, es decir, $a = 1$; por tanto, la distancia $y$ antes de la parada es <strong>$y = x$</strong>.</li>
+          <li>Al determinar la razón de cambio después de la parada puede verse que por cada minuto que transcurre, Mario recorre $2\text{ km}$, es decir, $a = 2$, además pasa por el punto $(12, 13)$; de donde se obtiene el valor de $b$ al sustituir en $y = ax + b$:
+            <div style="font-family: monospace; background: var(--bg); padding: 1rem; border-radius: 0.5rem; text-align: center; margin: 1rem auto; max-width: 250px;">
+              $13 = 2(12) + b$<br>
+              $13 = 24 + b$<br>
+              $13 - 24 = b$<br>
+              $-11 = b$
+            </div>
+            Por tanto, la distancia $y$ después de la parada puede expresarse como <strong>$y = 2x - 11$</strong>.
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="section section-E" id="interactive-area">
+      <h2 class="section-title">✏️ Resuelve en Clase</h2>
+      
+      <div class="exercise-box">
+        <p style="margin-bottom: 1.5rem;">María salió de su casa hacia la escuela que dista $1,500\text{ m}$ de su casa. De la casa hasta el punto A se desplazó en bicicleta, y a partir de ahí se fue caminando. La gráfica muestra la relación entre el tiempo $x$ (minutos) transcurridos desde que sale de casa y la distancia recorrida $y$ (metros).</p>
+        
+        <div class="graph-container" style="margin-bottom: 2rem;">
+          <svg viewBox="0 0 350 400" style="width: 100%; max-width: 350px; font-family: sans-serif;">
+            <defs>
+              <marker id="arrow" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="#333" />
+              </marker>
+            </defs>
+            
+            <g stroke="#e5e7eb" stroke-width="1">
+              <line x1="30" y1="20" x2="330" y2="20"/> <line x1="30" y1="50" x2="330" y2="50"/> <line x1="30" y1="80" x2="330" y2="80"/> <line x1="30" y1="110" x2="330" y2="110"/> <line x1="30" y1="140" x2="330" y2="140"/> <line x1="30" y1="170" x2="330" y2="170"/> <line x1="30" y1="200" x2="330" y2="200"/> <line x1="30" y1="230" x2="330" y2="230"/> <line x1="30" y1="260" x2="330" y2="260"/> <line x1="30" y1="290" x2="330" y2="290"/> <line x1="30" y1="320" x2="330" y2="320"/> <line x1="30" y1="350" x2="330" y2="350"/> <line x1="30" y1="20" x2="30" y2="350"/> <line x1="60" y1="20" x2="60" y2="350"/> <line x1="90" y1="20" x2="90" y2="350"/> <line x1="120" y1="20" x2="120" y2="350"/> <line x1="150" y1="20" x2="150" y2="350"/> <line x1="180" y1="20" x2="180" y2="350"/> <line x1="210" y1="20" x2="210" y2="350"/> <line x1="240" y1="20" x2="240" y2="350"/> <line x1="270" y1="20" x2="270" y2="350"/> <line x1="300" y1="20" x2="300" y2="350"/> </g>
+
+            <line x1="30" y1="260" x2="340" y2="260" stroke="#333" stroke-width="1.5" marker-end="url(#arrow)"/>
+            <line x1="120" y1="350" x2="120" y2="10" stroke="#333" stroke-width="1.5" marker-end="url(#arrow)"/>
+            
+            <text x="330" y="275" font-size="12" font-style="italic" fill="#333">x</text>
+            <text x="310" y="285" font-size="12" font-style="italic" fill="#333">min</text>
+            <text x="105" y="20" font-size="12" font-style="italic" fill="#333">y</text>
+            <text x="130" y="30" font-size="12" font-style="italic" fill="#333">m</text>
+
+            <text x="115" y="24" font-size="10" text-anchor="end" fill="#666">800</text>
+            <text x="115" y="54" font-size="10" text-anchor="end" fill="#666">700</text>
+            <text x="115" y="84" font-size="10" text-anchor="end" fill="#666">600</text>
+            <text x="115" y="114" font-size="10" text-anchor="end" fill="#666">500</text>
+            <text x="115" y="144" font-size="10" text-anchor="end" fill="#666">400</text>
+            <text x="115" y="174" font-size="10" text-anchor="end" fill="#666">300</text>
+            <text x="115" y="204" font-size="10" text-anchor="end" fill="#666">200</text>
+            <text x="115" y="234" font-size="10" text-anchor="end" fill="#666">100</text>
+            <text x="115" y="294" font-size="10" text-anchor="end" fill="#666">-100</text>
+            <text x="115" y="324" font-size="10" text-anchor="end" fill="#666">-200</text>
+            <text x="115" y="354" font-size="10" text-anchor="end" fill="#666">-300</text>
+
+            <text x="30" y="275" font-size="10" text-anchor="middle" fill="#666">-15</text>
+            <text x="60" y="275" font-size="10" text-anchor="middle" fill="#666">-10</text>
+            <text x="90" y="275" font-size="10" text-anchor="middle" fill="#666">-5</text>
+            <text x="112" y="275" font-size="10" text-anchor="middle" fill="#666">O</text>
+            <text x="150" y="275" font-size="10" text-anchor="middle" fill="#666">5</text>
+            <text x="180" y="275" font-size="10" text-anchor="middle" fill="#666">10</text>
+            <text x="210" y="275" font-size="10" text-anchor="middle" fill="#666">15</text>
+            <text x="240" y="275" font-size="10" text-anchor="middle" fill="#666">20</text>
+            <text x="270" y="275" font-size="10" text-anchor="middle" fill="#666">25</text>
+            <text x="300" y="275" font-size="10" text-anchor="middle" fill="#666">30</text>
+
+            <line x1="120" y1="260" x2="150" y2="110" stroke="#0284c7" stroke-width="2"/>
+            <line x1="150" y1="110" x2="270" y2="50" stroke="#ef4444" stroke-width="2"/>
+
+            <circle cx="120" cy="260" r="4" fill="#0284c7"/>
+            <circle cx="150" cy="110" r="4" fill="#333"/>
+            <text x="140" y="100" font-size="12" fill="#333" font-weight="bold">A</text>
+            <circle cx="270" cy="50" r="4" fill="#ef4444" stroke="#333" stroke-width="1"/>
+          </svg>
+        </div>
+
+        <div class="problem">
+          <p><strong>a)</strong> Determina la velocidad en metros por minuto mientras se desplaza en bicicleta.</p>
+          <div class="input-wrapper">
+            <span style="font-style: italic;">Velocidad = </span>
+            <math-field id="ans-a" virtual-keyboard-mode="onfocus"></math-field>
+            <span style="color:var(--text-muted); font-size:0.9rem;">m/min</span>
+          </div>
+        </div>
+
+        <div class="problem">
+          <p><strong>b)</strong> Expresa la relación entre el tiempo transcurrido $x$ minutos y la distancia recorrida $y$ metros, desde $0$ a $5$ minutos.</p>
+          <div class="input-wrapper">
+            <span style="font-style: italic; font-weight: bold;">$y =$ </span>
+            <math-field id="ans-b" virtual-keyboard-mode="onfocus"></math-field>
+          </div>
+        </div>
+
+        <div class="problem">
+          <p><strong>c)</strong> ¿Cuál es la velocidad de María cuando se desplaza caminando?</p>
+          <div class="input-wrapper">
+            <span style="font-style: italic;">Velocidad = </span>
+            <math-field id="ans-c" virtual-keyboard-mode="onfocus"></math-field>
+            <span style="color:var(--text-muted); font-size:0.9rem;">m/min</span>
+          </div>
+        </div>
+
+        <div class="problem">
+          <p><strong>d)</strong> Expresa la relación entre los $x$ minutos transcurridos y la distancia $y$ recorrida desde $5$ a $25$ minutos.</p>
+          <div class="input-wrapper">
+            <span style="font-style: italic; font-weight: bold;">$y =$ </span>
+            <math-field id="ans-d" virtual-keyboard-mode="onfocus"></math-field>
+          </div>
+        </div>
+      </div>
+
+      <div id="exercises-container">
+        <button class="btn-submit" onclick="submitAnswers()">Terminar y Guardar Clase</button>
+      </div>
+    </section>
+
+  </main>
+
+  <script type="module">
+    import { initUserBar } from '../../js/userbar.js';
+    import { initFirebase } from '../../js/initFirebase.js';
+    import { doc, getDoc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js";
+    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-auth.js";
+    
+    initUserBar('#userbar');
+    const { db, auth } = initFirebase();
+
+    const MATERIA_ID = 'matematica';
+    const CLASS_ID = '8-u3-c22'; 
+
+    let currentUser = null;
+    let alreadySubmitted = false;
+
+    // Evaluador de Expresiones y Valores
+    function cleanLatex(str) {
+      if (!str) return '';
+      return str.replace(/\s/g, '').replace(/\\text\{.*?\}/g, '').toLowerCase();
+    }
+
+    function calculateGrade() {
+      let score = 0;
+      const pts = 2.5; // 4 preguntas = 10 puntos total
+
+      const valA = cleanLatex(document.getElementById('ans-a').value);
+      const valB = cleanLatex(document.getElementById('ans-b').value);
+      const valC = cleanLatex(document.getElementById('ans-c').value);
+      const valD = cleanLatex(document.getElementById('ans-d').value);
+
+      // a) Velocidad bici: 100
+      if (valA === '100') score += pts;
+      
+      // b) Relación bici: 100x
+      if (valB === '100x') score += pts;
+      
+      // c) Velocidad caminando: 10
+      if (valC === '10') score += pts;
+      
+      // d) Relación caminando: 10x + 450
+      if (valD === '10x+450' || valD === '450+10x') score += pts;
+
+      return score;
+    }
+
+    function showGrade(nota) {
+      document.getElementById('interactive-area').innerHTML = `
+        <div class="result-summary">
+          <div style="color: var(--text-muted); font-size: 1.2rem; font-weight: 600;">Calificación de Actividad</div>
+          <div class="grade">${nota}/10</div>
+          <p style="color: var(--text-muted); margin-bottom: 2rem;">Tus respuestas han sido evaluadas exitosamente. Puedes volver al menú principal.</p>
+          <a href="../../pages/clases.html" class="btn-submit" style="text-decoration:none;display:inline-block; width:auto;">Volver a Clases</a>
+        </div>
+      `;
+    }
+
+    window.submitAnswers = async function() {
+      if (!currentUser) return alert('Error: No hay usuario logueado');
+      if (alreadySubmitted) return alert('Ya has enviado esta tarea.');
+      
+      const btn = document.querySelector('.btn-submit');
+      const originalText = btn.textContent;
+      btn.disabled = true;
+      btn.textContent = '⏳ Evaluando y guardando...';
+
+      try {
+        const rawScore = calculateGrade();
+        const nota = Number((rawScore).toFixed(1));
+
+        const classDocRef = doc(db, 'clases', MATERIA_ID, 'entregas', CLASS_ID);
+        
+        // Formato DD/MM/YYYY, HH:mm en El Salvador
+        const fechaLocal = new Date().toLocaleString('en-GB', { 
+            timeZone: 'America/El_Salvador',
+            day: '2-digit', month: '2-digit', year: 'numeric',
+            hour: '2-digit', minute: '2-digit', second: '2-digit',
+            hour12: false 
+        }).replace(',', '');
+
+        await setDoc(classDocRef, {
+          grado: 8,
+          año: new Date().getFullYear(),
+          materia: MATERIA_ID,
+          updatedAt: serverTimestamp(),
+          respuestas: {
+            [currentUser.uid]: {
+              nombre: currentUser.displayName || currentUser.email || 'Sin nombre',
+              email: currentUser.email,
+              nota: nota,
+              fechaLocal: fechaLocal
+            }
+          }
+        }, { merge: true });
+
+        alreadySubmitted = true;
+        showGrade(nota);
+        
+      } catch(error) {
+        console.error('❌ Error:', error);
+        alert('Error al guardar: ' + error.message);
+        btn.disabled = false;
+        btn.textContent = originalText;
+      }
+    };
+
+    onAuthStateChanged(auth, async (user) => {
+      const loadingEl = document.getElementById('loading');
+      if (user) {
+        currentUser = user;
+        try {
+          const classDocRef = doc(db, 'clases', MATERIA_ID, 'entregas', CLASS_ID);
+          const snap = await getDoc(classDocRef);
+          
+          if (snap.exists() && snap.data().respuestas && snap.data().respuestas[user.uid]) {
+            alreadySubmitted = true;
+            const userData = snap.data().respuestas[user.uid];
+            loadingEl.style.display = 'none'; 
+            showGrade(userData.nota);
+            return;
+          }
+        } catch(e) { console.error(e); }
+      } else {
+        document.getElementById('interactive-area').innerHTML = `
+          <div class="result-summary">
+            <h2 style="margin-bottom:1rem">Sesión Requerida</h2>
+            <p style="color:var(--text-muted);margin-bottom:2rem">Debes iniciar sesión para realizar la actividad de la clase.</p>
+            <a href="../../index.html" class="btn-submit" style="text-decoration:none;display:inline-block; width:auto;">Ir al Inicio</a>
+          </div>`;
+      }
+      loadingEl.style.display = 'none';
+      if (window.MathJax) MathJax.typesetPromise();
+    });
+  </script>
+</body>
+</html>

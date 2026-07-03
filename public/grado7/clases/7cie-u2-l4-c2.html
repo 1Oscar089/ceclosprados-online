@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+  <title>Genética, Frecuencia Alélica y Evolución | Ciencia 7°</title>
+  <link rel="stylesheet" href="../../css/styles.css">
+
+  <style>
+    /* Efecto Blur para Modales */
+    #app-wrapper { transition: filter 0.3s ease; }
+
+    .back-btn { display: inline-flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem; color: var(--text-muted); font-weight: 500; }
+    .back-btn:hover { color: var(--primary); text-decoration: none; }
+    .class-header { margin-bottom: 2rem; }
+    .class-title { font-size: 1.4rem; margin-bottom: 0.5rem; color: var(--primary); }
+    .class-meta { font-size: 0.9rem; color: var(--text-muted); }
+    
+    .alert-copy { background: #fef3c7; border-left: 4px solid #f59e0b; padding: 1.25rem; border-radius: 0.5rem; margin-bottom: 2rem; color: #b45309; font-weight: 600; display: flex; align-items: center; gap: 0.75rem; }
+    [data-theme="dark"] .alert-copy { background: #451a03; color: #fcd34d; }
+
+    .section { margin-bottom: 2.5rem; }
+    .section-title { font-size: 1.2rem; font-weight: 700; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; border-bottom: 2px solid var(--border); padding-bottom: 0.5rem; }
+    
+    .content-box { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.5rem; margin-bottom: 1.5rem; line-height: 1.8; }
+    
+    /* Mind Map CSS */
+    .mindmap { display: flex; flex-direction: column; align-items: center; gap: 1rem; padding: 2rem; background: var(--surface-hover); border-radius: 1rem; overflow-x: auto; }
+    .mm-core { background: var(--primary); color: white; padding: 1rem 2rem; border-radius: 999px; font-weight: bold; font-size: 1.2rem; z-index: 2; text-align: center;}
+    .mm-branches { display: flex; gap: 1.5rem; position: relative; flex-wrap: wrap; justify-content: center; }
+    .mm-branches::before { content: ''; position: absolute; top: -1rem; left: 10%; right: 10%; height: 2px; background: var(--primary); display: none; }
+    @media(min-width: 768px){ .mm-branches::before { display: block; } }
+    .mm-node { background: white; border: 2px solid var(--primary); padding: 1rem; border-radius: 0.75rem; width: 200px; text-align: center; position: relative; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+    [data-theme="dark"] .mm-node { background: #1e293b; }
+    .mm-node::before { content: ''; position: absolute; top: -1rem; left: 50%; width: 2px; height: 1rem; background: var(--primary); display: none; }
+    @media(min-width: 768px){ .mm-node::before { display: block; } }
+
+    /* Flashcards */
+    .flashcards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 1.5rem; perspective: 1000px; }
+    .flashcard { width: 100%; height: 180px; position: relative; cursor: pointer; }
+    .flashcard-inner { width: 100%; height: 100%; transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1); transform-style: preserve-3d; position: relative; }
+    .flashcard:hover .flashcard-inner { transform: rotateY(180deg); }
+    .flashcard-front, .flashcard-back { width: 100%; height: 100%; position: absolute; backface-visibility: hidden; display: flex; align-items: center; justify-content: center; padding: 1.5rem; border-radius: 1rem; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.08); border: 2px solid var(--border); }
+    .flashcard-front { background: var(--surface); font-weight: 800; font-size: 1.1rem; color: var(--primary); }
+    .flashcard-back { background: var(--primary); color: white; transform: rotateY(180deg); font-size: 0.95rem; line-height: 1.5; }
+
+    /* Botones */
+    .btn-quiz { display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 1rem 2.5rem; background: linear-gradient(135deg, #ef4444, #b91c1c); color: white; border: none; border-radius: 0.75rem; font-weight: 800; font-size: 1.2rem; cursor: pointer; margin: 2rem auto; width: 100%; max-width: 400px; transition: transform 0.2s; }
+    .btn-quiz:hover { transform: translateY(-3px); box-shadow: 0 6px 16px rgba(239, 68, 68, 0.4); }
+    .btn-quiz:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+    /* Modal Estricto */
+    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 10000; display: flex; justify-content: center; align-items: flex-start; padding: 2rem 1rem; overflow-y: auto; opacity: 0; pointer-events: none; transition: opacity 0.3s; }
+    .modal-overlay.active { opacity: 1; pointer-events: auto; }
+    .modal-content { background: var(--bg); width: 100%; max-width: 700px; border-radius: 1rem; padding: 2rem; position: relative; margin-bottom: 2rem; }
+    [data-theme="dark"] .modal-content { background: #0f172a; }
+    .btn-close { position: absolute; top: 1rem; right: 1rem; background: none; border: none; font-size: 2rem; cursor: pointer; color: #999; line-height: 1; padding: 0 0.5rem; border-radius: 50%; }
+    .btn-close:hover { color: #333; background: #eee; }
+    
+    .quiz-card { background: var(--surface); padding: 1.5rem; border-radius: 0.5rem; border: 1px solid var(--border); margin-bottom: 1.5rem; text-align: left; }
+    .quiz-option-label { display: block; margin: 10px 0; cursor: pointer; padding: 0.8rem; border: 2px solid var(--border); border-radius: 0.5rem; transition: background 0.2s; }
+    .quiz-option-label:hover { background: var(--surface-hover); border-color: var(--primary); }
+
+    .result-summary { text-align: center; padding: 3rem; background: var(--surface); border: 2px solid var(--border); border-radius: 1rem; margin: 2rem auto; }
+    .grade { font-size: 5rem; font-weight: 900; color: var(--primary); margin: 1rem 0; line-height: 1; }
+    
+    .loading { position: fixed; inset: 0; background: rgba(255,255,255,0.9); display: flex; justify-content: center; align-items: center; z-index: 9999; }
+    [data-theme="dark"] .loading { background: rgba(11,17,32,0.9); }
+  </style>
+</head>
+<body>
+  <div id="userbar"></div>
+  <div id="loading" class="loading">Cargando...</div>
+
+  <div id="app-wrapper">
+    <header class="app-container mt-4">
+      <a href="../../pages/clases.html" class="btn btn-ghost back-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><path d="M19 12H5"/><polyline points="12 19 5 12 12 5"/></svg>
+        Volver a Clases
+      </a>
+      <div class="class-header">
+        <h1 class="class-title">🧬 Frecuencia Alélica y Evolución</h1>
+        <p class="class-meta">Unidad 2 • Ciencia, Salud y Medio Ambiente</p>
+      </div>
+    </header>
+
+    <main class="app-container" id="app-main">
+      
+      <div class="alert-copy">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+        <strong>Instrucción Obligatoria:</strong> Debes copiar el Resumen, el Mapa Mental, los Ejemplos y crear las Flashcards (tarjetas) físicas en tu cuaderno de apuntes.
+      </div>
+
+      <section class="section">
+        <h2 class="section-title">📖 Resumen</h2>
+        <div class="content-box">
+          <p>En cualquier población, encontramos diferencias entre los individuos debido a la expresión de distintos alelos. Cada rasgo está controlado exactamente por <strong>dos alelos</strong> de un mismo locus en el cromosoma (uno paterno y uno materno).</p>
+          <p>La <strong>frecuencia alélica</strong> es el término que usamos para medir qué tan común es un alelo dentro de una población. Los alelos más abundantes suelen ser aquellos que contribuyen a la supervivencia y al éxito reproductivo.</p>
+          <p>Cuando estas frecuencias alélicas cambian a través de sucesivas generaciones (por ejemplo, cuando un alelo se vuelve perjudicial y desaparece), ocurre lo que conocemos como <strong>evolución biológica</strong>.</p>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2 class="section-title">🧠 Mapa Mental</h2>
+        <div class="mindmap">
+          <div class="mm-core">GENÉTICA Y EVOLUCIÓN</div>
+          <div class="mm-branches">
+            <div class="mm-node">
+              <strong>Genotipos</strong><br>
+              <span style="font-size:0.85rem; color:var(--text-muted)">Homocigoto (AA, bb) y Heterocigoto (Cc) alojados en loci.</span>
+            </div>
+            <div class="mm-node">
+              <strong>Frecuencia Alélica</strong><br>
+              <span style="font-size:0.85rem; color:var(--text-muted)">Qué tan común y abundante es un alelo en una población.</span>
+            </div>
+            <div class="mm-node">
+              <strong>Evolución</strong><br>
+              <span style="font-size:0.85rem; color:var(--text-muted)">Cambio en las frecuencias alélicas a través de generaciones.</span>
+            </div>
+            <div class="mm-node">
+              <strong>Selección Artificial</strong><br>
+              <span style="font-size:0.85rem; color:var(--text-muted)">Intervención agrícola que altera las proporciones genéticas.</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2 class="section-title">💡 Casos y Ejemplos</h2>
+        <div class="content-box">
+          <ul>
+            <li style="margin-bottom: 0.5rem;"><strong>Fenotipos Recesivos:</strong> En genética, solo podemos estar 100% seguros de qué genotipo tiene un individuo con solo mirarlo si estamos frente a un rasgo recesivo (por ejemplo, ojos claros implica obligatoriamente 'bb'). Si es dominante, podría ser 'AA' o 'Aa'.</li>
+            <li style="margin-bottom: 0.5rem;"><strong>Diversidad de Chiles:</strong> Todos los chiles dulces pertenecen a la misma especie (<em>Capsicum annum</em>), pero no hay dos iguales. Sus diversas formas y colores son resultado de la <strong>selección artificial</strong> realizada por agricultores.</li>
+            <li><strong>El Maíz:</strong> La diversidad fenotípica se hace muy evidente en las mazorcas de maíz que presentan múltiples colores en sus granos.</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2 class="section-title">🗂️ Flashcards (Pásalas a papel)</h2>
+        <p style="margin-bottom: 1rem; color: var(--text-muted);">Toca las tarjetas para voltearlas. Escribe el concepto en el frente de tu tarjeta y la definición en el reverso.</p>
+        
+        <div class="flashcards-grid">
+          <div class="flashcard">
+            <div class="flashcard-inner">
+              <div class="flashcard-front">Frecuencia Alélica</div>
+              <div class="flashcard-back">Término usado para referirse a qué tan común o abundante es un alelo dentro de una población.</div>
+            </div>
+          </div>
+          <div class="flashcard">
+            <div class="flashcard-inner">
+              <div class="flashcard-front">Evolución biológica</div>
+              <div class="flashcard-back">El cambio en las frecuencias alélicas de las poblaciones a través de sucesivas generaciones.</div>
+            </div>
+          </div>
+          <div class="flashcard">
+            <div class="flashcard-inner">
+              <div class="flashcard-front">Selección artificial</div>
+              <div class="flashcard-back">Proceso selectivo realizado por humanos (agricultores) que altera la proporción de alelos de una especie.</div>
+            </div>
+          </div>
+          <div class="flashcard">
+            <div class="flashcard-inner">
+              <div class="flashcard-front">Homocigoto / Heterocigoto</div>
+              <div class="flashcard-back">Homocigoto posee dos alelos idénticos (AA, bb). Heterocigoto posee dos alelos diferentes (Cc).</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="interactive-area">
+        <h2 class="section-title">📝 Evaluación de la Clase</h2>
+        <div id="quiz-entry-container" style="text-align: center;">
+          <button class="btn-quiz" style="background: var(--primary);" onclick="openQuizModal()">Comenzar Evaluación</button>
+          <p style="font-size: 0.85rem; color: #ef4444; font-weight: bold; margin-top: 1rem;">⚠️ ADVERTENCIA: Una vez iniciada, si la cierras sin enviar, tus preguntas cambiarán como penalización.</p>
+        </div>
+      </section>
+
+    </main>
+  </div> <div class="modal-overlay" id="quiz-modal">
+    <div class="modal-content">
+      <button class="btn-close" onclick="closeQuizModal()">×</button>
+      <div style="text-align: center; margin-bottom: 2rem;">
+        <h2 style="color: var(--primary); font-size: 1.8rem; font-weight: 800;">Evaluación en progreso</h2>
+        <p style="color: #ef4444; font-size: 0.9rem; font-weight: bold;">Si cierras esta ventana, tus preguntas cambiarán como penalización.</p>
+      </div>
+
+      <div id="quiz-container"></div>
+      
+      <button class="btn-quiz" id="btn-submit-quiz" style="background: var(--primary);" onclick="submitQuiz()">Terminar y Enviar</button>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initUserBar } from '../../js/userbar.js';
+    import { initFirebase } from '../../js/initFirebase.js';
+    import { doc, getDoc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js";
+    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-auth.js";
+    
+    initUserBar('#userbar');
+    const { db, auth } = initFirebase();
+
+    const MATERIA_ID = 'ciencia';
+    const CLASS_ID = '7cie-u2-l4-c2'; 
+
+    let currentUser = null;
+    let seededRNG; 
+    let quizPenalty = 0; 
+    let isQuizActive = false;
+
+    // --- GENERADOR DE NÚMEROS ALEATORIOS (Mulberry32) ---
+    function mulberry32(a) {
+      return function() {
+        var t = a += 0x6D2B79F5;
+        t = Math.imul(t ^ t >>> 15, t | 1);
+        t ^= t + Math.imul(t ^ t >>> 7, t | 61);
+        return ((t ^ t >>> 14) >>> 0) / 4294967296;
+      }
+    }
+
+    function seededShuffle(array, rngFunc) {
+      let arr = [...array];
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(rngFunc() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      return arr;
+    }
+
+    function initSeed() {
+      const storageKey = `seed_${CLASS_ID}`;
+      let mySeed = localStorage.getItem(storageKey);
+      if (!mySeed) {
+        mySeed = Math.floor(Math.random() * 1000000);
+        localStorage.setItem(storageKey, mySeed);
+      }
+      return parseInt(mySeed);
+    }
+
+    // --- FORMATEADOR DE FECHA EL SALVADOR ---
+    function formatSVDate(dateObj) {
+      return dateObj.toLocaleString('es-SV', {
+        timeZone: 'America/El_Salvador',
+        day: '2-digit', month: '2-digit', year: 'numeric',
+        hour: '2-digit', minute: '2-digit', hour12: true
+      });
+    }
+
+    // Banco de 20 preguntas adaptado al nuevo sistema
+    const QUESTION_BANK = [
+      { q: "¿A qué se deben principalmente las diferencias en los rasgos entre los individuos de una población?", o: [{t:"Al tamaño celular", c:false}, {t:"A la expresión de distintos alelos", c:true}, {t:"A su especie", c:false}, {t:"Al clima del entorno", c:false}] },
+      { q: "¿Cuántos alelos controlan exactamente cada rasgo en un mismo locus según el material?", o: [{t:"Solo uno", c:false}, {t:"Dos alelos", c:true}, {t:"Tres alelos", c:false}, {t:"Cuatro o más", c:false}] },
+      { q: "¿En qué caso podemos estar completamente seguros del genotipo de una persona con solo mirarla?", o: [{t:"Frente a un fenotipo recesivo", c:true}, {t:"Frente a un genotipo heterocigoto", c:false}, {t:"Frente a un fenotipo dominante", c:false}, {t:"Nunca se puede estar seguro", c:false}] },
+      { q: "¿Qué hace que un alelo tienda a ser más abundante que otro de forma natural?", o: [{t:"Su color", c:false}, {t:"Si es recesivo o dominante", c:false}, {t:"Si contribuye a la supervivencia y éxito reproductivo", c:true}, {t:"La manipulación en laboratorios", c:false}] },
+      { q: "¿Qué término usamos para referirnos a qué tan común es un alelo dentro de una población?", o: [{t:"Fenotipo", c:false}, {t:"Genotipo", c:false}, {t:"Selección artificial", c:false}, {t:"Frecuencia alélica", c:true}] },
+      { q: "¿Qué sucede con la frecuencia de los alelos en una población a través de las generaciones?", o: [{t:"Nunca cambia", c:false}, {t:"Puede cambiar fácilmente", c:true}, {t:"Se mantiene igual si es recesivo", c:false}, {t:"Desaparecen de inmediato", c:false}] },
+      { q: "¿Cómo define el texto a la evolución biológica?", o: [{t:"Cambio físico del cuerpo", c:false}, {t:"Cambio en las frecuencias alélicas a través de generaciones", c:true}, {t:"Proceso creado por los agricultores", c:false}, {t:"Aparición repentina de un nuevo rasgo", c:false}] },
+      { q: "¿Qué sucedería con la frecuencia alélica de un rasgo si resulta perjudicial para la supervivencia?", o: [{t:"Aumentaría", c:false}, {t:"Se volvería dominante", c:false}, {t:"Disminuiría", c:true}, {t:"No se vería afectada", c:false}] },
+      { q: "¿Cómo se denomina al par de alelos idénticos que se representan con letras mayúsculas, como 'AA'?", o: [{t:"Homocigoto dominante", c:true}, {t:"Homocigoto recesivo", c:false}, {t:"Heterocigoto", c:false}, {t:"Locus paterno", c:false}] },
+      { q: "¿Cómo se denomina al par de alelos idénticos que se representan con letras minúsculas, como 'bb'?", o: [{t:"Homocigoto dominante", c:false}, {t:"Homocigoto recesivo", c:true}, {t:"Heterocigoto", c:false}, {t:"Cromosoma dominante", c:false}] },
+      { q: "¿Cómo se llama al genotipo que posee dos alelos diferentes, como 'Cc'?", o: [{t:"Homocigoto", c:false}, {t:"Locus mixto", c:false}, {t:"Heterocigoto", c:true}, {t:"Puro", c:false}] },
+      { q: "¿De dónde provienen los dos cromosomas que contienen los alelos de un mismo locus?", o: [{t:"Ambos de la madre", c:false}, {t:"Ambos del padre", c:false}, {t:"Uno materno y otro paterno", c:true}, {t:"Del ambiente", c:false}] },
+      { q: "¿Qué especie agrícola menciona el texto como ejemplo de una sola especie con gran diversidad?", o: [{t:"Maíz", c:false}, {t:"Chiles dulces (Capsicum annum)", c:true}, {t:"Tomate silvestre", c:false}, {t:"Frijoles", c:false}] },
+      { q: "¿A qué proceso se debe en gran medida la diversidad de formas en especies agrícolas según el texto?", o: [{t:"Evolución natural", c:false}, {t:"Mutaciones por radiación", c:false}, {t:"Selección artificial", c:true}, {t:"Frecuencia estática", c:false}] },
+      { q: "¿Qué efecto tiene la selección artificial realizada por los agricultores en los cultivos?", o: [{t:"Altera la proporción de alelos", c:true}, {t:"Detiene la evolución", c:false}, {t:"Elimina los cromosomas maternos", c:false}, {t:"Destruye el locus de la planta", c:false}] },
+      { q: "¿Cómo se evidencia la diversidad fenotípica en el ejemplo del maíz mencionado en el material?", o: [{t:"Por el tamaño de sus hojas", c:false}, {t:"Por los múltiples colores que pueden tomar los granos", c:true}, {t:"Por la altura de la planta", c:false}, {t:"Por su resistencia a las plagas", c:false}] },
+      { q: "Según el esquema de cromosomas, ¿cómo se representa visualmente el genotipo Homocigoto recesivo?", o: [{t:"Con las letras AA", c:false}, {t:"Con las letras Cc", c:false}, {t:"Con las letras bb", c:true}, {t:"Con las letras AC", c:false}] },
+      { q: "¿Qué término indica la ubicación precisa de la pareja de alelos en un cromosoma?", o: [{t:"Loci / Locus", c:true}, {t:"Genotipo", c:false}, {t:"Radicando", c:false}, {t:"Citoplasma", c:false}] },
+      { q: "¿Cuáles son los impulsores o el concepto clave que resulta del cambio de frecuencias alélicas?", o: [{t:"El fenotipo recesivo", c:false}, {t:"La evolución", c:true}, {t:"El cromosoma materno", c:false}, {t:"El maíz coloreado", c:false}] },
+      { q: "A pesar de no haber dos chiles iguales, todos los chiles dulces pertenecen a:", o: [{t:"Especies distintas", c:false}, {t:"La especie Capsicum annum", c:true}, {t:"A la selección natural", c:false}, {t:"Especies recesivas", c:false}] }
+    ];
+
+    let userActiveQuiz = [];
+
+    window.addEventListener('beforeunload', function (e) {
+      if (isQuizActive) {
+        e.preventDefault();
+        e.returnValue = '';
+      }
+    });
+
+    window.openQuizModal = () => {
+      const baseSeed = initSeed();
+      seededRNG = mulberry32(baseSeed + quizPenalty);
+      
+      generateQuizUI();
+      
+      document.getElementById('quiz-modal').classList.add('active');
+      document.getElementById('app-wrapper').style.filter = 'blur(5px)';
+      isQuizActive = true;
+    };
+
+    window.closeQuizModal = () => {
+      const confirmClose = confirm("¿Estás seguro? Tus preguntas cambiarán como penalización al cerrar.");
+      if (confirmClose) {
+        document.getElementById('quiz-modal').classList.remove('active');
+        document.getElementById('app-wrapper').style.filter = 'none';
+        quizPenalty++; 
+        document.getElementById('quiz-container').innerHTML = ''; 
+        isQuizActive = false;
+      }
+    };
+
+    function generateQuizUI() {
+      userActiveQuiz = seededShuffle(QUESTION_BANK, seededRNG).slice(0, 5);
+      const container = document.getElementById('quiz-container');
+      container.innerHTML = ''; 
+
+      userActiveQuiz.forEach((item, idx) => {
+        const shuffledOptions = seededShuffle(item.o, seededRNG);
+        container.innerHTML += `
+          <div class="quiz-card">
+            <p style="margin-bottom:1rem; font-size:1.1rem; color: var(--text);"><strong>${idx + 1}. ${item.q}</strong></p>
+            ${shuffledOptions.map(opt => `
+              <label class="quiz-option-label">
+                <input type="radio" name="q${idx}" value="${opt.c}"> <span style="margin-left:8px;">${opt.t}</span>
+              </label>
+            `).join('')}
+          </div>
+        `;
+      });
+    }
+
+    window.submitQuiz = async function() {
+      if (!currentUser) return alert('Error: No hay usuario logueado');
+      
+      const btn = document.getElementById('btn-submit-quiz');
+
+      let score = 0;
+      for (let i = 0; i < 5; i++) {
+        const selected = document.querySelector(`input[name="q${i}"]:checked`);
+        if (!selected) {
+          return alert('Por favor responde todas las preguntas antes de enviar.');
+        }
+        if (selected.value === "true") score += 2;
+      }
+
+      isQuizActive = false;
+      btn.disabled = true;
+      btn.textContent = 'Guardando...';
+
+      try {
+        const classDocRef = doc(db, 'clases', MATERIA_ID, 'entregas', CLASS_ID);
+        
+        await setDoc(classDocRef, {
+          grado: 7,
+          año: new Date().getFullYear(),
+          materia: MATERIA_ID,
+          updatedAt: serverTimestamp(),
+          respuestas: {
+            [currentUser.uid]: {
+              nombre: currentUser.displayName || currentUser.email || 'Sin nombre',
+              email: currentUser.email,
+              nota: score,
+              fechaLocal: formatSVDate(new Date())
+            }
+          }
+        }, { merge: true });
+
+        document.getElementById('quiz-modal').classList.remove('active');
+        document.getElementById('app-wrapper').style.filter = 'none';
+        showGrade(score);
+        
+      } catch(error) {
+        console.error('❌ Error:', error);
+        alert('Error al guardar: ' + error.message);
+        btn.disabled = false;
+        btn.textContent = 'Terminar y Enviar';
+        isQuizActive = true; 
+      }
+    };
+
+    function showGrade(nota) {
+      document.getElementById('interactive-area').innerHTML = `
+        <div class="result-summary">
+          <div style="color: var(--text-muted); font-size: 1.2rem; font-weight: 600;">Calificación Final del Quiz</div>
+          <div class="grade">${nota}/10</div>
+          <p style="color: var(--text-muted); margin-bottom: 2rem;">¡Tu resultado ha sido guardado exitosamente en tu perfil!</p>
+          <a href="../../pages/clases.html" class="btn-quiz" style="text-decoration:none;display:inline-flex; width:auto; background: var(--primary);">Volver a Clases</a>
+        </div>
+      `;
+    }
+
+    onAuthStateChanged(auth, async (user) => {
+      const loadingEl = document.getElementById('loading');
+      if (user) {
+        currentUser = user;
+        
+        try {
+          const classDocRef = doc(db, 'clases', MATERIA_ID, 'entregas', CLASS_ID);
+          const snap = await getDoc(classDocRef);
+          
+          if (!snap.exists()) {
+             // Si no fue creada por clases.html, inicializamos como respaldo seguro
+             initSeed();
+             loadingEl.style.display = 'none';
+             return;
+          }
+
+          const data = snap.data();
+          const now = new Date();
+          const inicio = new Date(data.inicio);
+          const fin = new Date(data.fin);
+
+          // 1. ESTADO PENDIENTE (Fecha aún no llega)
+          if (now < inicio) {
+             document.getElementById('app-main').innerHTML = `
+                <div class="result-summary" style="margin-top: 4rem;">
+                    <h2 style="color:var(--primary); font-size: 2rem; margin-bottom: 1rem;">Clase Bloqueada 🔒</h2>
+                    <p style="font-size: 1.1rem;">Esta clase estará disponible a partir del <strong>${formatSVDate(inicio)}</strong>.</p>
+                    <a href="../../pages/clases.html" class="btn-quiz" style="text-decoration:none; display:inline-block; width: auto; margin-top: 2rem; background: var(--primary);">Volver a Clases</a>
+                </div>
+             `;
+             loadingEl.style.display = 'none';
+             return;
+          }
+
+          // 2. ESTADO EN CURSO O FINALIZADO (El contenido es visible)
+          const userAns = data.respuestas && data.respuestas[user.uid];
+
+          if (userAns) {
+             // Ya hizo la tarea
+             showGrade(userAns.nota);
+          } else if (now > fin) {
+             // No hizo la tarea y pasó el tiempo
+             document.getElementById('interactive-area').innerHTML = `
+                 <h2 class="section-title">📝 Evaluación de la Clase</h2>
+                 <div class="result-summary" style="border-color: #ef4444;">
+                     <h2 style="color:#ef4444; margin-bottom: 1rem;">Tiempo Agotado ⏳</h2>
+                     <p>La fecha límite para esta actividad fue el <strong>${formatSVDate(fin)}</strong>.</p>
+                     <p style="color:var(--text-muted); margin-top: 0.5rem; font-weight: bold;">Estado: No realizado y cerrado.</p>
+                     <a href="../../pages/clases.html" class="btn-quiz" style="text-decoration:none; display:inline-block; width: auto; background:#ef4444; margin-top: 2rem;">Volver a Clases</a>
+                 </div>
+             `;
+          } else {
+             // Está en curso y no ha hecho el Quiz
+             initSeed();
+          }
+          
+        } catch(e) { 
+          console.error(e); 
+        }
+      } else {
+        document.getElementById('interactive-area').innerHTML = `
+          <div class="result-summary">
+            <h2 style="margin-bottom:1rem">Sesión Requerida</h2>
+            <p style="color:var(--text-muted);margin-bottom:2rem">Debes iniciar sesión para realizar la evaluación de esta clase.</p>
+            <a href="../../index.html" class="btn-quiz" style="text-decoration:none;display:inline-flex;width:auto;">Ir al Inicio</a>
+          </div>`;
+      }
+      loadingEl.style.display = 'none';
+    });
+  </script>
+</body>
+</html>

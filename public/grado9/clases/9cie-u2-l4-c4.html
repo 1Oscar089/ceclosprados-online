@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+  <title>Eficiencia de Máquinas Térmicas | Ciencia 9°</title>
+  <link rel="stylesheet" href="../../css/styles.css">
+
+  <script defer src="https://cdn.jsdelivr.net/npm/mathlive@0.98.0/dist/mathlive.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mathlive@0.98.0/dist/mathlive-fonts.css">
+  <script>
+    MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] } };
+  </script>
+  <script id="MathJax-script" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js"></script>
+
+  <style>
+    .back-btn { display: inline-flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem; color: var(--text-muted); font-weight: 500; }
+    .back-btn:hover { color: var(--primary); text-decoration: none; }
+    .class-header { margin-bottom: 2rem; }
+    .class-title { font-size: 1.4rem; margin-bottom: 0.5rem; color: var(--primary); }
+    .class-meta { font-size: 0.9rem; color: var(--text-muted); }
+    
+    .section { margin-bottom: 2.5rem; }
+    .section-title { font-size: 1.2rem; font-weight: 700; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; border-bottom: 2px solid var(--border); padding-bottom: 0.5rem; }
+    
+    .alert-copy { background: #fef3c7; border-left: 4px solid #f59e0b; padding: 1.25rem; border-radius: 0.5rem; margin-bottom: 2rem; color: #b45309; font-weight: 600; display: flex; align-items: center; gap: 0.75rem; line-height: 1.5; }
+    [data-theme="dark"] .alert-copy { background: #451a03; color: #fcd34d; }
+
+    .content-box { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.5rem; margin-bottom: 1.5rem; line-height: 1.8; }
+    
+    /* Layout para Explicaciones (Esquema + Texto) */
+    .layout-split { display: grid; grid-template-columns: 340px 1fr; gap: 2rem; align-items: start; }
+    @media (max-width: 768px) { .layout-split { grid-template-columns: 1fr; } }
+    
+    /* Esquema Máquina Térmica SVG */
+    .svg-container { text-align: center; background: white; border-radius: 1rem; border: 2px solid var(--border); padding: 1.5rem; box-shadow: 0 4px 6px rgba(0,0,0,0.05); overflow-x: auto; }
+    [data-theme="dark"] .svg-container { background: #1e293b; }
+
+    /* Ejercicios Dinámicos */
+    .exercise-box { background: rgba(255,255,255,0.85); border: 2px solid rgba(167,139,250,0.2); border-radius: 1rem; padding: 2rem; margin-bottom: 2rem; }
+    [data-theme="dark"] .exercise-box { background: rgba(30,27,75,0.85); }
+    .problem { background: var(--surface-hover); border: 2px solid var(--border); border-radius: 0.75rem; padding: 1.5rem; margin-bottom: 1.5rem; transition: border-color 0.2s; }
+    .problem:hover { border-color: var(--primary); }
+    .label { font-weight: 600; font-size: 1.1rem; color: var(--text); margin-bottom: 1rem; line-height: 1.6; }
+    
+    .input-wrapper { display: flex; align-items: center; gap: 0.8rem; margin-bottom: 0.5rem; flex-wrap: wrap; }
+    /* Mejoras en el tamaño del cajón de matemáticas */
+    math-field { min-width: 200px; max-width: 300px; flex: 1; font-size: 1.3rem; padding: 0.6rem 0.8rem; border: 2px solid var(--border); border-radius: 0.5rem; background: white; outline: none; text-align: center;}
+    math-field:focus-within { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(167, 139, 250, 0.2); }
+    [data-theme="dark"] math-field { background: #1e1b4b; border-color: #4f46e5; color: white; }
+    
+    .btn-submit { display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 1rem 2.5rem; background: linear-gradient(135deg, #a78bfa, #8b5cf6); color: white; border: none; border-radius: 0.75rem; font-weight: 800; font-size: 1.1rem; cursor: pointer; margin: 2rem auto; width: 100%; max-width: 400px; transition: transform 0.2s; }
+    .btn-submit:hover { transform: translateY(-3px); box-shadow: 0 6px 16px rgba(139, 92, 246, 0.4); }
+    .btn-submit:disabled { opacity: 0.6; cursor: not-allowed; }
+
+    .result-summary { text-align: center; padding: 3rem; background: var(--surface); border: 2px solid var(--border); border-radius: 1rem; margin: 2rem auto; }
+    .grade { font-size: 5rem; font-weight: 900; color: var(--primary); margin: 1rem 0; line-height: 1; }
+    
+    .loading { position: fixed; inset: 0; background: rgba(255,255,255,0.9); display: flex; justify-content: center; align-items: center; z-index: 9999; }
+    [data-theme="dark"] .loading { background: rgba(11,17,32,0.9); }
+
+    .alert-unique { background: #dbeafe; border-left: 4px solid #3b82f6; padding: 1rem; border-radius: 0.5rem; color: #1e40af; margin-bottom: 1.5rem; font-weight: 600; font-size: 0.95rem; line-height: 1.5;}
+    [data-theme="dark"] .alert-unique { background: #1e3a8a; color: #bfdbfe; }
+  </style>
+</head>
+<body>
+  <div id="userbar"></div>
+  <div id="loading" class="loading">Cargando...</div>
+
+  <header class="app-container mt-4">
+    <a href="../../pages/clases.html" class="btn btn-ghost back-btn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><path d="M19 12H5"/><polyline points="12 19 5 12 12 5"/></svg>
+      Volver a Clases
+    </a>
+    <div class="class-header">
+      <h1 class="class-title">⚙️ Eficiencia de Carnot y Máquinas Térmicas</h1>
+      <p class="class-meta">Unidad 2 • Ciencia y Tecnología 9°</p>
+    </div>
+  </header>
+
+  <main class="app-container">
+    
+    <div class="alert-copy">
+      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink: 0;"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+      <div>
+        <strong>Instrucción Obligatoria:</strong> Debes copiar en tu cuaderno los problemas explicativos (incluyendo los esquemas de las máquinas térmicas) y los ejercicios personalizados que te asigne el sistema en la parte final.
+      </div>
+    </div>
+
+    <section class="section section-P">
+      <h2 class="section-title">🎯 Problemas Explicativos</h2>
+      
+      <div class="content-box">
+        <h3 style="color: var(--primary); margin-bottom: 1rem;">Problema 1: El motor de gasolina</h3>
+        <p>Mientras un motor de gasolina está funcionando, existe cierto volumen de gasolina que contiene $15,000 \text{ J}$ de energía potencial química que se quema en $1 \text{ s}$. Durante ese segundo, el motor realiza $3,000 \text{ J}$ de trabajo.</p>
+        <p>Calcularemos e interpretaremos la eficiencia real y la eficiencia ideal de Carnot, sabiendo que el motor quema gasolina a una temperatura aproximada de $2,500 \text{ K}$ (Fuente) y el calor residual sale a la atmósfera a $300 \text{ K}$ (Sumidero).</p>
+        
+        <div class="layout-split" style="margin-top: 2rem;">
+          <div class="svg-container">
+            <svg viewBox="0 0 320 350" style="width: 100%; max-width: 320px; display: block; margin: 0 auto; font-family: sans-serif;">
+              <text x="110" y="20" text-anchor="middle" font-size="13" fill="var(--text)">T<tspan dy="3" font-size="9">alta</tspan><tspan dy="-3"> = 2500 K</tspan></text>
+              
+              <rect x="50" y="25" width="120" height="25" fill="#e11d48" rx="4"/>
+              <text x="110" y="42" text-anchor="middle" font-size="13" fill="white" font-weight="bold">Fuente</text>
+              
+              <path d="M 90 50 L 130 50 L 130 80 L 145 80 L 110 115 L 75 80 L 90 80 Z" fill="#f87171" stroke="#ef4444"/>
+              <text x="150" y="85" font-size="13" fill="var(--text)">Q<tspan dy="3" font-size="9">entrada</tspan><tspan dy="-3"> = 15 kJ</tspan></text>
+              
+              <circle cx="110" cy="165" r="48" fill="#fde68a" stroke="#d97706" stroke-width="2" stroke-dasharray="4,2"/>
+              <text x="110" y="160" text-anchor="middle" font-size="14" fill="#92400e" font-weight="bold">Máquina</text>
+              <text x="110" y="178" text-anchor="middle" font-size="14" fill="#92400e" font-weight="bold">térmica</text>
+              
+              <path d="M 158 150 L 195 150 L 195 135 L 230 165 L 195 195 L 195 180 L 158 180 Z" fill="#34d399" stroke="#10b981"/>
+              <text x="235" y="170" font-size="13" fill="var(--text)">W<tspan dy="3" font-size="9">neto, salida</tspan><tspan dy="-3"> = 3 kJ</tspan></text>
+              
+              <path d="M 90 213 L 130 213 L 130 243 L 145 243 L 110 278 L 75 243 L 90 243 Z" fill="#60a5fa" stroke="#3b82f6"/>
+              <text x="150" y="250" font-size="13" fill="var(--text)">Q<tspan dy="3" font-size="9">salida</tspan></text>
+              
+              <text x="110" y="295" text-anchor="middle" font-size="13" fill="var(--text)">T<tspan dy="3" font-size="9">baja</tspan><tspan dy="-3"> = 300 K</tspan></text>
+              <rect x="50" y="300" width="120" height="25" fill="#0284c7" rx="4"/>
+              <text x="110" y="318" text-anchor="middle" font-size="13" fill="white" font-weight="bold">Sumidero</text>
+            </svg>
+          </div>
+          <div>
+            <p><strong>Eficiencia Real ($\varepsilon$):</strong></p>
+            <p>Es la relación entre el trabajo que nos entrega la máquina y la energía total que se le inyectó:</p>
+            <div style="background: var(--bg); padding: 0.5rem; border-radius: 0.5rem; overflow-x: auto; margin-bottom: 1rem;">
+              $$ \varepsilon = \left( \frac{W}{Q_{entrada}} \right) \times 100\% = \left( \frac{3 \text{ kJ}}{15 \text{ kJ}} \right) \times 100\% = 20\% $$
+            </div>
+            
+            <p><strong>Eficiencia Ideal de Carnot ($\varepsilon_c$):</strong></p>
+            <p>Es la eficiencia máxima teórica que podría tener considerando solo las temperaturas:</p>
+            <div style="background: var(--bg); padding: 0.5rem; border-radius: 0.5rem; overflow-x: auto;">
+              $$ \varepsilon_c = \left( \frac{T_{alta} - T_{baja}}{T_{alta}} \right) \times 100\% = \left( \frac{2500 - 300}{2500} \right) \times 100\% = 88\% $$
+            </div>
+            <p style="font-size: 0.9rem; color: var(--text-muted); margin-top: 0.5rem;"><strong>Interpretación:</strong> Ninguna máquina real construida bajo estas temperaturas podrá jamás superar el $88\%$ de eficiencia. El motor real está muy por debajo ($20\%$).</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="content-box">
+        <h3 style="color: var(--primary); margin-bottom: 1rem;">Problema 2: Comprobación de Leyes</h3>
+        <p>Una máquina térmica opera entre depósitos de $400 \text{ K}$ y $300 \text{ K}$. En cada ciclo, los datos son: $Q_{entrada} = 200 \text{ J}$, $Q_{salida} = -175 \text{ J}$, y $W_{ciclo} = 40 \text{ J}$. Verifiquemos si cumple las leyes de la termodinámica.</p>
+        
+        <div class="layout-split" style="margin-top: 2rem;">
+          <div class="svg-container">
+            <svg viewBox="0 0 320 350" style="width: 100%; max-width: 320px; display: block; margin: 0 auto; font-family: sans-serif;">
+              <text x="110" y="20" text-anchor="middle" font-size="13" fill="var(--text)">T<tspan dy="3" font-size="9">alta</tspan><tspan dy="-3"> = 400 K</tspan></text>
+              
+              <rect x="50" y="25" width="120" height="25" fill="#e11d48" rx="4"/>
+              <text x="110" y="42" text-anchor="middle" font-size="13" fill="white" font-weight="bold">Fuente</text>
+              
+              <path d="M 90 50 L 130 50 L 130 80 L 145 80 L 110 115 L 75 80 L 90 80 Z" fill="#f87171" stroke="#ef4444"/>
+              <text x="150" y="85" font-size="13" fill="var(--text)">Q<tspan dy="3" font-size="9">entrada</tspan><tspan dy="-3"> = 200 J</tspan></text>
+              
+              <circle cx="110" cy="165" r="48" fill="#fde68a" stroke="#d97706" stroke-width="2" stroke-dasharray="4,2"/>
+              <text x="110" y="160" text-anchor="middle" font-size="14" fill="#92400e" font-weight="bold">Máquina</text>
+              <text x="110" y="178" text-anchor="middle" font-size="14" fill="#92400e" font-weight="bold">térmica</text>
+              
+              <path d="M 158 150 L 195 150 L 195 135 L 230 165 L 195 195 L 195 180 L 158 180 Z" fill="#34d399" stroke="#10b981"/>
+              <text x="235" y="170" font-size="13" fill="var(--text)">W<tspan dy="3" font-size="9">ciclo</tspan><tspan dy="-3"> = 40 J</tspan></text>
+              
+              <path d="M 90 213 L 130 213 L 130 243 L 145 243 L 110 278 L 75 243 L 90 243 Z" fill="#60a5fa" stroke="#3b82f6"/>
+              <text x="150" y="250" font-size="13" fill="var(--text)">Q<tspan dy="3" font-size="9">salida</tspan><tspan dy="-3"> = -175 J</tspan></text>
+              
+              <text x="110" y="295" text-anchor="middle" font-size="13" fill="var(--text)">T<tspan dy="3" font-size="9">baja</tspan><tspan dy="-3"> = 300 K</tspan></text>
+              <rect x="50" y="300" width="120" height="25" fill="#0284c7" rx="4"/>
+              <text x="110" y="318" text-anchor="middle" font-size="13" fill="white" font-weight="bold">Sumidero</text>
+            </svg>
+          </div>
+          <div>
+            <p><strong>1ra Ley (Conservación de la Energía):</strong></p>
+            <p>El trabajo generado debe ser igual al calor que entra menos el calor que sale ($W = |Q_{entrada}| - |Q_{salida}|$):</p>
+            <div style="background: var(--bg); padding: 0.5rem; border-radius: 0.5rem; overflow-x: auto; margin-bottom: 1rem;">
+              $$ 40 \text{ J} = |200 \text{ J}| - |-175 \text{ J}| \Rightarrow 40 \neq 25 $$
+            </div>
+            <p style="color: #ef4444; font-weight: bold;">No cumple la primera ley.</p>
+            
+            <p style="margin-top: 1.5rem;"><strong>2da Ley (Límite de Eficiencia):</strong></p>
+            <p>La eficiencia real ($\varepsilon$) jamás puede superar la ideal de Carnot ($\varepsilon_c$):</p>
+            <div style="background: var(--bg); padding: 0.5rem; border-radius: 0.5rem; overflow-x: auto;">
+              $$ \varepsilon = \left(\frac{25}{200}\right) \times 100\% = 12.5\% \quad \text{y} \quad \varepsilon_c = \left(\frac{400 - 300}{400}\right) \times 100\% = 25\% $$
+            </div>
+            <p style="color: #10b981; font-weight: bold; margin-top: 0.5rem;">Sí cumple la segunda ley, porque $12.5\% < 25\%$.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="interactive-area">
+      <h2 class="section-title">✏️ Resuelve (Tarea Dinámica)</h2>
+      
+      <div class="alert-unique">
+        ℹ️ Para evitar copias, el sistema te ha asignado valores numéricos únicos al azar. Si recargas la página, seguirás teniendo tus mismos valores asignados. Resuelve los ejercicios con TU propia información.
+      </div>
+
+      <div class="exercise-box">
+        
+        <div class="problem">
+          <div class="label">
+            <strong>Ejercicio 1:</strong> Un motor térmico quema combustible aportando una energía de entrada de <strong style="color:var(--primary);"><span id="val-qIn1"></span> J</strong>. 
+            Durante ese proceso, el motor logra realizar un trabajo útil de <strong style="color:var(--primary);"><span id="val-w1"></span> J</strong>. 
+            El proceso ocurre entre una cámara de combustión a <strong style="color:var(--primary);"><span id="val-th1"></span> K</strong> y el escape a <strong style="color:var(--primary);"><span id="val-tc1"></span> K</strong>.
+          </div>
+          
+          <div style="margin-top: 1rem;">
+            <p style="margin-bottom: 0.5rem;">a) ¿Cuál es la <strong>eficiencia real ($\varepsilon$)</strong> de este motor?</p>
+            <div class="input-wrapper">
+              <math-field id="ans-1a" virtual-keyboard-mode="onfocus"></math-field> <span style="font-weight:bold; font-size: 1.2rem;">%</span>
+            </div>
+          </div>
+          <div style="margin-top: 1rem;">
+            <p style="margin-bottom: 0.5rem;">b) ¿Cuál es la <strong>eficiencia ideal de Carnot ($\varepsilon_c$)</strong> para esas temperaturas?</p>
+            <div class="input-wrapper">
+              <math-field id="ans-1b" virtual-keyboard-mode="onfocus"></math-field> <span style="font-weight:bold; font-size: 1.2rem;">%</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="problem">
+          <div class="label">
+            <strong>Ejercicio 2:</strong> Una máquina dice operar entre depósitos de <strong style="color:var(--primary);"><span id="val-th2"></span> K</strong> y <strong style="color:var(--primary);"><span id="val-tc2"></span> K</strong>. 
+            Ingresan <strong style="color:var(--primary);"><span id="val-qin2"></span> J</strong> de calor y arroja al sumidero un calor residual de <strong style="color:var(--primary);"><span id="val-qout2"></span> J</strong>. 
+            El fabricante afirma que entrega un trabajo de <strong style="color:var(--primary);"><span id="val-w2"></span> J</strong>.
+          </div>
+          
+          <div style="margin-top: 1rem;">
+            <p style="margin-bottom: 0.5rem;">a) ¿Cuál es el <strong>trabajo real</strong> que debería entregar según la Primera Ley de la Termodinámica ($|Q_{entrada}| - |Q_{salida}|$)?</p>
+            <div class="input-wrapper">
+              <math-field id="ans-2a" virtual-keyboard-mode="onfocus"></math-field> <span style="font-weight:bold; font-size: 1.2rem;">J</span>
+            </div>
+          </div>
+          <div style="margin-top: 1rem;">
+            <p style="margin-bottom: 0.5rem;">b) ¿Cuál es la <strong>eficiencia máxima de Carnot ($\varepsilon_c$)</strong> que podría tener?</p>
+            <div class="input-wrapper">
+              <math-field id="ans-2b" virtual-keyboard-mode="onfocus"></math-field> <span style="font-weight:bold; font-size: 1.2rem;">%</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="problem">
+          <div class="label">
+            <strong>Ejercicio 3:</strong> Tomando en cuenta los datos del <em>Ejercicio 1</em>. Si los ingenieros lograran construir el motor para que operara a la perfección absoluta (alcanzando la eficiencia de Carnot), ¿cuánto sería el <strong>Trabajo Máximo Teórico ($W_{max}$)</strong> que entregaría con esa misma energía de entrada?
+          </div>
+          <p class="hint" style="margin-bottom: 0.8rem;">Pista: $W_{max} = \varepsilon_c \times Q_{entrada}$ (Recuerda usar la eficiencia de Carnot en decimal para multiplicar).</p>
+          <div class="input-wrapper">
+            <span style="font-weight:bold; font-size: 1.2rem;">$W_{max} =$ </span>
+            <math-field id="ans-3" virtual-keyboard-mode="onfocus"></math-field> <span style="font-weight:bold; font-size: 1.2rem;">J</span>
+          </div>
+        </div>
+
+      </div>
+
+      <div id="exercises-container" style="text-align: center;">
+        <button class="btn-submit" onclick="submitAnswers()">Terminar y Enviar Respuestas</button>
+      </div>
+    </section>
+
+  </main>
+
+  <script type="module">
+    import { initUserBar } from '../../js/userbar.js';
+    import { initFirebase } from '../../js/initFirebase.js';
+    import { doc, getDoc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js";
+    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-auth.js";
+    
+    initUserBar('#userbar');
+    const { db, auth } = initFirebase();
+
+    const MATERIA_ID = 'ciencia';
+    const CLASS_ID = '9u2-l4-c4'; 
+
+    let currentUser = null;
+    let alreadySubmitted = false;
+    let studentData = {};
+
+    function generateStudentData() {
+      // Ex 1
+      const qIn1 = Math.floor(Math.random() * 10 + 10) * 1000; 
+      const w1 = Math.floor(Math.random() * 15 + 15) * 100; 
+      const th1 = Math.floor(Math.random() * 10 + 20) * 100; 
+      const tc1 = Math.floor(Math.random() * 7 + 28) * 10; 
+      
+      // Ex 2
+      const th2 = Math.floor(Math.random() * 5 + 4) * 100; 
+      let tc2 = Math.floor(Math.random() * 3 + 2) * 100; 
+      if(tc2 >= th2) tc2 = th2 - 100; 
+
+      const qin2 = Math.floor(Math.random() * 5 + 3) * 100; 
+      let qout2 = -(Math.floor(Math.random() * 4 + 1) * 50 + 50); 
+      if(Math.abs(qout2) >= qin2) qout2 = -(qin2 - 50); 
+
+      const w2 = Math.floor(Math.random() * 4 + 2) * 10; 
+
+      return { qIn1, w1, th1, tc1, th2, tc2, qin2, qout2, w2 };
+    }
+
+    function initInteractiveData() {
+      const storageKey = `${CLASS_ID}-randomData`;
+      const savedData = localStorage.getItem(storageKey);
+      
+      if (savedData) {
+        studentData = JSON.parse(savedData);
+      } else {
+        studentData = generateStudentData();
+        localStorage.setItem(storageKey, JSON.stringify(studentData));
+      }
+
+      document.getElementById('val-qIn1').textContent = studentData.qIn1.toLocaleString();
+      document.getElementById('val-w1').textContent = studentData.w1.toLocaleString();
+      document.getElementById('val-th1').textContent = studentData.th1.toLocaleString();
+      document.getElementById('val-tc1').textContent = studentData.tc1.toLocaleString();
+      
+      document.getElementById('val-th2').textContent = studentData.th2.toLocaleString();
+      document.getElementById('val-tc2').textContent = studentData.tc2.toLocaleString();
+      document.getElementById('val-qin2').textContent = studentData.qin2.toLocaleString();
+      document.getElementById('val-qout2').textContent = studentData.qout2.toLocaleString();
+      document.getElementById('val-w2').textContent = studentData.w2.toLocaleString();
+    }
+
+    function getNumericValue(str) {
+      if (!str) return NaN;
+      const cleanStr = str.replace(/\s/g, '').replace(/,/g, '.');
+      try { return parseFloat(cleanStr); } catch(e) { return NaN; }
+    }
+
+    function calculateGrade() {
+      let score = 0;
+      const ptsPerQ = 2; // 5 preguntas = 10 puntos en total
+
+      // Respuestas Correctas Calculadas
+      const r_1a = (studentData.w1 / studentData.qIn1) * 100;
+      const r_1b = ((studentData.th1 - studentData.tc1) / studentData.th1) * 100;
+      const r_2a = studentData.qin2 - Math.abs(studentData.qout2);
+      const r_2b = ((studentData.th2 - studentData.tc2) / studentData.th2) * 100;
+      const r_3 = (r_1b / 100) * studentData.qIn1;
+
+      // Obtener Inputs del Usuario
+      const u_1a = getNumericValue(document.getElementById('ans-1a').value);
+      const u_1b = getNumericValue(document.getElementById('ans-1b').value);
+      const u_2a = getNumericValue(document.getElementById('ans-2a').value);
+      const u_2b = getNumericValue(document.getElementById('ans-2b').value);
+      const u_3 = getNumericValue(document.getElementById('ans-3').value);
+
+      // Evaluación con margen de error
+      if (!isNaN(u_1a) && Math.abs(u_1a - r_1a) <= 0.5) score += ptsPerQ;
+      if (!isNaN(u_1b) && Math.abs(u_1b - r_1b) <= 0.5) score += ptsPerQ;
+      if (!isNaN(u_2a) && Math.abs(u_2a - r_2a) <= 0.5) score += ptsPerQ;
+      if (!isNaN(u_2b) && Math.abs(u_2b - r_2b) <= 0.5) score += ptsPerQ;
+      if (!isNaN(u_3) && Math.abs(u_3 - r_3) <= 2) score += ptsPerQ; 
+
+      return score;
+    }
+
+    function showGrade(nota) {
+      document.getElementById('interactive-area').innerHTML = `
+        <div class="result-summary">
+          <div style="color: var(--text-muted); font-size: 1.2rem; font-weight: 600;">Calificación de Actividad</div>
+          <div class="grade">${nota}/10</div>
+          <p style="color: var(--text-muted); margin-bottom: 2rem;">Tus ejercicios han sido evaluados basándose en los datos únicos que se te asignaron. ¡Registrado exitosamente!</p>
+          <a href="../../pages/clases.html" class="btn-submit" style="text-decoration:none;display:inline-flex;width:auto;">Volver a Clases</a>
+        </div>
+      `;
+    }
+
+    window.submitAnswers = async function() {
+      if (!currentUser) return alert('Error: No hay usuario logueado');
+      if (alreadySubmitted) return alert('Ya has enviado esta tarea.');
+      
+      const btn = document.querySelector('.btn-submit');
+      const originalText = btn.textContent;
+      btn.disabled = true;
+      btn.textContent = '⏳ Evaluando y guardando...';
+
+      try {
+        const rawScore = calculateGrade();
+        const nota = Number((rawScore).toFixed(1));
+
+        const classDocRef = doc(db, 'clases', MATERIA_ID, 'entregas', CLASS_ID);
+        
+        const fechaLocal = new Date().toLocaleString('en-GB', { 
+            timeZone: 'America/El_Salvador',
+            day: '2-digit', month: '2-digit', year: 'numeric',
+            hour: '2-digit', minute: '2-digit', second: '2-digit',
+            hour12: false 
+        }).replace(',', '');
+
+        await setDoc(classDocRef, {
+          grado: 9,
+          año: new Date().getFullYear(),
+          materia: MATERIA_ID,
+          updatedAt: serverTimestamp(),
+          respuestas: {
+            [currentUser.uid]: {
+              nombre: currentUser.displayName || currentUser.email || 'Sin nombre',
+              email: currentUser.email,
+              nota: nota,
+              datosAsignados: studentData, 
+              fechaLocal: fechaLocal
+            }
+          }
+        }, { merge: true });
+
+        alreadySubmitted = true;
+        showGrade(nota);
+        
+      } catch(error) {
+        console.error('❌ Error:', error);
+        alert('Error al guardar: ' + error.message);
+        btn.disabled = false;
+        btn.textContent = originalText;
+      }
+    };
+
+    onAuthStateChanged(auth, async (user) => {
+      const loadingEl = document.getElementById('loading');
+      if (user) {
+        currentUser = user;
+        initInteractiveData();
+
+        try {
+          const classDocRef = doc(db, 'clases', MATERIA_ID, 'entregas', CLASS_ID);
+          const snap = await getDoc(classDocRef);
+          
+          if (snap.exists() && snap.data().respuestas && snap.data().respuestas[user.uid]) {
+            alreadySubmitted = true;
+            const userData = snap.data().respuestas[user.uid];
+            loadingEl.style.display = 'none'; 
+            showGrade(userData.nota);
+            return;
+          }
+        } catch(e) { console.error(e); }
+      } else {
+        document.getElementById('interactive-area').innerHTML = `
+          <div class="result-summary">
+            <h2 style="margin-bottom:1rem">Sesión Requerida</h2>
+            <p style="color:var(--text-muted);margin-bottom:2rem">Debes iniciar sesión para realizar la actividad de la clase.</p>
+            <a href="../../index.html" class="btn-submit" style="text-decoration:none;display:inline-flex;width:auto;">Ir al Inicio</a>
+          </div>`;
+      }
+      loadingEl.style.display = 'none';
+      if (window.MathJax) MathJax.typesetPromise();
+    });
+  </script>
+</body>
+</html>

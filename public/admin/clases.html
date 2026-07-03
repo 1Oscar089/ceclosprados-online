@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+  <title>Revisión de Clases | Docentes</title>
+  <link rel="stylesheet" href="../css/styles.css">
+  <style>
+    /* ===== ADMIN CLASES - PASTEL DESIGN ===== */
+    .back-btn { display: inline-flex; align-items: center; gap: 0.5rem; margin-bottom: 1.5rem; color: var(--text-muted); font-weight: 500; padding: 0.5rem 0.8rem; border-radius: 0.6rem; transition: all 0.2s; }
+    .back-btn:hover { color: var(--primary); background: var(--surface-hover); transform: translateX(-2px); text-decoration: none; }
+    
+    .toolbar { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(12px); border: 2px solid rgba(167, 139, 250, 0.2); border-radius: 1rem; padding: 1.5rem; margin-bottom: 2rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; box-shadow: 0 4px 16px rgba(139, 92, 246, 0.08); }
+    [data-theme="dark"] .toolbar { background: rgba(30, 27, 75, 0.85); border-color: rgba(99, 102, 241, 0.3); }
+
+    .filters { display: flex; gap: 1rem; align-items: center; flex-wrap: wrap; }
+    
+    /* Agregado box-sizing para evitar que el padding desborde el ancho en inputs */
+    .select-grade { padding: 0.6rem 1rem; border-radius: 0.5rem; border: 2px solid var(--border); background: var(--bg); color: var(--text); font-weight: 600; outline: none; box-sizing: border-box; }
+    .select-grade:focus { border-color: var(--primary); }
+
+    .classes-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem; margin-bottom: 3rem; }
+    
+    .class-card { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(12px); border: 2px solid rgba(167, 139, 250, 0.2); border-radius: 1rem; padding: 1.5rem; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 4px 16px rgba(139, 92, 246, 0.08); position: relative; display: flex; flex-direction: column; min-height: 160px; }
+    [data-theme="dark"] .class-card { background: rgba(30, 27, 75, 0.85); border-color: rgba(99, 102, 241, 0.3); }
+    .class-card:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(139, 92, 246, 0.2); border-color: var(--primary); }
+    
+    .class-materia { font-size: 0.75rem; background: var(--surface-hover); padding: 0.2rem 0.6rem; border-radius: 999px; color: var(--text-muted); font-weight: 700; display: inline-block; margin-bottom: 0.5rem; text-transform: uppercase; align-self: flex-start; }
+    .class-title { font-size: 1.2rem; font-weight: 800; margin: 0 0 0.6rem; color: var(--primary); word-break: break-word; }
+    .class-date { font-size: 0.85rem; color: var(--text-muted); display: flex; align-items: center; gap: 0.3rem; margin-bottom: 0.25rem;}
+
+    /* ========================================================
+       MODALES FLOTANTES (CENTRADOS Y OVERLAY ABSOLUTO)
+       ======================================================== */
+    .modal-overlay { 
+      position: fixed; inset: 0; 
+      background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); 
+      z-index: 100000; /* Nivel super alto para cubrir la userbar sin importar qué */
+      display: flex; align-items: center; justify-content: center; /* Perfectamente centrado */
+      opacity: 0; pointer-events: none; transition: opacity 0.3s; 
+      padding: 1rem; 
+    }
+    .modal-overlay.active { opacity: 1; pointer-events: auto; }
+    
+    .modal-content { 
+      background: var(--surface); width: 100%; max-width: 850px; 
+      max-height: 95vh; /* Ocupa casi toda la pantalla si es necesario, pero sin salirse */
+      border-radius: 1.5rem; padding: 1.5rem; 
+      display: flex; flex-direction: column; position: relative;
+      transform: scale(0.95); transition: transform 0.3s; 
+      box-shadow: var(--shadow-xl); overflow: hidden;
+    }
+    .modal-overlay.active .modal-content { transform: scale(1); }
+    [data-theme="dark"] .modal-content { background: #0f172a; }
+
+    /* Botón cerrar anclado a la esquina de forma absoluta */
+    .btn-close { 
+      position: absolute; top: 1.2rem; right: 1.2rem; 
+      background: var(--surface-hover); border: none; font-size: 1.5rem; 
+      cursor: pointer; color: var(--text-muted); line-height: 1; 
+      width: 36px; height: 36px; border-radius: 50%; 
+      display: flex; align-items: center; justify-content: center; 
+      transition: all 0.2s; z-index: 10;
+    }
+    .btn-close:hover { background: #fee2e2; color: #ef4444; }
+
+    /* Cabecera del modal adaptada para no chocar con el botón de cerrar */
+    .modal-header { 
+      display: flex; flex-direction: column; gap: 0.5rem; 
+      margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 2px solid var(--border); 
+      padding-right: 3rem; flex-shrink: 0; 
+    }
+    .modal-title { font-size: 1.25rem; font-weight: 800; margin: 0; color: var(--primary); word-break: break-word; }
+    .modal-meta { color: var(--text-muted); font-size: 0.85rem; margin: 0; white-space: normal; }
+    
+    /* Contenedor de la tabla */
+    .table-container { overflow: auto; flex: 1; min-height: 0; width: 100%; border: 1px solid var(--border); border-radius: 0.5rem; }
+    table { width: 100%; border-collapse: collapse; text-align: left; min-width: 500px; }
+    th { background: var(--surface-hover); color: var(--text-muted); font-weight: 700; padding: 1rem; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.5px; position: sticky; top: 0; z-index: 5; box-shadow: 0 1px 0 var(--border); }
+    td { padding: 1rem; border-bottom: 1px solid var(--border); font-size: 0.95rem; color: var(--text); }
+    tr:hover td { background: rgba(167, 139, 250, 0.05); }
+
+    .badge-status { padding: 0.3rem 0.6rem; border-radius: 999px; font-size: 0.75rem; font-weight: 700; white-space: nowrap; }
+    .bg-green { background: #d1fae5; color: #047857; }
+    .bg-red { background: #fee2e2; color: #b91c1c; }
+    [data-theme="dark"] .bg-green { background: #064e3b; color: #34d399; }
+    [data-theme="dark"] .bg-red { background: #450a0a; color: #fca5a5; }
+
+    .nota-highlight { font-weight: 800; color: var(--primary); }
+    .loading-spinner { border: 4px solid rgba(167, 139, 250, 0.2); border-top: 4px solid var(--primary); border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 2rem auto; }
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+    /* ========================================================
+       DISEÑO DEL PANEL DE EDICIÓN RESPONSIVO
+       ======================================================== */
+    .edit-schedule-panel { background: var(--surface-hover); padding: 1rem; border-radius: 0.75rem; margin-bottom: 1rem; border: 1px solid var(--border); display: none; flex-shrink: 0; }
+    
+    .edit-schedule-row { display: flex; flex-direction: column; gap: 1rem; width: 100%; }
+    .input-full { width: 100%; }
+    .schedule-actions { display: flex; justify-content: flex-end; gap: 0.5rem; width: 100%; margin-top: 1rem; }
+    
+    .btn-edit-sm { background: transparent; border: 1px solid var(--primary); color: var(--primary); padding: 0.4rem 0.8rem; border-radius: 0.5rem; cursor: pointer; font-size: 0.85rem; font-weight: 600; transition: all 0.2s; white-space: nowrap; align-self: flex-start; }
+    .btn-edit-sm:hover { background: var(--primary); color: white; }
+
+    @media (min-width: 600px) { 
+      .edit-schedule-row { flex-direction: row; align-items: flex-end; } 
+      .edit-schedule-row > div { flex: 1; min-width: 0; }
+      .schedule-actions { margin-top: 0; flex: 0 0 auto; align-items: flex-end;}
+    }
+
+    @media (max-width: 768px) { 
+      .toolbar { flex-direction: column; align-items: stretch; } 
+      .modal-content { padding: 1rem; } 
+      th, td { padding: 0.75rem 0.5rem; font-size: 0.85rem; } 
+    }
+  </style>
+</head>
+<body>
+  <div id="userbar"></div>
+
+  <header class="app-container mt-6">
+    <a href="admin.html" class="back-btn">← Volver al Panel</a>
+    <h1 class="text-xl font-bold mb-2">📖 Revisión de Clases Interactivas</h1>
+    <p class="text-muted">Monitorea el progreso y configura los horarios de todas las clases detectadas en el sistema.</p>
+  </header>
+
+  <main class="app-container">
+    <div class="toolbar">
+      <div class="filters">
+        <select id="materia-filter" class="select-grade">
+          <option value="matematica">Matemática</option>
+          <option value="ciencia">Ciencias</option>
+          <option value="ingles">Inglés</option>
+        </select>
+        <select id="grado-filter" class="select-grade">
+          <option value="7">7° Grado</option>
+          <option value="8">8° Grado</option>
+          <option value="9">9° Grado</option>
+        </select>
+        <button class="btn btn-ghost" onclick="loadClasses()">🔄 Buscar</button>
+      </div>
+      <button class="btn btn-primary" onclick="openConsolidadoModal()">📊 Consolidado Trimestral</button>
+    </div>
+
+    <div id="classes-grid" class="classes-grid">
+      <div class="loading-spinner"></div>
+    </div>
+  </main>
+
+  <div class="modal-overlay" id="class-modal">
+    <div class="modal-content">
+      <button class="btn-close" onclick="closeModal('class-modal')">×</button>
+      
+      <div class="modal-header">
+        <h2 class="modal-title" id="modal-class-title">ID de la Clase</h2>
+        <p class="modal-meta" id="modal-class-meta"></p>
+        <button class="btn-edit-sm" style="margin-top: 0.5rem;" onclick="toggleEditSchedule()">✏️ Editar Horario</button>
+      </div>
+
+      <div id="edit-schedule-section" class="edit-schedule-panel">
+        <h4 style="margin-top:0; margin-bottom:1rem; color:var(--text); font-size: 1rem;">Modificar Horario de Clase</h4>
+        <div class="edit-schedule-row">
+          <div>
+            <label style="display:block; font-size:0.85rem; font-weight:600; color:var(--text-muted); margin-bottom:0.25rem;">Apertura:</label>
+            <input type="datetime-local" id="edit-inicio" class="select-grade input-full">
+          </div>
+          <div>
+            <label style="display:block; font-size:0.85rem; font-weight:600; color:var(--text-muted); margin-bottom:0.25rem;">Cierre:</label>
+            <input type="datetime-local" id="edit-fin" class="select-grade input-full">
+          </div>
+          <div class="schedule-actions">
+            <button class="btn btn-ghost" style="padding: 0.5rem 1rem;" onclick="toggleEditSchedule()">Cancelar</button>
+            <button class="btn btn-primary" style="padding: 0.5rem 1rem;" id="btn-save-schedule" onclick="saveSchedule()">Guardar</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Estudiante (Ordenado por Apellido)</th>
+              <th>Estado</th>
+              <th>Fecha de Resolución</th>
+              <th>Nota</th>
+            </tr>
+          </thead>
+          <tbody id="class-students-list"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="consolidado-modal">
+    <div class="modal-content" style="max-width: 1000px;">
+      <button class="btn-close" onclick="closeModal('consolidado-modal')">×</button>
+      
+      <div class="modal-header">
+        <h2 class="modal-title">📊 Consolidado de Clases</h2>
+        <div style="display:flex; gap:1rem; flex-wrap:wrap; margin-top: 0.5rem; width: 100%;">
+          <select id="trimestre-filter-modal" class="select-grade" style="flex: 1; min-width: 120px;">
+            <option value="t1">Trimestre 1</option>
+            <option value="t2">Trimestre 2</option>
+            <option value="t3">Trimestre 3</option>
+          </select>
+          <select id="materia-filter-modal" class="select-grade" style="flex: 1; min-width: 120px;">
+            <option value="matematica">Matemática</option>
+            <option value="ciencia">Ciencias</option>
+            <option value="ingles">Inglés</option>
+          </select>
+          <button class="btn btn-primary" style="flex: 1; min-width: 150px;" onclick="generateConsolidado()">Generar Reporte</button>
+        </div>
+      </div>
+      
+      <div class="table-container">
+        <table id="consolidado-table">
+          <thead id="consolidado-head"></thead>
+          <tbody id="consolidado-body">
+            <tr><td colspan="5" style="text-align:center; color:var(--text-muted);">Configura el filtro y haz clic en "Generar Reporte" para ver las notas.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initUserBar } from '../js/userbar.js';
+    import { initFirebase } from '../js/initFirebase.js';
+    import { collection, query, where, getDocs, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js";
+    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-auth.js";
+
+    initUserBar('#userbar');
+    const { db, auth } = initFirebase();
+
+    let currentStudents = [];
+    let currentClasses = [];
+    let trimestresConfig = {};
+    window.currentClass = null; 
+
+    function getApellidosForSort(nombreCompleto) {
+      if (!nombreCompleto) return "";
+      const words = nombreCompleto.trim().toUpperCase().split(/\s+/);
+      if (words.length <= 2) return words.join(" "); 
+      
+      const particles = ["DE", "DEL", "LA", "LAS", "LOS", "Y", "EL"];
+      let apellidos = [];
+      let count = 0;
+      for (let i = words.length - 1; i >= 0; i--) {
+          apellidos.unshift(words[i]);
+          if (!particles.includes(words[i])) count++;
+          if (count === 2) break; 
+      }
+      return apellidos.join(" ");
+    }
+
+    function findEntrega(estudiante, respuestas) {
+      if (!respuestas) return null;
+      if (respuestas[estudiante.id]) return respuestas[estudiante.id];
+      const respArray = Object.values(respuestas);
+      const eEst = (estudiante.correo || estudiante.email || '').trim().toLowerCase();
+      const nEst = (estudiante.nombre || '').trim().toLowerCase();
+      return respArray.find(r => {
+          const eR = (r.email || '').trim().toLowerCase();
+          const nR = (r.nombre || '').trim().toLowerCase();
+          return (eR === eEst && eEst !== '') || (nR === nEst && nEst !== '');
+      });
+    }
+
+    async function initTrimestres() {
+      const trimestresRef = doc(db, 'control', 'trimestres');
+      const snap = await getDoc(trimestresRef);
+      if (!snap.exists()) {
+        const defaultDates = {
+          t1: { inicio: '2026-02-02', fin: '2026-05-08', nombre: 'Trimestre 1' },
+          t2: { inicio: '2026-02-11', fin: '2026-08-14', nombre: 'Trimestre 2' },
+          t3: { inicio: '2026-08-17', fin: '2026-11-10', nombre: 'Trimestre 3' }
+        };
+        await setDoc(trimestresRef, defaultDates);
+        trimestresConfig = defaultDates;
+      } else {
+        trimestresConfig = snap.data();
+      }
+    }
+
+    async function loadStudents(grado) {
+      const q = query(collection(db, "users"), where("grado", "==", grado));
+      const querySnapshot = await getDocs(q);
+      const students = [];
+      querySnapshot.forEach((doc) => {
+        const data = doc.data();
+        if (data.rol !== 'docente' && data.rol !== 'admin') {
+          students.push({ id: doc.id, ...data });
+        }
+      });
+      return students.sort((a, b) => {
+          const apeA = getApellidosForSort(a.nombre);
+          const apeB = getApellidosForSort(b.nombre);
+          return apeA.localeCompare(apeB);
+      });
+    }
+
+    function formatDateTime(dateStr) {
+      if(!dateStr) return '';
+      const d = new Date(dateStr);
+      return d.toLocaleString('en-GB', { 
+        timeZone: 'America/El_Salvador',
+        day: '2-digit', month: '2-digit', year: 'numeric',
+        hour: '2-digit', minute: '2-digit',
+        hour12: false 
+      }).replace(',', '');
+    }
+
+    function toDatetimeLocal(dateStr) {
+      if (!dateStr) return '';
+      const d = new Date(dateStr);
+      if (isNaN(d.getTime())) return '';
+      const yyyy = d.getFullYear();
+      const mm = String(d.getMonth() + 1).padStart(2, '0');
+      const dd = String(d.getDate()).padStart(2, '0');
+      const hh = String(d.getHours()).padStart(2, '0');
+      const min = String(d.getMinutes()).padStart(2, '0');
+      return `${yyyy}-${mm}-${dd}T${hh}:${min}`;
+    }
+
+    window.loadClasses = async function() {
+      const materia = document.getElementById('materia-filter').value;
+      const grado = parseInt(document.getElementById('grado-filter').value);
+      
+      const grid = document.getElementById('classes-grid');
+      grid.innerHTML = '<div class="loading-spinner"></div>';
+      
+      currentStudents = await loadStudents(grado);
+
+      const q = query(collection(db, 'clases', materia, 'entregas'), where('grado', '==', grado));
+      const snap = await getDocs(q);
+      
+      let clasesEncontradas = [];
+      snap.forEach(d => {
+        const data = d.data();
+        clasesEncontradas.push({
+          id: d.id, 
+          materia: materia,
+          inicio: data.inicio || null,
+          fin: data.fin || null,
+          respuestas: data.respuestas || {}
+        });
+      });
+
+      if (clasesEncontradas.length === 0) {
+        grid.innerHTML = `<p style="text-align:center; width:100%; color:var(--text-muted);">No se encontraron documentos de clases para este filtro en la base de datos.</p>`;
+        return;
+      }
+
+      clasesEncontradas.sort((a, b) => {
+        const getU = (id) => { const m = id.match(/u(\d+)/); return m ? parseInt(m[1]) : 0; };
+        const getC = (id) => {
+            const parts = id.split('-');
+            const lastPart = parts[parts.length - 1].replace(/\D/g, ''); 
+            if (!lastPart) return 0;
+            const l = parseInt(lastPart.charAt(0)) || 0;
+            const c = parseInt(lastPart.substring(1)) || 0;
+            return (l * 1000) + c;
+        };
+        const uA = getU(a.id); const uB = getU(b.id);
+        if (uA !== uB) return uA - uB;
+        return getC(a.id) - getC(b.id);
+      });
+
+      currentClasses = clasesEncontradas;
+
+      grid.innerHTML = '';
+      for (const clase of currentClasses) {
+        const card = document.createElement('div');
+        card.className = 'class-card';
+        card.onclick = () => openClassModal(clase);
+        
+        const completadas = currentStudents.filter(est => findEntrega(est, clase.respuestas)).length;
+
+        let dateHtml = '';
+        if (clase.inicio && clase.fin) {
+          dateHtml = `
+            <div class="class-date">🕒 Abre: ${formatDateTime(clase.inicio)}</div>
+            <div class="class-date">📅 Cierra: ${formatDateTime(clase.fin)}</div>
+          `;
+        } else {
+          dateHtml = `<div class="class-date" style="color:#ef4444; font-weight: 600;">⚠️ Horario no configurado</div>`;
+        }
+
+        card.innerHTML = `
+          <span class="class-materia">${clase.materia.toUpperCase()}</span>
+          <h3 class="class-title">${clase.id}</h3>
+          ${dateHtml}
+          <div style="margin-top:auto; padding-top:1rem; font-size:0.85rem; color:var(--primary); font-weight:600;">
+            Entregas: ${completadas} / ${currentStudents.length}
+          </div>
+        `;
+        grid.appendChild(card);
+      }
+    };
+
+    window.openClassModal = function(clase) {
+      window.currentClass = clase;
+      document.getElementById('edit-schedule-section').style.display = 'none';
+
+      document.getElementById('modal-class-title').textContent = `${clase.id}`;
+      document.getElementById('modal-class-title').title = `${clase.id}`; 
+      
+      let metaText = `${clase.materia.toUpperCase()}`;
+      if(clase.fin) metaText += ` • Límite: ${formatDateTime(clase.fin)}`;
+      else metaText += ` • Sin configurar`;
+      document.getElementById('modal-class-meta').textContent = metaText;
+      
+      const tbody = document.getElementById('class-students-list');
+      document.getElementById('class-modal').classList.add('active');
+
+      tbody.innerHTML = '';
+      currentStudents.forEach(estudiante => {
+        const entrega = findEntrega(estudiante, clase.respuestas);
+        const tr = document.createElement('tr');
+        
+        if (entrega) {
+          tr.innerHTML = `
+            <td style="font-weight:600;">${estudiante.nombre || 'Sin nombre'}</td>
+            <td><span class="badge-status bg-green">Completado</span></td>
+            <td style="white-space:nowrap;">${entrega.fechaLocal || 'Recibido'}</td>
+            <td class="nota-highlight">${entrega.nota}/10</td>
+          `;
+        } else {
+          tr.innerHTML = `
+            <td>${estudiante.nombre || 'Sin nombre'}</td>
+            <td><span class="badge-status bg-red">Pendiente</span></td>
+            <td style="color:var(--text-muted); text-align:center;">-</td>
+            <td style="color:var(--text-muted); text-align:center;">-</td>
+          `;
+        }
+        tbody.appendChild(tr);
+      });
+    };
+
+    window.toggleEditSchedule = function() {
+      const section = document.getElementById('edit-schedule-section');
+      if (section.style.display === 'none') {
+        section.style.display = 'block';
+        document.getElementById('edit-inicio').value = window.currentClass.inicio ? toDatetimeLocal(window.currentClass.inicio) : '';
+        document.getElementById('edit-fin').value = window.currentClass.fin ? toDatetimeLocal(window.currentClass.fin) : '';
+      } else {
+        section.style.display = 'none';
+      }
+    };
+
+    window.saveSchedule = async function() {
+      const newInicio = document.getElementById('edit-inicio').value;
+      const newFin = document.getElementById('edit-fin').value;
+
+      if (!newInicio || !newFin) {
+        return alert('Por favor, selecciona fecha y hora tanto para Apertura como para Cierre.');
+      }
+
+      const btn = document.getElementById('btn-save-schedule');
+      const originalText = btn.textContent;
+      btn.disabled = true;
+      btn.textContent = 'Guardando...';
+
+      try {
+        const classRef = doc(db, 'clases', window.currentClass.materia, 'entregas', window.currentClass.id);
+        
+        await setDoc(classRef, {
+          inicio: newInicio,
+          fin: newFin,
+          grado: parseInt(document.getElementById('grado-filter').value),
+          materia: window.currentClass.materia
+        }, { merge: true });
+        
+        document.getElementById('edit-schedule-section').style.display = 'none';
+        closeModal('class-modal');
+        loadClasses(); 
+
+      } catch (error) {
+        console.error("Error al actualizar horario:", error);
+        alert('Error al guardar el horario: ' + error.message);
+      } finally {
+        btn.disabled = false;
+        btn.textContent = originalText;
+      }
+    };
+
+    window.openConsolidadoModal = () => {
+      document.getElementById('consolidado-modal').classList.add('active');
+    };
+
+    window.generateConsolidado = async function() {
+      const trimestreKey = document.getElementById('trimestre-filter-modal').value;
+      const materia = document.getElementById('materia-filter-modal').value;
+      const grado = parseInt(document.getElementById('grado-filter').value);
+
+      const tData = trimestresConfig[trimestreKey];
+      const tbody = document.getElementById('consolidado-body');
+      const thead = document.getElementById('consolidado-head');
+      
+      tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;"><div class="loading-spinner"></div></td></tr>';
+      
+      const tInicio = new Date(tData.inicio + 'T00:00:00');
+      const tFin = new Date(tData.fin + 'T23:59:59');
+
+      const students = await loadStudents(grado);
+
+      const q = query(collection(db, 'clases', materia, 'entregas'), where('grado', '==', grado));
+      const snap = await getDocs(q);
+
+      let clasesTrimestre = [];
+      snap.forEach(d => {
+         const data = d.data();
+         if (data.fin) {
+             const classFinDate = new Date(data.fin);
+             if (classFinDate >= tInicio && classFinDate <= tFin) {
+                 clasesTrimestre.push({
+                     id: d.id,
+                     fin: data.fin,
+                     respuestas: data.respuestas || {}
+                 });
+             }
+         }
+      });
+
+      clasesTrimestre.sort((a, b) => {
+        const getU = (id) => { const m = id.match(/u(\d+)/); return m ? parseInt(m[1]) : 0; };
+        const getC = (id) => {
+            const parts = id.split('-');
+            const lastPart = parts[parts.length - 1].replace(/\D/g, ''); 
+            if (!lastPart) return 0;
+            const l = parseInt(lastPart.charAt(0)) || 0;
+            const c = parseInt(lastPart.substring(1)) || 0;
+            return (l * 1000) + c;
+        };
+        const uA = getU(a.id); const uB = getU(b.id);
+        if (uA !== uB) return uA - uB;
+        return getC(a.id) - getC(b.id);
+      });
+
+      let headHtml = `<tr><th>Estudiante (Ordenado por Apellido)</th>`;
+      clasesTrimestre.forEach(t => headHtml += `<th>${t.id}</th>`);
+      headHtml += `<th>Promedio</th></tr>`;
+      thead.innerHTML = headHtml;
+
+      if (clasesTrimestre.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:var(--text-muted);">No hay clases registradas para <strong>${materia.toUpperCase()}</strong> en las fechas de este trimestre.</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = '';
+      students.forEach(estudiante => {
+        let trHtml = `<td style="font-weight:600; white-space:nowrap;">${estudiante.nombre || 'Sin nombre'}</td>`;
+        let suma = 0;
+        
+        clasesTrimestre.forEach(t => {
+          const entrega = findEntrega(estudiante, t.respuestas);
+
+          if (entrega) {
+            trHtml += `<td style="text-align:center;">${entrega.nota}</td>`;
+            suma += parseFloat(entrega.nota);
+          } else {
+            trHtml += `<td style="color:var(--text-muted); text-align:center;">0</td>`;
+          }
+        });
+
+        const promedio = (suma / clasesTrimestre.length).toFixed(1);
+        trHtml += `<td class="nota-highlight" style="text-align:center;">${promedio}</td>`;
+        
+        const tr = document.createElement('tr');
+        tr.innerHTML = trHtml;
+        tbody.appendChild(tr);
+      });
+    };
+
+    window.closeModal = (id) => { document.getElementById(id).classList.remove('active'); };
+
+    onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        await initTrimestres();
+        document.getElementById('grado-filter').addEventListener('change', loadClasses);
+        document.getElementById('materia-filter').addEventListener('change', loadClasses);
+        loadClasses();
+      } else {
+        window.location.href = '../../index.html';
+      }
+    });
+  </script>
+</body>
+</html>

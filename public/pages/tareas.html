@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+  <title>Tareas | CENTRO ESCOLAR CANTÓN LOS PRADOS</title>
+  <link rel="stylesheet" href="../css/styles.css">
+  <style>
+    .back-btn { display: inline-flex; align-items: center; gap: 0.5rem; margin-bottom: 1.5rem; color: var(--text-muted); font-weight: 500; padding: 0.5rem 0.8rem; border-radius: 0.6rem; transition: all 0.2s; }
+    .back-btn:hover { color: var(--primary); background: var(--surface-hover); transform: translateX(-2px); text-decoration: none; }
+    .grade-badge { margin-left: 0.5rem; vertical-align: middle; background: linear-gradient(135deg, #34d399, #10b981); color: white; padding: 0.2rem 0.6rem; border-radius: 999px; font-size: 0.75rem; font-weight: 700; box-shadow: 0 2px 6px rgba(16, 185, 129, 0.3); }
+    .icon { display: inline-flex; align-items: center; justify-content: center; }
+    .icon-sm { width: 20px; height: 20px; }
+    .icon-md { width: 24px; height: 24px; }
+    .accordion { width: 100%; }
+    .accordion-item { margin-bottom: 1rem; background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(12px); border: 2px solid rgba(167, 139, 250, 0.2); border-radius: 1rem; overflow: hidden; box-shadow: 0 4px 16px rgba(139, 92, 246, 0.1); transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1); animation: slideIn 0.3s ease forwards; opacity: 0; transform: translateY(10px); }
+    .accordion-item:nth-child(2) { animation-delay: 0.05s; }
+    .accordion-item:nth-child(3) { animation-delay: 0.1s; }
+    [data-theme="dark"] .accordion-item { background: rgba(30, 27, 75, 0.8); border: 2px solid rgba(99, 102, 241, 0.3); box-shadow: 0 4px 16px rgba(99, 102, 241, 0.2); }
+    .accordion-item:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(139, 92, 246, 0.2); border-color: rgba(167, 139, 250, 0.4); }
+    .accordion-header { display: flex; align-items: center; justify-content: space-between; padding: 1rem 1.25rem; cursor: pointer; background: transparent; transition: background 0.2s; }
+    .accordion-header:hover { background: rgba(167, 139, 250, 0.05); }
+    .accordion-header h3 { margin: 0; font-size: 1.05rem; font-weight: 700; display: flex; align-items: center; gap: 0.8rem; color: var(--text); flex-wrap: wrap; text-transform: capitalize; }
+    .status-tags { display: flex; gap: 0.4rem; flex-wrap: wrap; }
+    .tag { font-size: 0.7rem; padding: 0.15rem 0.5rem; border-radius: 999px; font-weight: 600; border: 1px solid transparent; }
+    .tag-proxima { background: #e2e8f0; color: #475569; border-color: #cbd5e1; }
+    .tag-pendiente { background: #fef3c7; color: #b45309; border-color: #fcd34d; }
+    .tag-vencida { background: #fee2e2; color: #b91c1c; border-color: #fca5a5; }
+    .tag-entregada { background: #d1fae5; color: #047857; border-color: #6ee7b7; }
+    [data-theme="dark"] .tag-proxima { background: #1e293b; color: #94a3b8; border-color: #334155; }
+    [data-theme="dark"] .tag-pendiente { background: #451a03; color: #fcd34d; border-color: #92400e; }
+    [data-theme="dark"] .tag-vencida { background: #450a0a; color: #fca5a5; border-color: #991b1b; }
+    [data-theme="dark"] .tag-entregada { background: #064e3b; color: #34d399; border-color: #059669; }
+    .acc-chevron { width: 20px; height: 20px; transition: transform 0.3s ease; color: var(--text-muted); }
+    .accordion-header.active .acc-chevron { transform: rotate(180deg); color: var(--primary); }
+    .accordion-body { max-height: 0; overflow: hidden; transition: max-height 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); background: rgba(240, 249, 255, 0.5); padding: 0 1.25rem; }
+    [data-theme="dark"] .accordion-body { background: rgba(49, 46, 129, 0.3); }
+    .task-card { margin: 0.75rem 0; background: white; border: 1px solid var(--border); border-radius: 0.8rem; box-shadow: 0 2px 8px rgba(0,0,0,0.04); transition: all 0.2s; position: relative; overflow: hidden; }
+    [data-theme="dark"] .task-card { background: #312e81; border-color: #4f46e5; }
+    .task-card:hover { transform: translateX(4px); border-color: var(--primary); box-shadow: 0 4px 12px rgba(139, 92, 246, 0.15); }
+    .task-card.proxima { border-left: 4px solid #94a3b8; }
+    .task-card.pendiente { border-left: 4px solid #fbbf24; }
+    .task-card.vencida { border-left: 4px solid #f87171; }
+    .task-card.entregada { border-left: 4px solid #10b981; }
+    .task-header { display: flex; align-items: flex-start; justify-content: space-between; padding: 1rem; gap: 1rem; flex-wrap: wrap; }
+    .task-info { flex: 1; min-width: 0; }
+    .task-title { margin: 0 0 0.4rem; font-size: 1rem; font-weight: 600; color: var(--text); }
+    .task-meta { display: flex; flex-wrap: wrap; gap: 0.6rem; font-size: 0.85rem; color: var(--text-muted); }
+    .task-meta-item { display: inline-flex; align-items: center; gap: 0.3rem; }
+    .task-status { display: inline-flex; align-items: center; gap: 0.3rem; padding: 0.25rem 0.7rem; border-radius: 999px; font-size: 0.78rem; font-weight: 600; white-space: nowrap; }
+    .task-status.proxima { background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; }
+    .task-status.pendiente { background: #fef3c7; color: #b45309; border: 1px solid #fcd34d; }
+    .task-status.vencida { background: #fee2e2; color: #b91c1c; border: 1px solid #fca5a5; }
+    .task-status.entregada { background: #d1fae5; color: #047857; border: 1px solid #6ee7b7; }
+    [data-theme="dark"] .task-status.proxima { background: #1e293b; color: #94a3b8; border-color: #334155; }
+    [data-theme="dark"] .task-status.pendiente { background: #451a03; color: #fcd34d; border-color: #92400e; }
+    [data-theme="dark"] .task-status.vencida { background: #450a0a; color: #fca5a5; border-color: #991b1b; }
+    [data-theme="dark"] .task-status.entregada { background: #064e3b; color: #34d399; border-color: #059669; }
+    .task-actions { display: flex; align-items: center; gap: 0.5rem; flex-shrink: 0; }
+    .btn-task { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.5rem 1rem; border: none; border-radius: 0.5rem; font-weight: 600; font-size: 0.88rem; cursor: pointer; transition: all 0.2s; text-decoration: none; white-space: nowrap; }
+    .btn-task.primary { background: linear-gradient(135deg, #a78bfa, #8b5cf6); color: white; box-shadow: 0 2px 6px rgba(139, 92, 246, 0.3); }
+    .btn-task.primary:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(139, 92, 246, 0.4); }
+    .btn-task.secondary { background: white; color: #4f46e5; border: 1px solid var(--border); }
+    [data-theme="dark"] .btn-task.secondary { background: #1e1b4b; color: #a78bfa; border-color: #4f46e5; }
+    .btn-task.secondary:hover { background: var(--surface-hover); }
+    .empty-state { text-align: center; padding: 3rem 1rem; color: var(--text-muted); }
+    .empty-state svg { width: 64px; height: 64px; margin-bottom: 1rem; opacity: 0.5; }
+    @keyframes slideIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    @media (max-width: 768px) { .accordion-header h3 { font-size: 0.95rem; } .task-header { flex-direction: column; } .task-actions { width: 100%; justify-content: flex-end; } .btn-task { flex: 1; justify-content: center; } }
+  </style>
+</head>
+<body>
+  <div id="userbar"></div>
+
+  <header class="app-container mt-6">
+    <a href="home.html" class="btn btn-ghost back-btn">
+      <span class="icon icon-sm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5"/><polyline points="12 19 5 12 12 5"/></svg></span>
+      Volver al Inicio
+    </a>
+    <h1 class="text-xl font-bold mb-2">
+      <span class="icon icon-md" style="color:var(--primary);margin-right:0.5rem">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+      </span>
+      Tareas <span id="grade-label" class="grade-badge">Cargando...</span>
+    </h1>
+    <p class="text-muted">Entrega actividades organizadas por materia (Priorizando fechas en Firebase)</p>
+  </header>
+
+  <main class="app-container">
+    <div id="tasks-accordion" class="accordion">
+      <div style="text-align:center; padding: 2rem; color: var(--text-muted);">Cargando tus tareas...</div>
+    </div>
+  </main>
+
+  <script type="module">
+    import { initFirebase } from '../js/initFirebase.js';
+    import { initUserBar } from '../js/userbar.js';
+    import { doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js";
+    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-auth.js";
+    
+    initUserBar('#userbar');
+    const { db, auth } = initFirebase();
+
+    // Semilla local: Solo se usa si en Firebase aún no existe la generalidad de la tarea.
+    const TAREAS_LOCAL = [
+      //{ id: '7-u3-117', titulo: 'Ejercicios de clase U4 1.7', grado: 7, materia: 'matematica', inicio: '2026-06-04T00:00', fin: '2026-06-04T23:59' }
+    ];
+
+    const ICONS = {
+      chevron: `<svg class="acc-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>`,
+      clock: `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>`,
+      lock: `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>`,
+      upload: `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>`,
+      alert: `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>`,
+      check: `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>`
+    };
+
+    function getSVDate() {
+      const options = { timeZone: 'America/El_Salvador', year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: false };
+      const formatter = new Intl.DateTimeFormat('en-US', options);
+      const parts = formatter.formatToParts(new Date());
+      const vals = {};
+      parts.forEach(p => vals[p.type] = p.value);
+      return new Date(vals.year, vals.month - 1, vals.day, vals.hour, vals.minute, vals.second);
+    }
+
+    function formatDateTime(dateStr) {
+      const d = new Date(dateStr);
+      return d.toLocaleDateString('es-SV', { 
+        day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit'
+      });
+    }
+
+    function getTaskStatus(inicio, fin, entrega) {
+      if (entrega) return 'entregada';
+      const ahora = getSVDate();
+      const start = new Date(inicio);
+      const end = new Date(fin);
+      
+      if (ahora < start) return 'proxima';
+      if (ahora > end) return 'vencida';
+      return 'pendiente';
+    }
+
+    function getStatusLabel(s) { return { proxima: 'Próxima', pendiente: 'Pendiente', vencida: 'Vencida', entregada: 'Entregada' }[s]; }
+    function getStatusIcon(s) { return { proxima: ICONS.lock, pendiente: ICONS.clock, vencida: ICONS.alert, entregada: ICONS.check }[s]; }
+
+    function findEntrega(user, respuestas) {
+      if (!respuestas) return null;
+      if (respuestas[user.uid]) return respuestas[user.uid];
+      const respArray = Object.values(respuestas);
+      const eEst = (user.email || '').trim().toLowerCase();
+      const nEst = (user.displayName || '').trim().toLowerCase();
+      return respArray.find(r => {
+          const eR = (r.email || '').trim().toLowerCase();
+          const nR = (r.nombre || '').trim().toLowerCase();
+          return (eR === eEst && eEst !== '') || (nR === nEst && nEst !== '');
+      });
+    }
+
+    async function loadUserTareas(user) {
+      const demo = sessionStorage.getItem('demoUser');
+      let grado = 7;
+      
+      if (demo) {
+        grado = JSON.parse(demo).grado || 7;
+      } else {
+        const initials = (user.displayName || 'USR').split(' ').map(n => n[0]).join('').slice(0, 3).toUpperCase();
+        const local = user.email?.split('@')[0] || '';
+        const snap = await getDoc(doc(db, 'users', `est_${local}_${initials}`));
+        if (snap.exists()) grado = snap.data().grado || 7;
+      }
+      
+      document.getElementById('grade-label').textContent = `${grado}° Grado`;
+      
+      const tareasActualizadas = [];
+      const formatMat = { matematica: 'Matemática y datos', ciencias: 'Ciencia y tecnología', ingles: 'Inglés' };
+
+      // Procesar la semilla local
+      const tareasGrado = TAREAS_LOCAL.filter(t => t.grado === grado);
+      
+      for (let t of tareasGrado) {
+        let entregaInfo = null;
+        let fbData = null;
+        const docRef = doc(db, 'tareas', t.materia, 'entregas', t.id);
+        
+        try {
+          const snap = await getDoc(docRef);
+          if (snap.exists()) {
+            fbData = snap.data();
+            if (fbData.respuestas) entregaInfo = findEntrega(user, fbData.respuestas);
+          } else {
+            // Si la tarea no existe en Firebase, la CREAMOS con los datos base de la semilla
+            fbData = {
+              titulo: t.titulo,
+              grado: t.grado,
+              materia: t.materia,
+              inicio: t.inicio,
+              fin: t.fin
+            };
+            try {
+              await setDoc(docRef, fbData, { merge: true });
+            } catch(e) { console.warn("No se pudieron inyectar metadatos", e); }
+          }
+        } catch (e) { console.warn('Error leyendo entrega:', e); }
+
+        // Prioridad: 1. Firebase, 2. Semilla Local
+        const finalInicio = fbData?.inicio || t.inicio;
+        const finalFin = fbData?.fin || t.fin;
+        const finalTitulo = fbData?.titulo || t.titulo;
+        
+        tareasActualizadas.push({
+          id: t.id,
+          titulo: finalTitulo,
+          materiaFormat: formatMat[t.materia] || t.materia,
+          inicio: finalInicio,
+          fin: finalFin,
+          estado: getTaskStatus(finalInicio, finalFin, entregaInfo),
+          entrega: entregaInfo
+        });
+      }
+      
+      renderTareasAcordeon(tareasActualizadas, grado);
+    }
+
+    function renderTareasAcordeon(tareas, grado) {
+      const container = document.getElementById('tasks-accordion');
+      container.innerHTML = '';
+      
+      if (tareas.length === 0) {
+        container.innerHTML = `<div class="empty-state">${ICONS.upload}<h3>No tienes tareas publicadas por el momento.</h3></div>`;
+        return;
+      }
+
+      const grouped = {};
+      tareas.forEach(t => { (grouped[t.materiaFormat] ||= []).push(t); });
+
+      Object.entries(grouped).forEach(([materia, lista], idx) => {
+        const counts = {
+          proxima: lista.filter(t => t.estado === 'proxima').length,
+          pendiente: lista.filter(t => t.estado === 'pendiente').length,
+          vencida: lista.filter(t => t.estado === 'vencida').length,
+          entregada: lista.filter(t => t.estado === 'entregada').length
+        };
+
+        const item = document.createElement('div');
+        item.className = 'accordion-item';
+        item.style.animationDelay = `${idx * 0.05}s`;
+
+        const header = document.createElement('div');
+        header.className = 'accordion-header';
+        header.innerHTML = `
+          <h3>${materia}
+            <div class="status-tags">
+              ${counts.proxima ? `<span class="tag tag-proxima">${counts.proxima} Próxima</span>` : ''}
+              ${counts.pendiente ? `<span class="tag tag-pendiente">${counts.pendiente} Pendiente</span>` : ''}
+              ${counts.vencida ? `<span class="tag tag-vencida">${counts.vencida} Vencida</span>` : ''}
+              ${counts.entregada ? `<span class="tag tag-entregada">${counts.entregada} Entregada</span>` : ''}
+            </div>
+          </h3>${ICONS.chevron}`;
+
+        const body = document.createElement('div');
+        body.className = 'accordion-body';
+
+        lista.forEach(tarea => {
+          const taskUrl = `../grado${grado}/tareas/${tarea.id}.html`;
+          
+          let btnHtml = '';
+          if (tarea.estado === 'pendiente' || tarea.estado === 'vencida') {
+            btnHtml = `<a href="${taskUrl}" class="btn-task primary">${ICONS.upload} Entregar</a>`;
+          } else if (tarea.estado === 'proxima') {
+            btnHtml = `<button class="btn-task secondary" disabled>${ICONS.lock} Aún no disponible</button>`;
+          } else {
+            btnHtml = `<a href="${taskUrl}" class="btn-task secondary">${ICONS.check} Ver Resultados</a>`;
+          }
+
+          let metaHtml = '';
+          if (tarea.estado === 'entregada') {
+            metaHtml = `
+              <span class="task-meta-item">${ICONS.check} Entregado: ${tarea.entrega.fechaLocal || 'Recibido'}</span>
+              <span class="task-meta-item" style="color:var(--primary); font-weight:700;">Nota: ${tarea.entrega.nota}/10</span>
+            `;
+          } else if (tarea.estado === 'proxima') {
+            metaHtml = `<span class="task-meta-item">${ICONS.clock} Abre: ${formatDateTime(tarea.inicio)}</span>`;
+          } else {
+            metaHtml = `<span class="task-meta-item">${ICONS.clock} Cierre: ${formatDateTime(tarea.fin)}</span>`;
+          }
+
+          const card = document.createElement('div');
+          card.className = `task-card ${tarea.estado}`;
+          card.innerHTML = `
+            <div class="task-header">
+              <div class="task-info">
+                <div class="task-title">Tarea: ${tarea.titulo}</div>
+                <div class="task-meta">${metaHtml}</div>
+              </div>
+              <div style="display:flex;align-items:center;gap:0.8rem;flex-wrap:wrap;">
+                <span class="task-status ${tarea.estado}">${getStatusIcon(tarea.estado)} ${getStatusLabel(tarea.estado)}</span>
+                <div class="task-actions">${btnHtml}</div>
+              </div>
+            </div>`;
+          
+          body.appendChild(card);
+        });
+
+        item.append(header, body);
+        container.appendChild(item);
+
+        header.onclick = () => {
+          const open = body.style.maxHeight && body.style.maxHeight !== '0px';
+          document.querySelectorAll('.accordion-body').forEach(b => b.style.maxHeight = null);
+          document.querySelectorAll('.accordion-header').forEach(h => h.classList.remove('active'));
+          if (!open) {
+            body.style.maxHeight = body.scrollHeight + 'px';
+            header.classList.add('active');
+          }
+        };
+      });
+    }
+
+    onAuthStateChanged(auth, (user) => {
+      if (user) { loadUserTareas(user); } 
+      else { window.location.href = '../../index.html'; }
+    });
+  </script>
+</body>
+</html>

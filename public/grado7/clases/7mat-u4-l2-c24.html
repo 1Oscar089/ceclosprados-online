@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+  <title>2.4 Multiplicación de una expresión algebraica con dos términos por un número | Matemática 7°</title>
+  <link rel="stylesheet" href="../../css/styles.css">
+
+  <script defer src="https://cdn.jsdelivr.net/npm/mathlive@0.98.0/dist/mathlive.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mathlive@0.98.0/dist/mathlive-fonts.css">
+  <script>
+    MathJax = { 
+      loader: {load: ['[tex]/cancel']},
+      tex: { 
+        packages: {'[+]': ['cancel']},
+        inlineMath: [['$', '$'], ['\\(', '\\)']] 
+      } 
+    };
+  </script>
+  <script id="MathJax-script" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js"></script>
+
+  <style>
+    /* FIX PARA EL TECLADO DE MATHLIVE EN MOVILES */
+    :root {
+      --keyboard-zindex: 999999 !important;
+    }
+
+    .back-btn { display: inline-flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem; color: var(--text-muted); font-weight: 500; transition: color 0.2s; }
+    .back-btn:hover { color: var(--primary); text-decoration: none; }
+    .class-header { margin-bottom: 2rem; }
+    .class-title { font-size: 1.5rem; margin-bottom: 0.5rem; color: var(--primary); font-weight: 800; line-height: 1.3;}
+    .class-meta { font-size: 0.95rem; color: var(--text-muted); font-weight: 500;}
+    
+    .section { margin-bottom: 2.5rem; }
+    .section-title { font-size: 1.25rem; font-weight: 800; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; border-bottom: 2px solid var(--border); padding-bottom: 0.5rem; }
+    
+    .section-P { border-left: 5px solid #0284c7; padding-left: 1rem; }
+    .section-S { border-left: 5px solid #16a34a; padding-left: 1rem; }
+    .section-C { border-left: 5px solid #d946ef; padding-left: 1rem; }
+    .section-E { border-left: 5px solid #ea580c; padding-left: 1rem; }
+
+    .content-box { background: var(--surface); border: 1px solid var(--border); border-radius: 1rem; padding: 1.5rem; margin-bottom: 1.5rem; line-height: 1.8; box-shadow: 0 4px 6px rgba(0,0,0,0.02); }
+    [data-theme="dark"] .content-box { background: #1e293b; border-color: #334155; }
+
+    /* Layout para Soluciones (2 columnas) */
+    .sol-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 1rem; }
+    .sol-item { background: var(--surface-hover); padding: 1.5rem; border-radius: 0.75rem; border: 1px solid var(--border); }
+    [data-theme="dark"] .sol-item { background: #0f172a; }
+    
+    .step-box { margin-top: 1rem; border-left: 3px solid var(--primary); padding-left: 1rem; }
+    .step { font-size: 0.95rem; color: var(--text-muted); margin-bottom: 0.8rem; }
+    .step strong { color: var(--text); }
+    .step-math { display: block; margin-top: 0.3rem; color: var(--text); font-size: 1.05rem;}
+
+    @media (max-width: 768px) { .sol-grid { grid-template-columns: 1fr; gap: 1rem; } }
+
+    /* Ejercicios Lápiz */
+    .exercise-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-top: 1.5rem; }
+    .exercise-item { background: var(--surface-hover); padding: 1.25rem; border-radius: 0.75rem; border: 1px solid var(--border); display: flex; flex-direction: column; gap: 0.8rem; }
+    [data-theme="dark"] .exercise-item { background: #0f172a; }
+    
+    /* FIX DE SCROLL HORIZONTAL APLICADO AQUÍ (box-sizing: border-box) */
+    math-field { 
+      font-size: 1.2rem; 
+      padding: 0.5rem 0.8rem; 
+      border: 2px solid var(--border); 
+      border-radius: 0.5rem; 
+      background: white; 
+      outline: none; 
+      width: 100%; 
+      max-width: 100%;
+      box-sizing: border-box; /* Previene que el padding rompa el width: 100% */
+      transition: border-color 0.2s;
+    }
+    math-field:focus-within { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(167, 139, 250, 0.2); }
+    math-field.correct { border-color: #10b981; background: #ecfdf5; }
+    math-field.incorrect { border-color: #ef4444; background: #fef2f2; }
+    math-field:disabled { opacity: 0.7; cursor: not-allowed; }
+    [data-theme="dark"] math-field { background: #1e1b4b; border-color: #4f46e5; color: white; }
+    [data-theme="dark"] math-field.correct { background: #064e3b; border-color: #10b981; }
+    [data-theme="dark"] math-field.incorrect { background: #450a0a; border-color: #ef4444; }
+
+    /* Botones */
+    .btn-submit { display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 1rem 2.5rem; background: linear-gradient(135deg, #a78bfa, #8b5cf6); color: white; border: none; border-radius: 0.75rem; font-weight: 800; font-size: 1.1rem; cursor: pointer; width: 100%; max-width: 400px; transition: transform 0.2s, box-shadow 0.2s; }
+    .btn-submit:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(139, 92, 246, 0.4); }
+    .btn-submit:disabled { opacity: 0.5; cursor: not-allowed; filter: grayscale(1); }
+
+    /* MODAL ESTRICTO RESPONSIVO */
+    .modal-overlay { 
+      position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(4px);
+      z-index: 10000; display: flex; align-items: center; justify-content: center; 
+      opacity: 0; pointer-events: none; transition: opacity 0.3s; padding: 1rem; 
+    }
+    .modal-overlay.active { opacity: 1; pointer-events: auto; }
+    
+    .modal-content { 
+      background: var(--bg); width: 100%; max-width: 600px; max-height: 90vh; 
+      border-radius: 1.5rem; padding: 2rem; display: flex; flex-direction: column; 
+      position: relative; transform: scale(0.95); transition: transform 0.3s; 
+      box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); overflow: hidden; 
+      box-sizing: border-box; /* Previene scroll interno */
+    }
+    [data-theme="dark"] .modal-content { background: #0f172a; border: 1px solid #334155; }
+    .modal-overlay.active .modal-content { transform: scale(1); }
+    
+    .btn-close { 
+      position: absolute; top: 1.2rem; right: 1.2rem; background: var(--surface-hover); 
+      border: none; font-size: 1.5rem; cursor: pointer; color: var(--text-muted); 
+      line-height: 1; width: 36px; height: 36px; border-radius: 50%; 
+      display: flex; align-items: center; justify-content: center; transition: all 0.2s; z-index: 10;
+    }
+    .btn-close:hover { background: #fee2e2; color: #ef4444; }
+
+    .modal-header { flex-shrink: 0; margin-bottom: 1.5rem; padding-right: 3rem; border-bottom: 2px solid var(--border); padding-bottom: 1rem;}
+    .modal-title { font-size: 1.4rem; font-weight: 800; color: var(--primary); margin: 0 0 0.5rem 0; }
+    .modal-warning { color: #ef4444; font-size: 0.9rem; font-weight: 600; margin: 0; }
+
+    .modal-body { overflow-y: auto; overflow-x: hidden; flex: 1; padding-right: 0.5rem; margin-bottom: 1rem; width: 100%; box-sizing: border-box;}
+    .modal-footer { flex-shrink: 0; margin-top: 1rem; }
+
+    .quiz-item { background: var(--surface); padding: 1.25rem; border-radius: 0.75rem; border: 1px solid var(--border); margin-bottom: 1rem; box-sizing: border-box; width: 100%;}
+    .quiz-item p { margin: 0 0 0.75rem 0; font-weight: 600; font-size: 1.1rem; word-wrap: break-word;}
+
+    .result-summary { text-align: center; padding: 2rem; background: var(--surface); border: 2px solid var(--border); border-radius: 1rem; margin: 2rem auto; }
+    .grade { font-size: 4rem; font-weight: 900; color: var(--primary); margin: 0.5rem 0; line-height: 1; }
+    
+    .loading { position: fixed; inset: 0; background: rgba(255,255,255,0.9); display: flex; justify-content: center; align-items: center; z-index: 9999; }
+    [data-theme="dark"] .loading { background: rgba(11,17,32,0.9); }
+    
+    @media (max-width: 768px) {
+      .modal-content { padding: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+  <div id="userbar"></div>
+  <div id="loading" class="loading">Cargando...</div>
+
+  <header class="app-container mt-4">
+    <a href="../../pages/clases.html" class="btn btn-ghost back-btn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><path d="M19 12H5"/><polyline points="12 19 5 12 12 5"/></svg>
+      Volver a Clases
+    </a>
+    <div class="class-header">
+      <h1 class="class-title">2.4 Multiplicación de una expresión algebraica con dos términos por un número</h1>
+      <p class="class-meta">Unidad 4 • Lección 2 • Matemática 7°</p>
+    </div>
+  </header>
+
+  <main class="app-container">
+
+    <section class="section section-P">
+      <h2 class="section-title">Problema Inicial</h2>
+      <div class="content-box">
+        <p>Efectúa las siguientes multiplicaciones aplicando la propiedad distributiva:</p>
+        <div class="sol-grid" style="margin-top: 1rem;">
+          <div><strong>a)</strong> $4(2x + 5)$</div>
+          <div><strong>b)</strong> $3(2x - 5)$</div>
+          <div><strong>c)</strong> $(4x - 3) \times (-2)$</div>
+          <div><strong>d)</strong> $-(6x - 2)$</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-S">
+      <h2 class="section-title">Solución Paso a Paso</h2>
+      <div class="content-box">
+        <div class="sol-grid">
+          
+          <div class="sol-item">
+            <strong style="font-size:1.1rem; color:var(--primary);">a) $4(2x + 5)$</strong>
+            <div class="step-box">
+              <div class="step">
+                <strong>Paso 1:</strong> Distribuimos el multiplicador exterior con cada uno de los términos interiores.
+                <span class="step-math">$= 4 \times (2x) + 4 \times (5)$</span>
+              </div>
+              <div class="step">
+                <strong>Paso 2:</strong> Realizamos cada multiplicación por separado.
+                <span class="step-math">$= 8x + 20$</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="sol-item">
+            <strong style="font-size:1.1rem; color:var(--primary);">b) $3(2x - 5)$</strong>
+            <div class="step-box">
+              <div class="step">
+                <strong>Paso 1:</strong> Identificamos el término negativo como suma de $(-5)$ y aplicamos distribución.
+                <span class="step-math">$= 3 \times (2x) + 3 \times (-5)$</span>
+              </div>
+              <div class="step">
+                <strong>Paso 2:</strong> Calculamos y aplicamos la ley de signos: $(+) \times (-) = (-)$.
+                <span class="step-math">$= 6x - 15$</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="sol-item">
+            <strong style="font-size:1.1rem; color:var(--primary);">c) $(4x - 3) \times (-2)$</strong>
+            <div class="step-box">
+              <div class="step">
+                <strong>Paso 1:</strong> El multiplicador entra desde la derecha y afecta a cada término.
+                <span class="step-math">$= 4x \times (-2) + (-3) \times (-2)$</span>
+              </div>
+              <div class="step">
+                <strong>Paso 2:</strong> Calculamos con los signos. El segundo término se vuelve positivo.
+                <span class="step-math">$= -8x + 6$</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="sol-item">
+            <strong style="font-size:1.1rem; color:var(--primary);">d) $-(6x - 2)$</strong>
+            <div class="step-box">
+              <div class="step">
+                <strong>Paso 1:</strong> El signo negativo antes del paréntesis indica una multiplicación por $-1$.
+                <span class="step-math">$= -1 \times (6x) + (-1) \times (-2)$</span>
+              </div>
+              <div class="step">
+                <strong>Paso 2:</strong> Calculamos para cambiar los signos de todo el interior.
+                <span class="step-math">$= -6x + 2$</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-C">
+      <h2 class="section-title">Conclusión</h2>
+      <div class="content-box" style="background: #fae8ff; border-color: #f5d0fe;">
+        <p style="color: #0c4a6e;">Para multiplicar una expresión algebraica de más de dos términos por un número, se aplica la <strong>propiedad distributiva</strong>:</p>
+        <div style="text-align: center; margin-top: 0.5rem; color: #0c4a6e; font-size: 1.1rem;">
+          $a(bx + c) = a(bx) + a(c)$ <br><br>
+          $(bx + c) \times a = bx(a) + c(a)$
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-E" id="practica-area">
+      <h2 class="section-title">Práctica en Clase (Evaluada)</h2>
+      <div class="content-box">
+        <p>Efectúa las siguientes multiplicaciones aplicando la propiedad distributiva. Resuélvelas y haz clic en "Guardar Práctica". <strong>Nota: Al hacer clic, el sistema guardará todo exactamente como esté. No se permiten correcciones posteriores.</strong></p>
+        
+        <div class="exercise-grid">
+          <div class="exercise-item">
+            <label><strong>a)</strong> $5(3x + 2)$</label>
+            <math-field id="prac-ans-0" virtual-keyboard-mode="onfocus"></math-field>
+          </div>
+          <div class="exercise-item">
+            <label><strong>b)</strong> $4(3x - 2)$</label>
+            <math-field id="prac-ans-1" virtual-keyboard-mode="onfocus"></math-field>
+          </div>
+          <div class="exercise-item">
+            <label><strong>c)</strong> $(2x + 6) \times (-2)$</label>
+            <math-field id="prac-ans-2" virtual-keyboard-mode="onfocus"></math-field>
+          </div>
+          <div class="exercise-item">
+            <label><strong>d)</strong> $-(2x + 3)$</label>
+            <math-field id="prac-ans-3" virtual-keyboard-mode="onfocus"></math-field>
+          </div>
+          <div class="exercise-item">
+            <label><strong>e)</strong> $3(-4x - 5)$</label>
+            <math-field id="prac-ans-4" virtual-keyboard-mode="onfocus"></math-field>
+          </div>
+          <div class="exercise-item">
+            <label><strong>f)</strong> $-4(2x - 3)$</label>
+            <math-field id="prac-ans-5" virtual-keyboard-mode="onfocus"></math-field>
+          </div>
+          <div class="exercise-item">
+            <label><strong>g)</strong> $(4x + 12) \times \frac{1}{4}$</label>
+            <math-field id="prac-ans-6" virtual-keyboard-mode="onfocus"></math-field>
+          </div>
+          <div class="exercise-item">
+            <label><strong>h)</strong> $-\frac{1}{2}(2x - 6)$</label>
+            <math-field id="prac-ans-7" virtual-keyboard-mode="onfocus"></math-field>
+          </div>
+        </div>
+        <div style="text-align: center; margin-top: 2rem;" id="practica-btn-container">
+          <button class="btn-submit" id="btn-submit-practica" style="margin:0;" onclick="submitPractica()">Verificar y Guardar Práctica</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="evaluation-area">
+      <h2 class="section-title">📝 Ejercicio Adicional (Evaluado)</h2>
+      <div class="content-box" style="text-align: center;">
+        <p style="margin-bottom: 1rem; color: var(--text-muted);">Haz clic en el botón para generar tu multiplicación aleatoria evaluada. Se guardará tu nota al terminar.</p>
+        <div id="adicional-btn-container">
+            <button class="btn-submit" id="btn-open-modal" style="margin: 0;" onclick="openQuizModal()">Comenzar Ejercicio Adicional</button>
+            <p style="font-size: 0.85rem; color: #ef4444; font-weight: bold; margin-top: 1rem;">
+            ⚠️ ADVERTENCIA ANTI-TRAMPAS: Al abrir la evaluación, no debes cambiar de pestaña, usar otras aplicaciones ni minimizar el navegador. Si lo haces, se aplicará una penalización inmediata.
+            </p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <div class="modal-overlay" id="quiz-modal">
+    <div class="modal-content">
+      <button class="btn-close" onclick="closeQuizModal()">×</button>
+      
+      <div class="modal-header">
+        <h2 class="modal-title">Evaluación Aleatoria</h2>
+        <p class="modal-warning">Si cambias de pestaña o minimizas la ventana, tu ejercicio será penalizado.</p>
+      </div>
+
+      <div class="modal-body" id="quiz-container">
+        </div>
+      
+      <div class="modal-footer">
+        <button class="btn-submit" id="btn-submit-quiz" onclick="submitAdicional()" style="margin: 0; width: 100%;">Terminar y Enviar Adicional</button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initUserBar } from '../../js/userbar.js';
+    import { initFirebase } from '../../js/initFirebase.js';
+    import { doc, getDoc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js";
+    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-auth.js";
+    
+    initUserBar('#userbar');
+    const { db, auth } = initFirebase();
+
+    const CLASS_ID = '7mat-u4-l2-c24';
+    const MATERIA_ID = 'matematica';
+
+    let currentUser = null;
+    let isQuizActive = false;
+    let isClassClosed = false;
+    let generatedQuestions = [];
+
+    function getRandomInt(min, max) {
+      return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    // --- EL EXTERMINADOR DE CÓDIGO (LATEX CLEANER PARA BINOMIOS) ---
+    function cleanLatex(str) {
+      if (!str) return '';
+      let s = str.replace(/\s/g, '').toLowerCase();
+      
+      s = s.replace(/\\dfrac/g, '\\frac').replace(/\\tfrac/g, '\\frac');
+      while (/\\frac\{([^{}]+)\}\{([^{}]+)\}/.test(s)) {
+        s = s.replace(/\\frac\{([^{}]+)\}\{([^{}]+)\}/g, '$1/$2');
+      }
+      s = s.replace(/\\frac([0-9a-z])([0-9a-z])/g, '$1/$2');
+      s = s.replace(/\\cdot/g, '').replace(/\\times/g, '').replace(/\*/g, '');
+      s = s.replace(/\\[a-z]+/gi, ''); 
+      s = s.replace(/[{}[\]()]/g, ''); 
+      s = s.replace(/\/1(?=[a-z\+\-]|$)/g, ''); 
+      s = s.replace(/^\+/, ''); 
+      s = s.replace(/--/g, '+'); 
+      s = s.replace(/\+-/g, '-');
+      s = s.replace(/-\+/g, '-');
+      s = s.replace(/\+\+/g, '+');
+      
+      return s;
+    }
+
+    const practicaAnswers = [
+      ['15x+10', '10+15x'], 
+      ['12x-8', '-8+12x'], 
+      ['-4x-12', '-12-4x'], 
+      ['-2x-3', '-3-2x'], 
+      ['-12x-15', '-15-12x'], 
+      ['-8x+12', '12-8x'], 
+      ['1x+3', 'x+3', '3+1x', '3+x'], 
+      ['-1x+3', '-x+3', '3-1x', '3-x'] 
+    ];
+
+    async function saveToFirebase(updates) {
+      if (!currentUser || isClassClosed) return;
+      const docRef = doc(db, 'clases', MATERIA_ID, 'entregas', CLASS_ID);
+      const snap = await getDoc(docRef);
+      
+      const fechaLocal = new Date().toLocaleString('en-GB', { 
+          timeZone: 'America/El_Salvador',
+          day: '2-digit', month: '2-digit', year: 'numeric',
+          hour: '2-digit', minute: '2-digit', second: '2-digit',
+          hour12: false 
+      }).replace(',', '');
+      
+      let existingObj = {};
+      if(snap.exists() && snap.data().respuestas && snap.data().respuestas[currentUser.uid]) {
+        existingObj = snap.data().respuestas[currentUser.uid];
+      }
+      
+      existingObj = {
+        ...existingObj,
+        nombre: currentUser.displayName || currentUser.email,
+        email: currentUser.email,
+        fechaLocal: fechaLocal,
+        ...updates
+      };
+      
+      let finalNota = 0;
+      let count = 0;
+      if (existingObj.notaPractica !== undefined) { finalNota += existingObj.notaPractica; count++; }
+      if (existingObj.notaAdicional !== undefined) { finalNota += existingObj.notaAdicional; count++; }
+      existingObj.nota = count > 0 ? Number((finalNota / count).toFixed(1)) : 0;
+
+      await setDoc(docRef, {
+        grado: 7,
+        año: new Date().getFullYear(),
+        materia: MATERIA_ID,
+        updatedAt: serverTimestamp(),
+        respuestas: {
+          [currentUser.uid]: existingObj
+        }
+      }, { merge: true });
+    }
+
+    window.submitPractica = async () => {
+      if (!currentUser || isClassClosed) return;
+      
+      console.log("=== REPORTE DE VALIDACIÓN ===");
+      let correctCount = 0;
+      for (let i = 0; i < 8; i++) {
+        const inputEl = document.getElementById(`prac-ans-${i}`);
+        const rawLatex = inputEl.value;
+        const userAns = cleanLatex(rawLatex);
+        const validOptions = practicaAnswers[i];
+        
+        console.log(`Pregunta ${String.fromCharCode(97+i)}):`);
+        console.log(`  Raw LaTeX :`, rawLatex);
+        console.log(`  Limpiado  :`, userAns);
+        console.log(`  Esperadas :`, validOptions);
+        
+        if (userAns !== '' && validOptions.includes(userAns)) {
+          correctCount++;
+          inputEl.classList.add('correct');
+          console.log(`  Estado    : CORRECTO`);
+        } else {
+          inputEl.classList.add('incorrect');
+          console.log(`  Estado    : INCORRECTO`);
+        }
+        inputEl.disabled = true; 
+      }
+      console.log("===============================");
+
+      const btn = document.getElementById('btn-submit-practica');
+      btn.disabled = true;
+      btn.innerHTML = 'Guardando...';
+
+      let notaPractica = (correctCount / 8) * 10;
+      notaPractica = Number(notaPractica.toFixed(1));
+
+      try {
+        await saveToFirebase({ notaPractica: notaPractica });
+        showPracticaGrade(notaPractica);
+      } catch (e) {
+        alert("Error al guardar: " + e.message);
+        btn.disabled = false;
+        btn.innerHTML = `Reintentar Guardar Práctica`;
+      }
+    };
+
+    function showPracticaGrade(nota) {
+      const container = document.getElementById('practica-btn-container');
+      container.innerHTML = `
+        <div style="background: var(--surface-hover); border: 2px solid var(--border); border-radius: 1rem; padding: 1.5rem; display: inline-block;">
+            <p style="margin:0; font-weight: bold; color: var(--text-muted);">Nota de Práctica:</p>
+            <h3 style="margin: 0.5rem 0 0 0; font-size: 2.5rem; color: var(--primary);">${nota}/10</h3>
+        </div>
+      `;
+      for (let i = 0; i < 8; i++) {
+        const el = document.getElementById(`prac-ans-${i}`);
+        if(el) { el.disabled = true; el.style.pointerEvents = 'none'; }
+      }
+    }
+
+    function generateNewQuiz() {
+      const quiz = [];
+      const variables = ['x', 'y', 'a', 'm', 'n'];
+
+      let v = variables[getRandomInt(0, variables.length - 1)];
+      let k = getRandomInt(2, 6) * (getRandomInt(0, 1) ? 1 : -1);
+      let a = getRandomInt(2, 6) * (getRandomInt(0, 1) ? 1 : -1);
+      let b = getRandomInt(1, 9) * (getRandomInt(0, 1) ? 1 : -1);
+      
+      if(a === 0) a = 2;
+      if(b === 0) b = 3;
+
+      let term1 = a === 1 ? v : (a === -1 ? `-${v}` : `${a}${v}`);
+      let term2 = b > 0 ? `+${b}` : `${b}`;
+      
+      let qText = `${k}(${term1} ${term2})`;
+      
+      let ansA = k * a;
+      let ansB = k * b;
+      
+      let ansTerm1 = `${ansA}${v}`;
+      let ansTerm2 = ansB > 0 ? `+${ansB}` : `${ansB}`;
+      let ansText = `${ansTerm1}${ansTerm2}`;
+      
+      quiz.push({ q: qText, ansA: ansA, ansB: ansB, v: v, ansText: ansText });
+      return quiz;
+    }
+
+    function checkDynamicBinomial(userLatex, qData) {
+       let u = cleanLatex(userLatex);
+       let ansA = qData.ansA;
+       let ansB = qData.ansB;
+       let v = qData.v;
+       
+       let termV1 = `${ansA}${v}`;
+       let termV2 = (ansA === 1) ? v : (ansA === -1 ? `-${v}` : `${ansA}${v}`);
+       
+       let termC1 = ansB > 0 ? `+${ansB}` : `${ansB}`;
+       
+       let opt1 = `${termV1}${termC1}`;
+       let opt2 = `${termV2}${termC1}`;
+       
+       let termV1_pos = ansA > 0 ? `+${ansA}${v}` : `${ansA}${v}`;
+       let termV2_pos = ansA === 1 ? `+${v}` : (ansA === -1 ? `-${v}` : (ansA > 0 ? `+${ansA}${v}` : `${ansA}${v}`));
+       let opt3 = `${ansB}${termV1_pos}`;
+       let opt4 = `${ansB}${termV2_pos}`;
+       
+       const validOptions = [opt1, opt2, opt3, opt4].map(s => {
+           return s.replace(/^\+/, '').replace(/\+-/g, '-').replace(/-\+/g, '-').replace(/\+\+/g, '+');
+       });
+
+       return validOptions.includes(u);
+    }
+
+    function applyCheatPenalty() {
+      if (isQuizActive) {
+        isQuizActive = false;
+        document.getElementById('quiz-modal').classList.remove('active');
+        document.getElementById('quiz-container').innerHTML = '';
+        sessionStorage.setItem('cheat_penalty', 'true'); 
+        window.location.reload(); 
+      }
+    }
+
+    document.addEventListener("visibilitychange", () => {
+      if (document.hidden) applyCheatPenalty();
+    });
+
+    window.addEventListener("blur", () => {
+      applyCheatPenalty(); 
+    });
+
+    window.addEventListener('load', () => {
+      if (sessionStorage.getItem('cheat_penalty') === 'true') {
+        sessionStorage.removeItem('cheat_penalty');
+        setTimeout(() => {
+          alert("⚠️ PENALIZACIÓN ANTI-TRAMPAS ⚠️\n\nEl sistema ha detectado que cambiaste de ventana, de aplicación o perdiste el foco durante tu evaluación.\n\nTu ejercicio ha sido cancelado y tus valores matemáticos han cambiado.");
+        }, 500);
+      }
+    });
+
+    window.openQuizModal = () => {
+      if (isClassClosed) return;
+      generatedQuestions = generateNewQuiz(); 
+      
+      const container = document.getElementById('quiz-container');
+      container.innerHTML = `
+        <div class="quiz-item" style="overflow-x: hidden; box-sizing: border-box; width: 100%;">
+          <p style="word-wrap: break-word;">Efectúa la multiplicación:<br><br> \\( ${generatedQuestions[0].q} \\)</p>
+          <math-field id="ans-q0" virtual-keyboard-mode="onfocus" style="box-sizing: border-box; max-width: 100%;"></math-field>
+        </div>
+      `;
+      
+      if (window.MathJax) MathJax.typesetPromise();
+      document.getElementById('quiz-modal').classList.add('active');
+      isQuizActive = true;
+    };
+
+    window.closeQuizModal = () => {
+      const confirmClose = confirm("¿Estás seguro? Tus números y variables cambiarán como penalización si no envías.");
+      if (confirmClose) {
+        document.getElementById('quiz-modal').classList.remove('active');
+        document.getElementById('quiz-container').innerHTML = ''; 
+        isQuizActive = false;
+      }
+    };
+
+    window.submitAdicional = async () => {
+      if (!currentUser || isClassClosed) return;
+      
+      const btn = document.getElementById('btn-submit-quiz');
+      const inputEl = document.getElementById(`ans-q0`);
+      
+      const rawLatex = inputEl.value;
+      const qData = generatedQuestions[0];
+      
+      console.log("=== EVALUACIÓN ADICIONAL ===");
+      console.log(`Raw LaTeX :`, rawLatex);
+      console.log(`Limpiado  :`, cleanLatex(rawLatex));
+      console.log("============================");
+
+      let correctCount = (rawLatex !== '' && checkDynamicBinomial(rawLatex, qData)) ? 1 : 0;
+
+      isQuizActive = false;
+      btn.disabled = true;
+      btn.innerHTML = 'Guardando...';
+
+      let notaAdicional = correctCount * 10;
+
+      try {
+        await saveToFirebase({ notaAdicional: notaAdicional });
+        document.getElementById('quiz-modal').classList.remove('active');
+        showAdicionalGrade(notaAdicional);
+      } catch (e) {
+        alert("Error al guardar: " + e.message);
+        btn.disabled = false;
+        btn.innerHTML = `Reintentar Guardar Adicional`;
+        isQuizActive = true;
+      }
+    };
+
+    function showAdicionalGrade(score) {
+      document.getElementById('evaluation-area').innerHTML = `
+        <h2 class="section-title">📝 Ejercicio Adicional (Evaluado)</h2>
+        <div class="result-summary" style="margin-top: 0; padding: 2rem;">
+          <p style="margin:0; font-weight: bold; color: var(--text-muted);">Nota Adicional:</p>
+          <h2 style="font-size: 3.5rem; color: var(--primary); margin: 0.5rem 0;">${score}/10</h2>
+          <p style="margin-top: 1rem; font-weight: 600; color: var(--text-muted);">¡Tu nota adicional está guardada!</p>
+        </div>
+      `;
+    }
+
+    function lockClassAsExpired() {
+      isClassClosed = true;
+      const pracBtn = document.getElementById('btn-submit-practica');
+      if (pracBtn) {
+        pracBtn.disabled = true;
+        pracBtn.innerHTML = "Tiempo Agotado";
+        document.getElementById('practica-btn-container').innerHTML = `
+          <div style="background: #fef2f2; border: 2px solid #ef4444; border-radius: 1rem; padding: 1.5rem; display: inline-block;">
+              <p style="margin:0; font-weight: bold; color: #ef4444;">Tiempo Agotado / No Enviado</p>
+              <h3 style="margin: 0.5rem 0 0 0; font-size: 2.5rem; color: #ef4444;">0/10</h3>
+          </div>
+        `;
+        for (let i = 0; i < 8; i++) {
+          const el = document.getElementById(`prac-ans-${i}`);
+          if(el) { el.disabled = true; el.style.pointerEvents = 'none'; }
+        }
+      }
+      
+      const adicBtn = document.getElementById('btn-open-modal');
+      if (adicBtn) {
+        document.getElementById('adicional-btn-container').innerHTML = `
+          <div style="background: #fef2f2; border: 2px solid #ef4444; border-radius: 1rem; padding: 1.5rem; display: inline-block;">
+              <p style="margin:0; font-weight: bold; color: #ef4444;">Tiempo Agotado / No Enviado</p>
+              <h3 style="margin: 0.5rem 0 0 0; font-size: 2.5rem; color: #ef4444;">0/10</h3>
+          </div>
+        `;
+      }
+    }
+
+    onAuthStateChanged(auth, async (user) => {
+      const loadingEl = document.getElementById('loading');
+      if (user) {
+        currentUser = user;
+        const snap = await getDoc(doc(db, 'clases', MATERIA_ID, 'entregas', CLASS_ID));
+        
+        if (!snap.exists()) {
+          alert("La clase no ha sido configurada.");
+          window.location.href = "../../pages/clases.html";
+          return;
+        }
+
+        const docData = snap.data();
+        const now = new Date();
+        const startDate = new Date(docData.inicio);
+        const endDate = new Date(docData.fin);
+
+        if (now < startDate) {
+          alert("Esta clase aún no está disponible.");
+          window.location.href = "../../pages/clases.html";
+          return;
+        }
+
+        let hasPractica = false;
+        let hasAdicional = false;
+
+        if (docData.respuestas && docData.respuestas[user.uid]) {
+          const userData = docData.respuestas[user.uid];
+          if (userData.notaPractica !== undefined) {
+             showPracticaGrade(userData.notaPractica);
+             hasPractica = true;
+          }
+          if (userData.notaAdicional !== undefined) {
+             showAdicionalGrade(userData.notaAdicional);
+             hasAdicional = true;
+          }
+        }
+
+        if (now > endDate) {
+           isClassClosed = true;
+           if (!hasPractica || !hasAdicional) {
+              lockClassAsExpired();
+           }
+        }
+
+      } else {
+        document.getElementById('evaluation-area').innerHTML = `
+          <div class="result-summary">
+            <h2>Sesión Requerida</h2>
+            <p>Debes iniciar sesión para realizar los ejercicios.</p>
+            <a href="../../index.html" class="btn-submit" style="text-decoration:none; display:inline-flex; width:auto;">Ir al Inicio</a>
+          </div>`;
+      }
+      loadingEl.style.display = 'none';
+    });
+
+  </script>
+</body>
+</html>

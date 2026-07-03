@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+  <title>Tienda | CENTRO ESCOLAR CANTÓN LOS PRADOS</title>
+  <link rel="stylesheet" href="../css/styles.css">
+  <style>
+    .balance-bar { 
+      background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(12px);
+      border: 2px solid rgba(167, 139, 250, 0.2); border-radius: 1rem;
+      padding: 1.5rem; margin-bottom: 2rem; display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 1rem; box-shadow: 0 4px 16px rgba(139, 92, 246, 0.08);
+    }
+    [data-theme="dark"] .balance-bar { background: rgba(30, 27, 75, 0.85); border-color: rgba(99, 102, 241, 0.3); }
+    .balance-amount { font-size: 2.5rem; font-weight: 800; color: var(--primary); line-height: 1; }
+    .balance-label { font-size: 0.9rem; color: var(--text-muted); margin-top: 0.3rem; }
+    
+    .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1.5rem; margin-bottom: 3rem; }
+    .product-card {
+      background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(12px);
+      border: 2px solid rgba(167, 139, 250, 0.2); border-radius: 1rem;
+      padding: 1.5rem; display: flex; flex-direction: column; align-items: center; text-align: center;
+      transition: all 0.3s ease; box-shadow: 0 4px 16px rgba(139, 92, 246, 0.08);
+      position: relative;
+    }
+    [data-theme="dark"] .product-card { background: rgba(30, 27, 75, 0.85); border-color: rgba(99, 102, 241, 0.3); }
+    .product-card:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(139, 92, 246, 0.2); }
+    .product-card.out-of-stock { opacity: 0.6; pointer-events: none; }
+    .stock-badge {
+      position: absolute; top: 0.75rem; right: 0.75rem;
+      font-size: 0.7rem; padding: 0.2rem 0.5rem; border-radius: 999px;
+      font-weight: 700; background: #d1fae5; color: #047857;
+    }
+    .stock-badge.low { background: #fef3c7; color: #b45309; }
+    .stock-badge.out { background: #fee2e2; color: #b91c1c; }
+    .product-icon { font-size: 3rem; margin-bottom: 1rem; }
+    .product-name { font-size: 1.1rem; font-weight: 700; margin: 0 0 0.5rem; }
+    .product-desc { font-size: 0.9rem; color: var(--text-muted); margin: 0 0 1rem; flex: 1; }
+    .product-price { font-size: 1.25rem; font-weight: 800; color: var(--primary); margin-bottom: 1rem; }
+    .btn-add {
+      width: 100%; padding: 0.75rem; background: var(--primary); color: white; border: none;
+      border-radius: 0.75rem; font-weight: 600; cursor: pointer; transition: all 0.2s;
+    }
+    .btn-add:hover:not(:disabled) { background: var(--primary-hover); transform: scale(1.02); }
+    .btn-add:disabled { opacity: 0.5; cursor: not-allowed; }
+    
+    .orders-section {
+      background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(12px);
+      border: 2px solid rgba(167, 139, 250, 0.2); border-radius: 1rem;
+      padding: 1.5rem; box-shadow: 0 4px 16px rgba(139, 92, 246, 0.08);
+    }
+    [data-theme="dark"] .orders-section { background: rgba(30, 27, 75, 0.85); border-color: rgba(99, 102, 241, 0.3); }
+    .orders-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.5rem; }
+    .orders-title { font-size: 1.2rem; font-weight: 800; margin: 0; }
+    .orders-list { display: flex; flex-direction: column; gap: 0.75rem; max-height: 400px; overflow-y: auto; }
+    .order-item-card {
+      background: var(--surface-hover); border: 1px solid var(--border); border-radius: 0.75rem;
+      padding: 1rem; display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 0.75rem; transition: all 0.2s;
+    }
+    .order-item-card:hover { border-color: var(--primary); }
+    .order-item-info { display: flex; align-items: center; gap: 0.75rem; flex: 1; min-width: 200px; }
+    .order-item-icon { font-size: 1.5rem; }
+    .order-item-name { font-weight: 600; }
+    .order-item-date { font-size: 0.8rem; color: var(--text-muted); margin-top: 0.2rem; }
+    .order-item-meta { text-align: right; display: flex; flex-direction: column; align-items: flex-end; gap: 0.3rem; }
+    .order-item-price { font-weight: 700; color: var(--primary); }
+    .order-item-qty { font-size: 0.85rem; color: var(--text-muted); }
+    .status-badge { font-size: 0.7rem; padding: 0.2rem 0.5rem; border-radius: 999px; font-weight: 600; }
+    .status-pending { background: #fef3c7; color: #b45309; }
+    .status-completed { background: #d1fae5; color: #047857; }
+    
+    .cart-overlay { 
+      position: fixed; inset: 0; background: rgba(0,0,0,0.4); backdrop-filter: blur(4px);
+      z-index: 1000; display: flex; align-items: center; justify-content: center;
+      opacity: 0; pointer-events: none; transition: opacity 0.3s;
+    }
+    .cart-overlay.active { opacity: 1; pointer-events: auto; }
+    .cart-modal {
+      background: var(--surface); width: 90%; max-width: 450px; max-height: 80vh;
+      border-radius: 1.5rem; padding: 1.5rem; display: flex; flex-direction: column;
+      transform: scale(0.95); transition: transform 0.3s; box-shadow: var(--shadow-xl);
+    }
+    .cart-overlay.active .cart-modal { transform: scale(1); }
+    .cart-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
+    .cart-title { font-size: 1.2rem; font-weight: 800; margin: 0; }
+    .btn-close { background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--text-muted); }
+    .cart-items { flex: 1; overflow-y: auto; padding-right: 0.5rem; margin-bottom: 1rem; }
+    .cart-item { display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem 0; border-bottom: 1px solid var(--border); }
+    .cart-item-info { flex: 1; text-align: left; }
+    .cart-item-name { font-weight: 600; font-size: 0.95rem; }
+    .cart-item-price { font-size: 0.85rem; color: var(--text-muted); }
+    .cart-controls { display: flex; align-items: center; gap: 0.5rem; }
+    .btn-qty { width: 28px; height: 28px; border-radius: 50%; border: 1px solid var(--border); background: var(--surface-hover); cursor: pointer; display: grid; place-items: center; }
+    .cart-footer { border-top: 2px solid var(--border); padding-top: 1rem; }
+    .cart-total { display: flex; justify-content: space-between; font-size: 1.1rem; font-weight: 800; margin-bottom: 1rem; }
+    .btn-checkout {
+      width: 100%; padding: 1rem; background: linear-gradient(135deg, #a78bfa, #8b5cf6);
+      color: white; border: none; border-radius: 0.75rem; font-weight: 700; font-size: 1rem;
+      cursor: pointer; transition: all 0.2s;
+    }
+    .btn-checkout:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(139, 92, 246, 0.4); }
+    .btn-checkout:disabled { opacity: 0.6; cursor: not-allowed; }
+    
+    @media (max-width: 768px) {
+      .balance-bar { flex-direction: column; text-align: center; }
+      .products-grid { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); }
+      .order-item-card { flex-direction: column; align-items: flex-start; }
+      .order-item-meta { align-items: flex-start; text-align: left; }
+    }
+  </style>
+</head>
+<body>
+  <div id="userbar"></div>
+
+  <header class="app-container mt-6">
+    <a href="home.html" class="btn btn-ghost back-btn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><path d="M19 12H5"/><polyline points="12 19 5 12 12 5"/></svg>
+      Volver al Inicio
+    </a>
+    <h1 class="text-xl font-bold mb-2" style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+      <span style="color: var(--primary);">🏪</span>
+      <span>Tienda Escolar</span> <span id="grade-label" class="grade-badge">Cargando...</span>
+    </h1>
+    <p class="text-muted">Canjea tus puntos por privilegios escolares</p>
+  </header>
+
+  <main class="app-container">
+    <div class="balance-bar">
+      <div>
+        <div class="balance-label">Tu saldo disponible</div>
+        <div class="balance-amount"><span id="user-points">0</span> pts</div>
+      </div>
+      <button class="btn btn-outline" id="btn-open-cart"> Ver Carrito (<span id="cart-count">0</span>)</button>
+    </div>
+
+    <div id="products-grid" class="products-grid">
+      <p style="text-align:center;grid-column:1/-1;color:var(--text-muted);padding:3rem 0;">Cargando productos...</p>
+    </div>
+
+    <div class="orders-section">
+      <div class="orders-header">
+        <h2 class="orders-title">📦 Mis Pedidos</h2>
+        <span class="text-muted text-sm" id="orders-count">0 artículos</span>
+      </div>
+      <div class="orders-list" id="orders-list">
+        <p style="text-align:center;color:var(--text-muted);padding:2rem 0;">Cargando historial...</p>
+      </div>
+    </div>
+  </main>
+
+  <div class="cart-overlay" id="cart-overlay">
+    <div class="cart-modal">
+      <div class="cart-header">
+        <h2 class="cart-title">🛒 Tu Carrito</h2>
+        <button class="btn-close" id="btn-close-cart">×</button>
+      </div>
+      <div class="cart-items" id="cart-items"></div>
+      <div class="cart-footer">
+        <div class="cart-total">
+          <span>Total:</span>
+          <span id="cart-total">0 pts</span>
+        </div>
+        <button class="btn-checkout" id="btn-checkout" disabled>Confirmar Compra</button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initFirebase } from '../js/initFirebase.js';
+    import { initUserBar, updateUserBarStats } from '../js/userbar.js';
+    import { doc, getDoc, updateDoc, setDoc, runTransaction } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js";
+    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-auth.js";
+
+    initUserBar('#userbar');
+    const { db, auth } = initFirebase();
+
+    let PRODUCTS = [];
+    let cart = {};
+    let currentUser = null;
+    let userPoints = 0;
+
+    // ✅ ESTRUCTURA: Colección 'tienda' con documentos 'products' y 'orders'
+    const PRODUCTS_DOC = doc(db, 'tienda', 'products');
+    const ORDERS_DOC = doc(db, 'tienda', 'orders');
+
+    const DEFAULT_PRODUCTS = [
+      { id: 'p1', name: 'Salida al baño', description: 'Permiso para salir al baño.', price: 20, icon: '🚽', stock: 50 },
+      { id: 'p2', name: 'Escuchar música', description: '15 minutos de música.', price: 10, icon: '', stock: 100 },
+      { id: 'p3', name: 'Día sin tarea', description: 'Vale por un día sin tarea.', price: 50, icon: '', stock: 20 },
+      { id: 'p4', name: 'Llegar tarde', description: 'Llegar 5 min tarde.', price: 15, icon: '⏰', stock: 30 },
+      { id: 'p5', name: 'Usar celular', description: '15 minutos de celular.', price: 20, icon: '📱', stock: 25 },
+      { id: 'p6', name: 'Elegir actividad', description: 'Elige la actividad.', price: 30, icon: '🎨', stock: 15 }
+    ];
+
+    // ✅ Inicialización segura: crea documentos si no existen
+    async function ensureStoreExists() {
+      console.log('🔍 Verificando tienda...');
+      const [prodSnap, ordSnap] = await Promise.all([
+        getDoc(PRODUCTS_DOC),
+        getDoc(ORDERS_DOC)
+      ]);
+
+      if (!prodSnap.exists()) {
+        console.log('🏪 Creando tienda/products...');
+        await setDoc(PRODUCTS_DOC, { items: DEFAULT_PRODUCTS });
+      }
+      if (!ordSnap.exists()) {
+        console.log('📋 Creando tienda/orders...');
+        await setDoc(ORDERS_DOC, { items: [] });
+      }
+      
+      const finalSnap = await getDoc(PRODUCTS_DOC);
+      PRODUCTS = finalSnap.data()?.items || [];
+      console.log('✅ Tienda lista. Productos:', PRODUCTS.length);
+      renderProducts();
+      updateUI();
+    }
+
+    async function loadUser() {
+      const demo = sessionStorage.getItem('demoUser');
+      if (demo) {
+        const data = JSON.parse(demo);
+        currentUser = { displayName: data.nombre || 'Demo', uid: 'demo' };
+        userPoints = data.puntos || 100;
+        document.getElementById('grade-label').textContent = `${data.grado || 7}°`;
+        updateUI();
+        return;
+      }
+
+      return new Promise((resolve) => {
+        const unsubscribe = onAuthStateChanged(auth, async (user) => {
+          unsubscribe();
+          if (user) {
+            currentUser = user;
+            try {
+              const initials = (user.displayName || 'USR').split(' ').map(n => n[0]).join('').slice(0, 3).toUpperCase();
+              const local = user.email?.split('@')[0] || '';
+              const docId = `est_${local}_${initials}`;
+              const snap = await getDoc(doc(db, 'users', docId));
+              if (snap.exists()) {
+                const data = snap.data();
+                userPoints = data.puntos ?? 0;
+                document.getElementById('grade-label').textContent = `${data.grado || 7}°`;
+                localStorage.setItem('cecp_user_data', JSON.stringify(data));
+              }
+            } catch (e) { console.error(e); }
+          }
+          updateUI();
+          resolve();
+        });
+      });
+    }
+
+    function updateUI() {
+      document.getElementById('user-points').textContent = userPoints;
+      PRODUCTS.forEach(p => {
+        const btn = document.getElementById(`btn-${p.id}`);
+        const card = document.getElementById(`card-${p.id}`);
+        if (btn && card) {
+          if (p.stock <= 0) {
+            btn.disabled = true;
+            btn.textContent = 'Agotado';
+            card.classList.add('out-of-stock');
+          } else if (userPoints < p.price) {
+            btn.disabled = true;
+            btn.textContent = `Faltan ${p.price - userPoints} pts`;
+            card.classList.remove('out-of-stock');
+          } else {
+            btn.disabled = false;
+            btn.textContent = 'Agregar al Carrito';
+            card.classList.remove('out-of-stock');
+          }
+        }
+      });
+      updateCartUI();
+    }
+
+    function renderProducts() {
+      const grid = document.getElementById('products-grid');
+      grid.innerHTML = '';
+      if (PRODUCTS.length === 0) {
+        grid.innerHTML = '<p style="text-align:center;grid-column:1/-1;color:var(--text-muted);padding:3rem 0;">No hay productos</p>';
+        return;
+      }
+      PRODUCTS.forEach(p => {
+        const card = document.createElement('div');
+        card.className = 'product-card';
+        card.id = `card-${p.id}`;
+        const stockClass = p.stock <= 0 ? 'out' : p.stock <= 5 ? 'low' : '';
+        const stockText = p.stock <= 0 ? 'Agotado' : p.stock <= 5 ? `Solo ${p.stock}` : `Stock: ${p.stock}`;
+        card.innerHTML = `
+          ${p.stock > 0 ? `<span class="stock-badge ${stockClass}">${stockText}</span>` : ''}
+          <div class="product-icon">${p.icon}</div>
+          <h3 class="product-name">${p.name}</h3>
+          <p class="product-desc">${p.description}</p>
+          <div class="product-price">${p.price} pts</div>
+          <button class="btn-add" id="btn-${p.id}" onclick="window.addToCart('${p.id}')">Agregar</button>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    window.addToCart = (id) => {
+      const product = PRODUCTS.find(p => p.id === id);
+      if (!product || product.stock <= 0) return window.showToast('Agotado', 'error');
+      if (!cart[id]) cart[id] = 0;
+      if (getCartTotal() + product.price > userPoints) return window.showToast('Sin puntos', 'warning');
+      if (cart[id] >= product.stock) return window.showToast('Sin stock', 'warning');
+      cart[id]++;
+      updateCartUI();
+      window.showToast(`${product.name} agregado`, 'success', 2000);
+    };
+
+    window.removeFromCart = (id) => {
+      if (cart[id] > 0) cart[id]--;
+      if (cart[id] <= 0) delete cart[id];
+      updateCartUI();
+    };
+
+    function getCartTotal() {
+      return Object.keys(cart).reduce((sum, id) => {
+        const p = PRODUCTS.find(prod => prod.id === id);
+        return sum + (p ? p.price * (cart[id] || 0) : 0);
+      }, 0);
+    }
+
+    function updateCartUI() {
+      Object.keys(cart).forEach(id => { if (!cart[id] || cart[id] <= 0) delete cart[id]; });
+      const total = getCartTotal();
+      const count = Object.values(cart).reduce((a, b) => a + b, 0);
+      document.getElementById('cart-count').textContent = count;
+      document.getElementById('cart-total').textContent = `${total} pts`;
+      document.getElementById('btn-checkout').disabled = total === 0 || total > userPoints;
+      
+      const container = document.getElementById('cart-items');
+      if (count === 0) {
+        container.innerHTML = '<p style="text-align:center;color:var(--text-muted);padding:2rem 0;">Carrito vacío</p>';
+        return;
+      }
+      container.innerHTML = '';
+      Object.keys(cart).forEach(id => {
+        const p = PRODUCTS.find(prod => prod.id === id);
+        if (!p || !cart[id]) return;
+        const item = document.createElement('div');
+        item.className = 'cart-item';
+        item.innerHTML = `
+          <div class="cart-item-info"><div class="cart-item-name">${p.name}</div><div class="cart-item-price">${p.price} pts</div></div>
+          <div class="cart-controls">
+            <button class="btn-qty" onclick="window.removeFromCart('${id}')">−</button>
+            <span>${cart[id]}</span>
+            <button class="btn-qty" onclick="window.addToCart('${id}')">+</button>
+          </div>
+        `;
+        container.appendChild(item);
+      });
+    }
+
+    async function loadMyOrders() {
+      const list = document.getElementById('orders-list');
+      const count = document.getElementById('orders-count');
+      if (!currentUser) {
+        list.innerHTML = '<p style="text-align:center;color:var(--text-muted);">Inicia sesión</p>';
+        count.textContent = '0';
+        return;
+      }
+      try {
+        list.innerHTML = '<p style="text-align:center;color:var(--text-muted);">Cargando...</p>';
+        const snap = await getDoc(ORDERS_DOC);
+        if (!snap.exists()) {
+          list.innerHTML = '<p style="text-align:center;color:var(--text-muted);">Sin pedidos</p>';
+          count.textContent = '0';
+          return;
+        }
+        const allOrders = snap.data().items || [];
+        const myOrders = allOrders.filter(o => o.userId === currentUser.uid);
+        if (myOrders.length === 0) {
+          list.innerHTML = '<p style="text-align:center;color:var(--text-muted);padding:2rem 0;">Sin pedidos aún</p>';
+          count.textContent = '0';
+          return;
+        }
+        const grouped = {};
+        myOrders.forEach(order => {
+          order.items.forEach(item => {
+            if (!grouped[item.productId]) {
+              grouped[item.productId] = { ...item, totalQty: 0, lastOrder: null };
+            }
+            grouped[item.productId].totalQty += item.quantity;
+            grouped[item.productId].lastOrder = {
+              // ✅ Maneja fecha ISO string o timestamp numérico
+              date: order.createdAt ? new Date(order.createdAt).toLocaleDateString('es-SV') : 'Hoy',
+              status: order.status,
+              id: order.orderId
+            };
+          });
+        });
+        const items = Object.values(grouped);
+        count.textContent = `${items.length} tipo${items.length !== 1 ? 's' : ''}`;
+        list.innerHTML = '';
+        items.forEach(item => {
+          const product = PRODUCTS.find(p => p.id === item.productId);
+          const el = document.createElement('div');
+          el.className = 'order-item-card';
+          el.innerHTML = `
+            <div class="order-item-info">
+              <span class="order-item-icon">${product?.icon || ''}</span>
+              <div><div class="order-item-name">${item.name}</div><div class="order-item-date">#${item.lastOrder.id.slice(-4)}</div></div>
+            </div>
+            <div class="order-item-meta">
+              <span class="status-badge ${item.lastOrder.status === 'pending' ? 'status-pending' : 'status-completed'}">${item.lastOrder.status === 'pending' ? '⏳' : '✅'}</span>
+              <div class="order-item-qty">x${item.totalQty}</div>
+              <div class="order-item-price">${item.price * item.totalQty} pts</div>
+            </div>
+          `;
+          list.appendChild(el);
+        });
+      } catch (e) {
+        console.error(e);
+        list.innerHTML = '<p style="color:var(--danger);text-align:center;">Error</p>';
+      }
+    }
+
+    document.getElementById('btn-open-cart').onclick = () => document.getElementById('cart-overlay').classList.add('active');
+    document.getElementById('btn-close-cart').onclick = () => document.getElementById('cart-overlay').classList.remove('active');
+    document.getElementById('cart-overlay').onclick = (e) => { if (e.target.id === 'cart-overlay') document.getElementById('cart-overlay').classList.remove('active'); };
+
+    document.getElementById('btn-checkout').onclick = async () => {
+      const total = getCartTotal();
+      if (!currentUser) return window.showToast('Inicia sesión', 'error');
+      if (total > userPoints) return window.showToast('Sin puntos', 'error');
+      
+      const btn = document.getElementById('btn-checkout');
+      btn.disabled = true;
+      btn.textContent = 'Procesando...';
+      
+      try {
+        await runTransaction(db, async (transaction) => {
+          const prodSnap = await transaction.get(PRODUCTS_DOC);
+          const ordSnap = await transaction.get(ORDERS_DOC);
+          
+          const currentProducts = prodSnap.exists() ? prodSnap.data().items || [] : [];
+          const currentOrders = ordSnap.exists() ? ordSnap.data().items || [] : [];
+          
+          const orderItems = Object.keys(cart).filter(id => {
+            const p = currentProducts.find(x => x.id === id);
+            return cart[id] > 0 && p && p.stock >= cart[id];
+          }).map(id => {
+            const p = currentProducts.find(x => x.id === id);
+            return { productId: id, name: p.name, quantity: cart[id], price: p.price };
+          });
+          
+          if (orderItems.length === 0) throw new Error('Carrito vacío o sin stock');
+          
+          const updatedProducts = currentProducts.map(p => {
+            const qty = cart[p.id];
+            return qty > 0 ? { ...p, stock: Math.max(0, p.stock - qty) } : p;
+          });
+          
+          // ✅ Usa ISO string en lugar de serverTimestamp() para evitar error en arrays
+          const newOrder = {
+            orderId: `ORD-${Date.now()}`,
+            userId: currentUser.uid,
+            userName: currentUser.displayName || 'User',
+            items: orderItems,
+            totalCost: total,
+            status: 'pending',
+            createdAt: new Date().toISOString() 
+          };
+          
+          // ✅ Crea o actualiza documentos de forma segura
+          transaction.set(PRODUCTS_DOC, { items: updatedProducts }, { merge: true });
+          transaction.set(ORDERS_DOC, { items: [...currentOrders, newOrder] }, { merge: true });
+        });
+        
+        // Actualizar puntos del usuario
+        const initials = (currentUser.displayName || 'U').split(' ').map(n => n[0]).join('').slice(0, 3).toUpperCase();
+        const local = currentUser.email?.split('@')[0] || '';
+        await updateDoc(doc(db, 'users', `est_${local}_${initials}`), { puntos: userPoints - total });
+        
+        window.showToast('¡Compra exitosa!', 'success');
+        setTimeout(() => window.location.reload(), 1500);
+      } catch (e) {
+        console.error('❌ Error en checkout:', e);
+        window.showToast(e.message || 'Error al procesar', 'error');
+        btn.disabled = false;
+        btn.textContent = 'Confirmar';
+      }
+    };
+
+    window.addEventListener('DOMContentLoaded', async () => {
+      await loadUser();
+      await ensureStoreExists();
+      loadMyOrders();
+    });
+  </script>
+</body>
+</html>

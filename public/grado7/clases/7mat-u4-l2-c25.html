@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+  <title>2.5 División de una expresión algebraica con dos términos entre un número | Matemática 7°</title>
+  <link rel="stylesheet" href="../../css/styles.css">
+
+  <script defer src="https://cdn.jsdelivr.net/npm/mathlive@0.98.0/dist/mathlive.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mathlive@0.98.0/dist/mathlive-fonts.css">
+  <script>
+    MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] } };
+  </script>
+  <script id="MathJax-script" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js"></script>
+
+  <style>
+    :root { --keyboard-zindex: 999999 !important; }
+    .back-btn { display: inline-flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem; color: var(--text-muted); font-weight: 500; transition: color 0.2s; }
+    .back-btn:hover { color: var(--primary); text-decoration: none; }
+    .class-header { margin-bottom: 2rem; }
+    .class-title { font-size: 1.5rem; margin-bottom: 0.5rem; color: var(--primary); font-weight: 800; line-height: 1.3;}
+    .class-meta { font-size: 0.95rem; color: var(--text-muted); font-weight: 500;}
+    
+    .section { margin-bottom: 2.5rem; }
+    .section-title { font-size: 1.25rem; font-weight: 800; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; border-bottom: 2px solid var(--border); padding-bottom: 0.5rem; }
+    
+    .section-P { border-left: 5px solid #0284c7; padding-left: 1rem; }
+    .section-S { border-left: 5px solid #16a34a; padding-left: 1rem; }
+    .section-C { border-left: 5px solid #d946ef; padding-left: 1rem; }
+    .section-E { border-left: 5px solid #f97316; padding-left: 1rem; }
+    .section-L { border-left: 5px solid #ef4444; padding-left: 1rem; }
+
+    .content-box { background: var(--surface); border: 1px solid var(--border); border-radius: 1rem; padding: 1.5rem; margin-bottom: 1.5rem; line-height: 1.8; box-shadow: 0 4px 6px rgba(0,0,0,0.02); }
+    [data-theme="dark"] .content-box { background: #1e293b; border-color: #334155; }
+
+    /* CAJAS DE TIPS DEL LIBRO */
+    .tip-box { background: #ecfccb; border: 1px solid #a3e635; border-radius: 0.5rem; padding: 1rem; font-size: 0.95rem; color: #166534; margin: 1rem 0; }
+    [data-theme="dark"] .tip-box { background: rgba(22, 163, 74, 0.1); border-color: #16a34a; color: #a7f3d0; }
+    
+    .info-box { background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 0.5rem; padding: 1rem; font-size: 0.95rem; color: #334155; margin: 1rem 0; }
+    [data-theme="dark"] .info-box { background: #0f172a; border-color: #334155; color: #cbd5e1; }
+
+    /* MATHLIVE INPUTS */
+    math-field { 
+      font-size: 1.2rem; padding: 0.4rem; border: 2px solid var(--border); border-radius: 0.5rem; 
+      background: white; width: 100%; box-sizing: border-box; transition: border-color 0.2s; min-width: 100px;
+    }
+    math-field:focus-within { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2); }
+    math-field.correct { border-color: #10b981; background: #ecfdf5; }
+    math-field.incorrect { border-color: #ef4444; background: #fef2f2; }
+    math-field:disabled { opacity: 0.7; cursor: not-allowed; }
+    [data-theme="dark"] math-field { background: #0f172a; border-color: #475569; color: white; }
+    [data-theme="dark"] math-field.correct { background: #064e3b; border-color: #10b981; }
+    [data-theme="dark"] math-field.incorrect { background: #450a0a; border-color: #ef4444; }
+
+    .input-row { display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; margin-top: 1rem; margin-bottom: 1.5rem; }
+    .input-group { flex: 1; min-width: 180px; display: flex; flex-direction: column; gap: 0.5rem; }
+    .input-group label { font-weight: 600; font-size: 1.05rem; color: var(--primary); }
+
+    /* BOTONES */
+    .btn-submit { display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 0.8rem 2rem; background: linear-gradient(135deg, #0284c7, #2563eb); color: white; border: none; border-radius: 0.75rem; font-weight: 800; font-size: 1rem; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; margin-top: 1rem; }
+    .btn-submit:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(37, 99, 235, 0.4); }
+    .btn-submit:disabled { opacity: 0.5; cursor: not-allowed; filter: grayscale(1); transform: none; box-shadow: none; }
+    .btn-cancel { background: var(--surface-hover); color: var(--text); border: 1px solid var(--border); }
+    .btn-cancel:hover:not(:disabled) { background: var(--border); transform: translateY(-2px); box-shadow: none; color: var(--text); }
+
+    /* MODALS */
+    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(4px); z-index: 10000; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.3s; padding: 1rem; }
+    .modal-overlay.active { opacity: 1; pointer-events: auto; }
+    .modal-content { background: var(--bg); width: 100%; max-width: 700px; max-height: 90vh; border-radius: 1.5rem; padding: 2rem; display: flex; flex-direction: column; position: relative; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); overflow: hidden; box-sizing: border-box; }
+    [data-theme="dark"] .modal-content { background: #0f172a; border: 1px solid #334155; }
+    
+    #confirm-modal { z-index: 10001; } 
+    #confirm-modal .modal-content { max-width: 450px; text-align: center; }
+
+    .btn-close { position: absolute; top: 1.2rem; right: 1.2rem; background: var(--surface-hover); border: none; font-size: 1.5rem; cursor: pointer; color: var(--text-muted); width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; z-index: 10; }
+    .modal-header { flex-shrink: 0; margin-bottom: 1.5rem; padding-right: 3rem; border-bottom: 2px solid var(--border); padding-bottom: 1rem;}
+    .modal-body { overflow-y: auto; flex: 1; padding-right: 0.5rem;}
+    
+    .result-summary { text-align: center; margin-top: 1rem; font-weight: bold; font-size: 1.2rem; padding: 1rem; border-radius: 0.5rem; }
+    .loading { position: fixed; inset: 0; background: rgba(255,255,255,0.9); display: flex; justify-content: center; align-items: center; z-index: 9999; }
+    [data-theme="dark"] .loading { background: rgba(11,17,32,0.9); }
+
+    /* LAYOUT EXTRAS */
+    .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
+    .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; }
+    .solution-col { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 0.75rem; padding: 1.5rem;}
+    [data-theme="dark"] .solution-col { background: #1e293b; border-color: #334155; }
+    .math-step { text-align: center; font-size: 1.15rem; line-height: 2.2; margin: 1rem 0; overflow-x: auto; }
+  </style>
+</head>
+<body>
+  <div id="userbar"></div>
+  <div id="loading" class="loading">Cargando...</div>
+
+  <header class="app-container mt-4">
+    <a href="../../pages/clases.html" class="btn btn-ghost back-btn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><path d="M19 12H5"/><polyline points="12 19 5 12 12 5"/></svg>
+      Volver a Clases
+    </a>
+    <div class="class-header">
+      <h1 class="class-title">2.5 División de una expresión algebraica con dos términos entre un número</h1>
+      <p class="class-meta">Unidad 4 • Lección 2 • Matemática 7°</p>
+    </div>
+  </header>
+
+  <main class="app-container">
+
+    <section class="section section-P">
+      <h2 class="section-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+        Problema Inicial
+      </h2>
+      <div class="content-box">
+        <div style="display: flex; flex-wrap: wrap; gap: 2rem; align-items: flex-start;">
+          <div style="flex: 1; min-width: 250px;">
+            <p>Efectúa las siguientes divisiones:</p>
+            <ol style="line-height: 2; font-weight: bold; color: var(--primary); font-size: 1.1rem; list-style-type: none; padding-left: 0;">
+              <li>a) $(8x + 12) \div 4$</li>
+              <li>b) $(4x - 6) \div (-2)$</li>
+            </ol>
+          </div>
+          <div style="flex: 1; min-width: 250px;">
+            <div class="tip-box">
+              Recuerda que el recíproco de $\frac{a}{b}$ es $\frac{b}{a}$, por ejemplo el recíproco de $\frac{2}{3}$ es $\frac{3}{2}$. <br><br>
+              También el recíproco de un entero $c$ es $\frac{1}{c}$, y el recíproco de $\frac{1}{c}$ es $c$.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-S">
+      <h2 class="section-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        Solución Paso a Paso
+      </h2>
+      <div class="content-box">
+        <p>Transformamos la división en multiplicación usando el <strong>número recíproco</strong> del divisor, y luego aplicamos la propiedad distributiva a cada término del binomio.</p>
+        
+        <div class="grid-2">
+          <div class="solution-col">
+            <h4 style="color: var(--primary); margin-top: 0;">Literal a)</h4>
+            <div class="math-step">
+              $(8x + 12) \div 4 = (8x + 12) \times \frac{1}{4}$<br>
+              $= 8x \times \frac{1}{4} + 12 \times \frac{1}{4}$<br>
+              $= \frac{8}{4}x + \frac{12}{4}$<br>
+              <strong>$= 2x + 3$</strong>
+            </div>
+          </div>
+
+          <div class="solution-col">
+            <h4 style="color: var(--primary); margin-top: 0;">Literal b)</h4>
+            <div class="math-step">
+              $(4x - 6) \div (-2) = (4x - 6) \times \left(-\frac{1}{2}\right)$<br>
+              $= 4x \times \left(-\frac{1}{2}\right) - 6 \times \left(-\frac{1}{2}\right)$<br>
+              $= \left(-\frac{4}{2}\right)x + \left(\frac{6}{2}\right)$<br>
+              <strong>$= -2x + 3$</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-C">
+      <h2 class="section-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+        Conclusión
+      </h2>
+      <div class="content-box" style="background: #fdf4ff; border-color: #f5d0fe;">
+        <p style="font-size: 1.05rem; color: #86198f;">Para dividir una expresión algebraica de dos o más términos por un número, se convierte en la multiplicación de la expresión algebraica por el <strong>recíproco del divisor</strong>.</p>
+        
+        <p style="margin-top: 1.5rem; font-weight: bold; color: #701a75;">Opcionalmente, se puede realizar separando como fracción:</p>
+        <div style="background: white; padding: 1rem; border-radius: 0.5rem; text-align: center; font-size: 1.2rem; margin-top: 1rem; overflow-x: auto;">
+          $(8x + 12) \div 4 = \frac{8x + 12}{4} = \frac{8x}{4} + \frac{12}{4} = 2x + 3$
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-E">
+      <h2 class="section-title">💡 Ejemplo Magistral</h2>
+      <div class="content-box">
+        <p>Efectúa la siguiente división: $\quad (-9x - 6) \div \left(-\frac{3}{7}\right)$</p>
+        
+        <div style="background: #fff7ed; padding: 1.5rem; border-left: 4px solid #f97316; border-radius: 0 0.5rem 0.5rem 0; margin-top: 1rem;">
+          <h4 style="margin-top: 0; color: #c2410c;">Solución Detallada</h4>
+          <p>El recíproco de $-\frac{3}{7}$ es $-\frac{7}{3}$. Entonces:</p>
+          <div class="math-step" style="text-align: left; padding-left: 2rem;">
+            $(-9x - 6) \div \left(-\frac{3}{7}\right) = (-9x - 6) \times \left(-\frac{7}{3}\right)$<br><br>
+            $= (-9x) \times \left(-\frac{7}{3}\right) + (-6) \times \left(-\frac{7}{3}\right)$<br><br>
+            $= \frac{9 \times 7}{3}x + \frac{6 \times 7}{3}$<br><br>
+            $= 3 \times 7x + 2 \times 7$<br><br>
+            <strong>$= 21x + 14$</strong>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-L">
+      <h2 class="section-title">✏️ Práctica 1: Lápiz</h2>
+      <div class="content-box">
+        <p>Efectúa las siguientes divisiones en tu cuaderno y anota el resultado final aquí. Esta sección será calificada sobre una nota base de <strong>10 puntos</strong> y se guardará en tu progreso.</p>
+        <p style="color: var(--text-muted); font-size: 0.9rem;"><em>Nota: Usa el teclado matemático interactivo (presionando las tres rayitas azules si lo necesitas). Las respuestas aceptan el formato exacto del libro o tu escritura directa de fracciones.</em></p>
+
+        <div class="grid-3" style="margin-top: 2rem;">
+          
+          <div class="input-group">
+            <label>a) $(2x + 4) \div 2 =$</label>
+            <math-field id="e1-a" virtual-keyboard-mode="onfocus"></math-field>
+          </div>
+          <div class="input-group">
+            <label>b) $(6x - 9) \div 3 =$</label>
+            <math-field id="e1-b" virtual-keyboard-mode="onfocus"></math-field>
+          </div>
+          <div class="input-group">
+            <label>c) $(-15x + 10) \div 5 =$</label>
+            <math-field id="e1-c" virtual-keyboard-mode="onfocus"></math-field>
+          </div>
+
+          <div class="input-group">
+            <label>d) $(-28x - 14) \div 7 =$</label>
+            <math-field id="e1-d" virtual-keyboard-mode="onfocus"></math-field>
+          </div>
+          <div class="input-group">
+            <label>e) $(2x + 4) \div (-2) =$</label>
+            <math-field id="e1-e" virtual-keyboard-mode="onfocus"></math-field>
+          </div>
+          <div class="input-group">
+            <label>f) $(6x - 9) \div (-3) =$</label>
+            <math-field id="e1-f" virtual-keyboard-mode="onfocus"></math-field>
+          </div>
+
+          <div class="input-group">
+            <label>g) $(-15x + 10) \div (-5) =$</label>
+            <math-field id="e1-g" virtual-keyboard-mode="onfocus"></math-field>
+          </div>
+          <div class="input-group">
+            <label>h) $(-28x - 14) \div (-7) =$</label>
+            <math-field id="e1-h" virtual-keyboard-mode="onfocus"></math-field>
+          </div>
+          <div class="input-group">
+            <label>i) $(3y + 18) \div \frac{3}{4} =$</label>
+            <math-field id="e1-i" virtual-keyboard-mode="onfocus"></math-field>
+          </div>
+
+          <div class="input-group">
+            <label>j) $(4y - 8) \div \frac{4}{7} =$</label>
+            <math-field id="e1-j" virtual-keyboard-mode="onfocus"></math-field>
+          </div>
+          <div class="input-group">
+            <label>k) $(-15x + 10) \div \left(-\frac{5}{6}\right) =$</label>
+            <math-field id="e1-k" virtual-keyboard-mode="onfocus"></math-field>
+          </div>
+          <div class="input-group">
+            <label>l) $(3y + 18) \div \left(-\frac{6}{7}\right) =$</label>
+            <math-field id="e1-l" virtual-keyboard-mode="onfocus"></math-field>
+          </div>
+
+        </div>
+
+        <div style="text-align: right; margin-top: 2rem;">
+          <button class="btn-submit" id="btn-submit-p1" onclick="openConfirmModal('p1')" style="background: linear-gradient(135deg, #ef4444, #b91c1c);">✅ Guardar y Enviar Práctica 1</button>
+        </div>
+        <div id="res-p1" class="result-summary"></div>
+      </div>
+    </section>
+
+    <section class="section section-eval" id="evaluation-area">
+      <h2 class="section-title">📝 Evaluación Aleatoria</h2>
+      <div class="content-box" style="text-align: center;">
+        <p style="margin-bottom: 1rem; color: var(--text-muted);">Completa la Práctica 1 para desbloquear la evaluación final.</p>
+        <div id="eval-btn-container">
+            <button class="btn-submit" id="btn-start-eval" onclick="openEvalModal()" disabled style="margin: 0; background: linear-gradient(135deg, #f59e0b, #d97706); width: auto;">🔒 Bloqueado: Completa la Práctica 1</button>
+            <p style="font-size: 0.85rem; color: #ef4444; font-weight: bold; margin-top: 1rem;">
+            ⚠️ ADVERTENCIA ANTI-TRAMPAS: Al iniciar, no debes cambiar de pestaña ni minimizar tu navegador. Si lo haces, tu evaluación será anulada y reiniciada.
+            </p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <div class="modal-overlay" id="eval-modal">
+    <div class="modal-content">
+      <button class="btn-close" onclick="closeEvalModal()">×</button>
+      
+      <div class="modal-header">
+        <h2 class="modal-title" style="color: var(--primary); margin:0;">Evaluación Final</h2>
+        <p style="color: #ef4444; font-weight: bold; margin: 0.5rem 0 0 0; font-size: 0.9rem;">Si cambias de pestaña o minimizas la ventana, tu progreso será penalizado.</p>
+      </div>
+
+      <div class="modal-body" id="eval-container">
+        <p>Aplica el recíproco y la ley de los signos para efectuar la siguiente división generada al azar.</p>
+        
+        <div style="background: #e0f2fe; border: 1px solid #bae6fd; padding: 1.5rem; border-radius: 0.5rem; margin-bottom: 1.5rem;">
+          <p id="problem-text" style="font-size: 1.5rem; color: #0369a1; font-weight: bold; text-align: center; margin: 0;"></p>
+        </div>
+        
+        <div class="input-row" style="justify-content: center;">
+          <div class="input-group" style="flex: 0 1 300px;">
+            <label>Resultado simplificado:</label>
+            <math-field id="prac2-a" virtual-keyboard-mode="onfocus"></math-field>
+          </div>
+        </div>
+      </div>
+      
+      <div class="modal-footer" style="margin-top: 1.5rem; flex-shrink: 0;">
+        <button class="btn-submit" id="btn-submit-eval" style="width: 100%; margin: 0; background: linear-gradient(135deg, #10b981, #059669);" onclick="openConfirmModal('eval')">Enviar Respuestas y Finalizar</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="confirm-modal">
+    <div class="modal-content" style="max-width: 400px; text-align: center; padding: 2.5rem;">
+      <h2 style="color: var(--primary); margin-top: 0;">¿Estás seguro?</h2>
+      <p style="font-size: 1.05rem; margin-bottom: 1.5rem;">Una vez enviado, no podrás modificar tus respuestas. ¿Deseas continuar y guardar tu calificación de forma permanente?</p>
+      <div style="display: flex; gap: 1rem; justify-content: center;">
+        <button class="btn-submit btn-cancel" onclick="closeConfirmModal()">Cancelar</button>
+        <button class="btn-submit" id="btn-confirm-yes" onclick="confirmAction()">Sí, Enviar</button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initUserBar } from '../../js/userbar.js';
+    import { initFirebase } from '../../js/initFirebase.js';
+    import { doc, getDoc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js";
+    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-auth.js";
+    
+    initUserBar('#userbar');
+    const { db, auth } = initFirebase();
+
+    const CLASS_ID = '7mat-u4-l2-c25';
+    const MATERIA_ID = 'matematica'; 
+    let currentUser = null, isClassClosed = false, isEvalActive = false;
+
+    // --- CONFIGURACIÓN DE TECLADO MATHLIVE ---
+    window.addEventListener('DOMContentLoaded', () => {
+      if (window.mathVirtualKeyboard) {
+          try { window.mathVirtualKeyboard.layouts = ['default']; } catch(e) {}
+      }
+      
+      setTimeout(() => {
+        document.querySelectorAll('math-field').forEach(mf => {
+          mf.addEventListener('keydown', (e) => {
+            const allowedKeys = ['Backspace', 'ArrowLeft', 'ArrowRight', 'Tab', 'Delete', 'Enter'];
+            if (!allowedKeys.includes(e.key) && !e.ctrlKey && !e.metaKey) {
+              e.preventDefault();
+            }
+          });
+        });
+      }, 500); 
+    });
+
+    // --- LÓGICA DE CONFIRMACIÓN MODAL ---
+    let pendingAction = '';
+    
+    window.openConfirmModal = (action) => {
+      if(isClassClosed) return;
+      pendingAction = action;
+      document.getElementById('confirm-modal').classList.add('active');
+    };
+    
+    window.closeConfirmModal = () => {
+      pendingAction = '';
+      document.getElementById('confirm-modal').classList.remove('active');
+    };
+    
+    window.confirmAction = () => {
+      document.getElementById('confirm-modal').classList.remove('active');
+      if(pendingAction === 'p1') submitPractice1();
+      if(pendingAction === 'eval') submitEval();
+    };
+
+    // --- LÓGICA DE GUARDADO EN FIREBASE ---
+    async function saveToFirebase(updates) {
+      if (!currentUser || isClassClosed) return;
+      const docRef = doc(db, 'clases', MATERIA_ID, 'entregas', CLASS_ID);
+      const snap = await getDoc(docRef);
+      const fechaLocal = new Date().toLocaleString('en-GB', { timeZone: 'America/El_Salvador' }).replace(',', '');
+      let existingObj = (snap.exists() && snap.data().respuestas) ? snap.data().respuestas[currentUser.uid] || {} : {};
+
+      existingObj = { ...existingObj, nombre: currentUser.displayName || currentUser.email, email: currentUser.email, fechaLocal, ...updates };
+
+      // Promediar ambas notas en base 10
+      let finalNota = 0, count = 0;
+      if (existingObj.notaPractica !== undefined) { finalNota += existingObj.notaPractica; count++; }
+      if (existingObj.notaAdicional !== undefined) { finalNota += existingObj.notaAdicional; count++; }
+      existingObj.nota = count > 0 ? Number((finalNota / count).toFixed(1)) : 0;
+
+      await setDoc(docRef, { grado: 7, año: new Date().getFullYear(), materia: MATERIA_ID, updatedAt: serverTimestamp(), respuestas: { [currentUser.uid]: existingObj } }, { merge: true });
+    }
+
+    // --- LIMPIADOR EXACTO Y NO DESTRUCTIVO PARA LAS OPCIONES ---
+    function cleanMath(str) {
+        if(!str) return "";
+        // Elimina todos los espacios
+        return str.replace(/\s/g, "");
+    }
+
+    // --- LÓGICA PRÁCTICA 1 (12 Ejercicios) ---
+    // Agregamos en los Arrays todas las variaciones raw (crudas) exactas que el estudiante puede ingresar.
+    const ansP1 = {
+      'e1-a': ['x+2', '+x+2', '1x+2'],
+      'e1-b': ['2x-3', '+2x-3'],
+      'e1-c': ['-3x+2'],
+      'e1-d': ['-4x-2'],
+      'e1-e': ['-x-2', '-1x-2'],
+      'e1-f': ['-2x+3'],
+      'e1-g': ['3x-2', '+3x-2'],
+      'e1-h': ['4x+2', '+4x+2'],
+      'e1-i': [
+        '4y+24',
+        '\\frac{4}{1}y+24',
+        '\\frac41y+24',
+        '\\frac{4y}{1}+24',
+        '4y+\\frac{24}{1}',
+        '\\frac41y+\\frac{24}1'
+      ],
+      'e1-j': [
+        '7y-14',
+        '\\frac{7}{1}y-14',
+        '\\frac71y-14',
+        '\\frac{7y}{1}-14',
+        '7y-\\frac{14}{1}'
+      ],
+      'e1-k': ['18x-12', '+18x-12'],
+      'e1-l': [
+        '-\\frac{7}{2}y-21',
+        '-\\frac72y-21',
+        '-\\frac{7y}{2}-21',
+        '\\frac{-7}{2}y-21',
+        '\\frac{-7y}{2}-21',
+        '-\\frac{21}{6}y-21',
+        '-\\frac{21y}{6}-21',
+        '\\frac{-21}{6}y-21',
+        '-3.5y-21'
+      ]
+    };
+
+    function validateField(id) {
+      const mf = document.getElementById(id);
+      const rawVal = mf.value;
+      const val = cleanMath(rawVal);
+      const correctOnes = ansP1[id].map(s => cleanMath(s));
+      
+      // Mostrar log para facilitar validación a maestros
+      console.log(`[DEBUG Lápiz ${id.toUpperCase()}]`);
+      console.log(`  - Entrada original (Latex): "${rawVal}"`);
+      console.log(`  - Entrada limpiada por JS: "${val}"`);
+      console.log(`  - Opciones aceptadas:`, correctOnes);
+
+      if (correctOnes.includes(val)) {
+          mf.classList.add('correct');
+          return true;
+      } else {
+          mf.classList.add('incorrect');
+          return false;
+      }
+    }
+
+    window.submitPractice1 = async () => {
+      let correctCount = 0;
+      const ids = ['e1-a', 'e1-b', 'e1-c', 'e1-d', 'e1-e', 'e1-f', 'e1-g', 'e1-h', 'e1-i', 'e1-j', 'e1-k', 'e1-l'];
+      
+      console.log("=== INICIANDO VALIDACIÓN ===");
+      ids.forEach(id => {
+         if (validateField(id)) correctCount++;
+      });
+
+      // Cálculo de la nota base 10 (12 ejercicios)
+      let score = (correctCount / 12) * 10;
+      score = Number(score.toFixed(1));
+
+      document.getElementById('btn-submit-p1').disabled = true;
+      document.getElementById('btn-submit-p1').innerHTML = "Guardando...";
+      
+      await saveToFirebase({ notaPractica: score });
+      showPractice1Result(score);
+    };
+
+    function showPractice1Result(score) {
+      const ids = ['e1-a', 'e1-b', 'e1-c', 'e1-d', 'e1-e', 'e1-f', 'e1-g', 'e1-h', 'e1-i', 'e1-j', 'e1-k', 'e1-l'];
+      ids.forEach(id => {
+        let el = document.getElementById(id);
+        if(el) { el.disabled = true; }
+      });
+      document.getElementById('btn-submit-p1').style.display = 'none';
+      
+      const res = document.getElementById('res-p1');
+      res.innerHTML = `<span style="color: #059669; font-weight: bold;">¡Práctica 1 Guardada! Obtuviste ${score}/10.0 puntos.</span>`;
+      res.style.background = "#ecfdf5";
+      res.style.border = "1px solid #a7f3d0";
+
+      const evalBtn = document.getElementById('btn-start-eval');
+      if(evalBtn && !isClassClosed) {
+        evalBtn.disabled = false;
+        evalBtn.innerHTML = `Comenzar Evaluación`;
+      }
+    }
+
+    // --- LÓGICA EVALUACIÓN (MODAL) ---
+    let evalExpected = [];
+    
+    function applyCheatPenalty() {
+      if (isEvalActive) {
+        isEvalActive = false;
+        document.getElementById('eval-modal').classList.remove('active');
+        sessionStorage.setItem('cheat_penalty', 'true'); 
+        window.location.reload(); 
+      }
+    }
+
+    document.addEventListener("visibilitychange", () => { if (document.hidden) applyCheatPenalty(); });
+    window.addEventListener("blur", applyCheatPenalty);
+    
+    window.addEventListener('load', () => {
+      if (sessionStorage.getItem('cheat_penalty') === 'true') {
+        sessionStorage.removeItem('cheat_penalty');
+        setTimeout(() => { alert("⚠️ PENALIZACIÓN ANTI-TRAMPAS ⚠️\n\nEl sistema detectó un cambio de ventana o pérdida de foco. Tu evaluación fue reiniciada y los datos del problema han cambiado."); }, 500);
+      }
+    });
+
+    // Generador aleatorio de divisiones
+    window.openEvalModal = () => {
+      if (isClassClosed) return;
+      
+      const problems = [
+        { exp: "\\left( 10x - 15 \\right) \\div 5", ans: ["2x-3", "+2x-3"] },
+        { exp: "\\left( -12x + 8 \\right) \\div (-4)", ans: ["3x-2", "+3x-2"] },
+        { exp: "\\left( 6x + 9 \\right) \\div \\left( -\\frac{3}{2} \\right)", ans: ["-4x-6"] },
+        { exp: "\\left( -14x - 7 \\right) \\div 7", ans: ["-2x-1"] }
+      ];
+
+      let rnd = Math.floor(Math.random() * problems.length);
+      let prob = problems[rnd];
+      
+      evalExpected = prob.ans;
+      
+      const probText = document.getElementById('problem-text');
+      probText.innerHTML = `\\( ${prob.exp} \\)`;
+      
+      if(window.MathJax) { MathJax.typesetPromise([probText]).catch((err) => console.log(err)); }
+
+      document.getElementById('prac2-a').value = '';
+      document.getElementById('prac2-a').classList.remove('correct', 'incorrect');
+
+      document.getElementById('eval-modal').classList.add('active');
+      isEvalActive = true;
+    };
+
+    window.closeEvalModal = () => {
+      if (confirm("¿Seguro que deseas salir? Tus respuestas se perderán.")) {
+        document.getElementById('eval-modal').classList.remove('active');
+        isEvalActive = false;
+      }
+    };
+
+    window.submitEval = async () => {
+      isEvalActive = false; 
+      let p2score = 0; 
+
+      let valAns = cleanMath(document.getElementById('prac2-a').value);
+      const correctOnes = evalExpected.map(s => cleanMath(s));
+
+      if (correctOnes.includes(valAns)) {
+        p2score = 10.0;
+        document.getElementById('prac2-a').classList.add('correct');
+      } else {
+        document.getElementById('prac2-a').classList.add('incorrect');
+      }
+
+      document.getElementById('btn-submit-eval').disabled = true;
+      document.getElementById('btn-submit-eval').innerHTML = "Guardando...";
+      
+      await saveToFirebase({ notaAdicional: p2score });
+      
+      document.getElementById('eval-modal').classList.remove('active');
+      showEvalResult(p2score);
+    };
+
+    function showEvalResult(score) {
+      document.getElementById('evaluation-area').innerHTML = `
+        <h2 class="section-title">📝 Evaluación Final</h2>
+        <div class="result-summary" style="margin-top: 0; padding: 2rem;">
+          <p style="margin:0; font-weight: bold; color: var(--text-muted);">Puntaje de Evaluación:</p>
+          <h2 style="font-size: 3.5rem; color: var(--primary); margin: 0.5rem 0;">${score}/10.0</h2>
+          <p style="margin-top: 1rem; font-weight: 600; color: var(--text-muted);">¡Tu evaluación ha sido guardada con éxito!</p>
+        </div>
+      `;
+    }
+
+    function lockClassAsExpired() {
+      isClassClosed = true;
+      document.getElementById('eval-btn-container').innerHTML = `
+        <div class="result-summary" style="border-color: #ef4444; background: #fef2f2; padding: 1.5rem; margin: 0;">
+          <h3 style="color: #ef4444; margin: 0;">⏳ Tiempo Agotado para Evaluar</h3>
+        </div>
+      `;
+      let b1 = document.getElementById('btn-submit-p1'); if(b1) b1.disabled = true;
+    }
+
+    // INIT
+    onAuthStateChanged(auth, async (user) => {
+      const loadingEl = document.getElementById('loading');
+      if (user) {
+        currentUser = user;
+        const snap = await getDoc(doc(db, 'clases', MATERIA_ID, 'entregas', CLASS_ID));
+        
+        if (!snap.exists()) {
+          alert("La clase no ha sido configurada.");
+          window.location.href = "../../pages/clases.html";
+          return;
+        }
+
+        const docData = snap.data();
+        const now = new Date();
+        const startDate = new Date(docData.inicio);
+        const endDate = new Date(docData.fin);
+
+        if (now < startDate) {
+          alert("Esta clase aún no está disponible.");
+          window.location.href = "../../pages/clases.html";
+          return;
+        }
+
+        let hasEval = false;
+        if (docData.respuestas && docData.respuestas[user.uid]) {
+          const userData = docData.respuestas[user.uid];
+          
+          if (userData.notaPractica !== undefined) {
+             showPractice1Result(userData.notaPractica);
+          }
+          if (userData.notaAdicional !== undefined) {
+             showEvalResult(userData.notaAdicional);
+             hasEval = true;
+          }
+        } 
+        
+        if (now > endDate && !hasEval) {
+           lockClassAsExpired();
+        }
+
+      } else {
+        document.getElementById('evaluation-area').innerHTML = `
+          <div class="result-summary">
+            <h2>Sesión Requerida</h2>
+            <p>Debes iniciar sesión para guardar tu avance.</p>
+            <a href="../../index.html" class="btn-submit" style="text-decoration:none; display:inline-flex; width:auto;">Ir al Inicio</a>
+          </div>`;
+      }
+      loadingEl.style.display = 'none';
+    });
+  </script>
+</body>
+</html>

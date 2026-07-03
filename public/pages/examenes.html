@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+  <title>Exámenes | CENTRO ESCOLAR CANTÓN LOS PRADOS</title>
+  <link rel="stylesheet" href="../css/styles.css">
+  <style>
+    /* ===== EXÁMENES PREMIUM - PASTEL DESIGN + TZ SV ===== */
+    .back-btn { 
+      display: inline-flex; align-items: center; gap: 0.5rem; 
+      margin-bottom: 1.5rem; color: var(--text-muted); font-weight: 500; 
+      padding: 0.5rem 0.8rem; border-radius: 0.6rem;
+      transition: all 0.2s;
+    }
+    .back-btn:hover { 
+      color: var(--primary); background: var(--surface-hover); 
+      transform: translateX(-2px); text-decoration: none; 
+    }
+    
+    .grade-badge { 
+      margin-left: 0.5rem; vertical-align: middle; 
+      background: linear-gradient(135deg, #34d399, #10b981);
+      color: white; padding: 0.2rem 0.6rem; border-radius: 999px;
+      font-size: 0.75rem; font-weight: 700;
+      box-shadow: 0 2px 6px rgba(16, 185, 129, 0.3);
+    }
+    
+    .icon { display: inline-flex; align-items: center; justify-content: center; }
+    .icon-sm { width: 20px; height: 20px; }
+    .icon-md { width: 24px; height: 24px; }
+    
+    /* ACORDEÓN */
+    .accordion { width: 100%; }
+    .accordion-item { 
+      margin-bottom: 1rem; 
+      background: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(12px);
+      border: 2px solid rgba(167, 139, 250, 0.2);
+      border-radius: 1rem; 
+      overflow: hidden; 
+      box-shadow: 0 4px 16px rgba(139, 92, 246, 0.1);
+      transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+      animation: slideIn 0.3s ease forwards;
+      opacity: 0; transform: translateY(10px);
+    }
+    .accordion-item:nth-child(2) { animation-delay: 0.05s; }
+    .accordion-item:nth-child(3) { animation-delay: 0.1s; }
+    
+    [data-theme="dark"] .accordion-item {
+      background: rgba(30, 27, 75, 0.8);
+      border: 2px solid rgba(99, 102, 241, 0.3);
+      box-shadow: 0 4px 16px rgba(99, 102, 241, 0.2);
+    }
+    .accordion-item:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(139, 92, 246, 0.2);
+      border-color: rgba(167, 139, 250, 0.4);
+    }
+    
+    /* HEADER DEL ACORDEÓN */
+    .accordion-header { 
+      display: flex; align-items: center; justify-content: space-between; 
+      padding: 1rem 1.25rem; cursor: pointer; 
+      background: transparent; transition: background 0.2s; 
+    }
+    .accordion-header:hover { background: rgba(167, 139, 250, 0.05); }
+    
+    .accordion-header h3 { 
+      margin: 0; font-size: 1.05rem; font-weight: 700; 
+      display: flex; align-items: center; gap: 0.8rem; color: var(--text);
+      flex-wrap: wrap;
+    }
+    
+    /* TAGS DE ESTADO */
+    .status-tags { display: flex; gap: 0.4rem; flex-wrap: wrap; }
+    .tag { font-size: 0.7rem; padding: 0.15rem 0.5rem; border-radius: 999px; font-weight: 600; border: 1px solid transparent; }
+    
+    .tag-habilitado { background: #d1fae5; color: #047857; border-color: #6ee7b7; }
+    .tag-proximo { background: #fef3c7; color: #b45309; border-color: #fcd34d; }
+    .tag-finalizado { background: #fee2e2; color: #b91c1c; border-color: #fca5a5; }
+    
+    [data-theme="dark"] .tag-habilitado { background: #052e16; color: #6ee7b7; border-color: #065f46; }
+    [data-theme="dark"] .tag-proximo { background: #451a03; color: #fcd34d; border-color: #92400e; }
+    [data-theme="dark"] .tag-finalizado { background: #450a0a; color: #fca5a5; border-color: #991b1b; }
+    
+    .acc-chevron { 
+      width: 20px; height: 20px; transition: transform 0.3s ease; 
+      color: var(--text-muted); 
+    }
+    .accordion-header.active .acc-chevron { 
+      transform: rotate(180deg); color: var(--primary); 
+    }
+    
+    .accordion-body { 
+      max-height: 0; overflow: hidden; 
+      transition: max-height 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); 
+      background: rgba(240, 249, 255, 0.5);
+      padding: 0 1.25rem;
+    }
+    [data-theme="dark"] .accordion-body { background: rgba(49, 46, 129, 0.3); }
+    
+    /* TARJETAS DE EXAMEN */
+    .exam-card { 
+      margin: 0.75rem 0; 
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 0.8rem; 
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      transition: all 0.2s;
+      position: relative; overflow: hidden;
+    }
+    [data-theme="dark"] .exam-card { background: #312e81; border-color: #4f46e5; }
+    .exam-card:hover {
+      transform: translateX(4px); border-color: var(--primary);
+      box-shadow: 0 4px 12px rgba(139, 92, 246, 0.15);
+    }
+    
+    /* Barra lateral de color */
+    .exam-card.habilitado { border-left: 4px solid #34d399; }
+    .exam-card.proximo { border-left: 4px solid #fbbf24; }
+    .exam-card.finalizado { border-left: 4px solid #f87171; }
+    
+    .exam-header {
+      display: flex; align-items: flex-start; justify-content: space-between;
+      padding: 1rem; gap: 1rem; flex-wrap: wrap;
+    }
+    .exam-info { flex: 1; min-width: 0; }
+    .exam-title { margin: 0 0 0.4rem; font-size: 1rem; font-weight: 600; color: var(--text); }
+    .exam-meta { display: flex; flex-wrap: wrap; gap: 0.6rem; font-size: 0.85rem; color: var(--text-muted); }
+    .exam-meta-item { display: inline-flex; align-items: center; gap: 0.3rem; }
+    
+    /* BADGES */
+    .exam-status {
+      display: inline-flex; align-items: center; gap: 0.3rem;
+      padding: 0.25rem 0.7rem; border-radius: 999px;
+      font-size: 0.78rem; font-weight: 600; white-space: nowrap;
+    }
+    .exam-status.habilitado { background: #d1fae5; color: #047857; border: 1px solid #6ee7b7; }
+    .exam-status.proximo { background: #fef3c7; color: #b45309; border: 1px solid #fcd34d; }
+    .exam-status.finalizado { background: #fee2e2; color: #b91c1c; border: 1px solid #fca5a5; }
+    [data-theme="dark"] .exam-status.habilitado { background: #052e16; color: #6ee7b7; border-color: #065f46; }
+    [data-theme="dark"] .exam-status.proximo { background: #451a03; color: #fcd34d; border-color: #92400e; }
+    [data-theme="dark"] .exam-status.finalizado { background: #450a0a; color: #fca5a5; border-color: #991b1b; }
+    
+    .exam-actions { display: flex; align-items: center; gap: 0.5rem; flex-shrink: 0; }
+    .btn-exam {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      padding: 0.5rem 1rem; border: none; border-radius: 0.5rem;
+      font-weight: 600; font-size: 0.88rem; cursor: pointer;
+      transition: all 0.2s; text-decoration: none; white-space: nowrap;
+    }
+    .btn-exam.primary { background: linear-gradient(135deg, #a78bfa, #8b5cf6); color: white; box-shadow: 0 2px 6px rgba(139, 92, 246, 0.3); }
+    .btn-exam.primary:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(139, 92, 246, 0.4); }
+    .btn-exam.secondary { background: white; color: #4f46e5; border: 1px solid var(--border); }
+    [data-theme="dark"] .btn-exam.secondary { background: #1e1b4b; color: #a78bfa; border-color: #4f46e5; }
+    .btn-exam.secondary:hover { background: var(--surface-hover); }
+    .btn-exam:disabled { opacity: 0.5; cursor: not-allowed; transform: none !important; }
+    
+    /* Overlay para bloqueados */
+    .exam-card.proximo .exam-header { opacity: 0.7; }
+    .exam-card.proximo::after {
+      content: '🔒 Próximo';
+      position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%, -50%) rotate(-10deg);
+      background: rgba(255,255,255,0.9); padding: 0.5rem 1.5rem;
+      border-radius: 0.5rem; font-weight: 700; color: #475569;
+      border: 2px solid #cbd5e1; box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      pointer-events: none; z-index: 10;
+    }
+    [data-theme="dark"] .exam-card.proximo::after { background: rgba(30,27,75,0.9); color: #94a3b8; border-color: #475569; }
+    
+    .empty-state { text-align: center; padding: 3rem 1rem; color: var(--text-muted); }
+    .empty-state svg { width: 64px; height: 64px; margin-bottom: 1rem; opacity: 0.5; }
+    
+    @keyframes slideIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    
+    @media (max-width: 768px) {
+      .accordion-header h3 { font-size: 0.95rem; }
+      .tag { font-size: 0.65rem; padding: 0.1rem 0.4rem; }
+      .exam-header { flex-direction: column; }
+      .exam-actions { width: 100%; justify-content: flex-end; }
+      .btn-exam { flex: 1; justify-content: center; }
+      .accordion-body { padding: 0 0.8rem; }
+    }
+  </style>
+</head>
+<body>
+  <!-- USERBAR FIJA -->
+  <div id="userbar"></div>
+
+  <header class="app-container mt-6">
+    <a href="home.html" class="btn btn-ghost back-btn">
+      <span class="icon icon-sm">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><polyline points="12 19 5 12 12 5"/></svg>
+      </span>
+      Volver al Inicio
+    </a>
+    <h1 class="text-xl font-bold mb-2">
+      <span class="icon icon-md" style="color:var(--primary);margin-right:0.5rem">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1"/></svg>
+      </span>
+      Exámenes <span id="grade-label" class="grade-badge">Cargando...</span>
+    </h1>
+    <p class="text-muted">Evaluaciones programadas por materia</p>
+  </header>
+
+  <main class="app-container">
+    <div id="exams-accordion" class="accordion"></div>
+  </main>
+
+  <script type="module">
+    // 1. IMPORTS AL INICIO
+    import { initFirebase } from '../js/initFirebase.js';
+    import { initUserBar } from '../js/userbar.js';
+    import { doc, getDoc } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js";
+    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-auth.js";
+    
+    initUserBar('#userbar');
+    const { db, auth } = initFirebase();
+
+    // 2. MOCK DATA DE EXÁMENES POR GRADO (Con fechas inicio/fin)
+    const EXAMENES_DB = {
+      7: [
+        { id: 'e7-1', titulo: 'Evaluación Expresiones Algebraicas', materia: 'Matemática y datos', inicio: '2026-05-15T08:00', fin: '2026-05-15T12:00' },
+        { id: 'e7-2', titulo: 'Quiz Genética Clásica', materia: 'Ciencia y tecnología', inicio: '2020-11-10T10:00', fin: '2020-11-10T14:00' },
+        { id: 'e7-3', titulo: 'Vocabulario Unit 1', materia: 'Inglés', inicio: '2020-01-01T08:00', fin: '2030-11-20T18:00' }
+      ],
+      8: [
+        { id: 'e8-1', titulo: 'Examen Parcial Función Lineal', materia: 'Matemática y datos', inicio: '2026-06-20T08:00', fin: '2026-06-20T18:00' },
+        { id: 'e8-2', titulo: 'Evaluación Ecosistemas', materia: 'Ciencia y tecnología', inicio: '2020-11-12T09:00', fin: '2020-11-15T15:00' }
+      ],
+      9: [
+        { id: 'e9-1', titulo: 'Evaluación Final Funciones', materia: 'Matemática y datos', inicio: '2020-01-01T08:00', fin: '2030-11-25T17:00' },
+        { id: 'e9-2', titulo: 'Prueba Electricidad', materia: 'Ciencia y tecnología', inicio: '2020-11-14T08:00', fin: '2020-11-14T12:00' }
+      ]
+    };
+
+    // 3. DETECCIÓN DE GRADO OPTIMIZADA
+    async function detectGrado() {
+      const params = new URLSearchParams(window.location.search);
+      if (params.has('grado')) return parseInt(params.get('grado')) || 7;
+      
+      if (typeof window.getUserGrade === 'function') {
+        const cachedGrade = window.getUserGrade();
+        if (cachedGrade) {
+          console.log('📦 Exámenes: Grado desde localStorage:', cachedGrade);
+          return cachedGrade;
+        }
+      }
+      
+      const demo = sessionStorage.getItem('demoUser');
+      if (demo) return JSON.parse(demo).grado || 7;
+      
+      return new Promise((resolve) => {
+        const unsubscribe = onAuthStateChanged(auth, async (user) => {
+          unsubscribe();
+          if (user) {
+            try {
+              const initials = (user.displayName || 'USR').split(' ').map(n => n[0]).join('').slice(0, 3).toUpperCase();
+              const local = user.email?.split('@')[0] || '';
+              const docId = `est_${local}_${initials}`;
+              const snap = await getDoc(doc(db, 'users', docId));
+              if (snap.exists()) {
+                console.log('☁️ Exámenes: Grado desde Firebase:', snap.data().grado);
+                resolve(snap.data().grado || 7);
+              } else resolve(7);
+            } catch { resolve(7); }
+          } else { resolve(7); }
+        });
+        setTimeout(() => { unsubscribe(); resolve(7); }, 2000);
+      });
+    }
+
+    // 4. ICONOS SVG
+    const ICONS = {
+      chevron: `<svg class="acc-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>`,
+      clock: `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>`,
+      lock: `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>`,
+      play: `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>`,
+      chart: `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>`
+    };
+
+    // 5. UTILIDADES CON ZONA HORARIA EL SALVADOR (UTC-6)
+    function formatDateSV(dateStr) {
+      const d = new Date(dateStr);
+      return d.toLocaleDateString('es-SV', { 
+        day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit',
+        timeZone: 'America/El_Salvador' 
+      });
+    }
+
+    // LÓGICA DE ESTADOS DINÁMICA CON TIMEZONE EL SALVADOR
+    function getExamStatus(inicio, fin) {
+      // Obtener hora actual en El Salvador
+      const ahoraSV = new Date(new Date().toLocaleString('en-US', { 
+        timeZone: 'America/El_Salvador' 
+      }));
+      
+      const start = new Date(inicio);
+      const end = new Date(fin);
+
+      if (ahoraSV < start) return 'proximo';
+      if (ahoraSV >= start && ahoraSV <= end) return 'habilitado';
+      return 'finalizado';
+    }
+
+    function getStatusLabel(s) { 
+      return { habilitado: 'Habilitado', proximo: 'Próximo', finalizado: 'Finalizado' }[s] || s; 
+    }
+    function getStatusIcon(s) { 
+      return { habilitado: ICONS.play, proximo: ICONS.lock, finalizado: ICONS.chart }[s] || ICONS.clock; 
+    }
+
+    // 6. RENDERIZADO CON ACORDEÓN POR MATERIA
+    function renderExamsAcordeon(exams, grado) {
+      const container = document.getElementById('exams-accordion');
+      container.innerHTML = '';
+      if (!exams || exams.length === 0) {
+        container.innerHTML = `<div class="empty-state"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1"/></svg><h3>No hay exámenes programados</h3><p>Por ahora no tienes evaluaciones pendientes.</p></div>`;
+        return;
+      }
+
+      // Agrupar por materia y calcular estados reales
+      const grouped = {};
+      exams.forEach(e => { 
+        const estadoReal = getExamStatus(e.inicio, e.fin);
+        if (!grouped[e.materia]) grouped[e.materia] = []; 
+        grouped[e.materia].push({ ...e, estado: estadoReal }); 
+      });
+
+      Object.entries(grouped).forEach(([materia, examsMateria], idx) => {
+        // Contar estados dinámicos
+        const habilitado = examsMateria.filter(t => t.estado === 'habilitado').length;
+        const proximo = examsMateria.filter(t => t.estado === 'proximo').length;
+        const finalizado = examsMateria.filter(t => t.estado === 'finalizado').length;
+
+        const item = document.createElement('div');
+        item.className = 'accordion-item';
+        item.style.animationDelay = `${idx * 0.05}s`;
+
+        // Header con tags visibles
+        const header = document.createElement('div');
+        header.className = 'accordion-header';
+        header.innerHTML = `
+          <h3>
+            ${materia}
+            <div class="status-tags">
+              ${habilitado > 0 ? `<span class="tag tag-habilitado">${habilitado} Habilitado</span>` : ''}
+              ${proximo > 0 ? `<span class="tag tag-proximo">${proximo} Próximo</span>` : ''}
+              ${finalizado > 0 ? `<span class="tag tag-finalizado">${finalizado} Finalizado</span>` : ''}
+            </div>
+          </h3>
+          ${ICONS.chevron}
+        `;
+
+        // Body
+        const body = document.createElement('div');
+        body.className = 'accordion-body';
+
+        examsMateria.forEach(exam => {
+          const statusIcon = getStatusIcon(exam.estado);
+          const statusLabel = getStatusLabel(exam.estado);
+          const startFmt = formatDateSV(exam.inicio);
+          const endFmt = formatDateSV(exam.fin);
+          
+          // Construir URL con parámetros
+          const params = new URLSearchParams({
+            start: exam.inicio,
+            end: exam.fin
+          });
+          const examUrl = `../grado${grado}/examenes/${exam.id}.html?${params.toString()}`;
+          
+          let actionBtn = '';
+          if (exam.estado === 'habilitado') {
+            actionBtn = `<a href="${examUrl}" class="btn-exam primary">${ICONS.play} Iniciar</a>`;
+          } else {
+            actionBtn = `<a href="${examUrl}" class="btn-exam secondary">${ICONS.chart} Ver detalle</a>`;
+          }
+
+          const card = document.createElement('div');
+          card.className = `exam-card ${exam.estado}`;
+          card.innerHTML = `
+            <div class="exam-header">
+              <div class="exam-info">
+                <div class="exam-title">${exam.titulo}</div>
+                <div class="exam-meta">
+                  <span class="exam-meta-item">${ICONS.clock} Inicio: ${startFmt}</span>
+                  <span class="exam-meta-item">Fin: ${endFmt}</span>
+                </div>
+              </div>
+              <div style="display:flex; align-items:center; gap:0.8rem; flex-wrap:wrap;">
+                <span class="exam-status ${exam.estado}">${statusIcon} ${statusLabel}</span>
+                <div class="exam-actions">${actionBtn}</div>
+              </div>
+            </div>
+          `;
+          body.appendChild(card);
+        });
+
+        item.appendChild(header);
+        item.appendChild(body);
+        container.appendChild(item);
+
+        // Toggle Acordeón
+        header.addEventListener('click', () => {
+          const isOpen = body.style.maxHeight && body.style.maxHeight !== '0px';
+          document.querySelectorAll('.accordion-body').forEach(b => b.style.maxHeight = null);
+          document.querySelectorAll('.accordion-header').forEach(h => h.classList.remove('active'));
+          if (!isOpen) {
+            body.style.maxHeight = body.scrollHeight + 'px';
+            header.classList.add('active');
+          }
+        });
+      });
+    }
+
+    // 7. INICIALIZACIÓN
+    (async function init() {
+      const grado = await detectGrado();
+      document.getElementById('grade-label').textContent = `${grado}° Grado`;
+      const exams = EXAMENES_DB[grado] || [];
+      renderExamsAcordeon(exams, grado);
+      console.log('✅ Exámenes cargados para grado', grado);
+    })();
+  </script>
+</body>
+</html>

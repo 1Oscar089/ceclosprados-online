@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+  <title>Mecanismos de evolución - Creatividad | Ciencias 7°</title>
+  <link rel="stylesheet" href="../../css/styles.css">
+
+  <style>
+    .back-btn { display: inline-flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem; color: var(--text-muted); font-weight: 500; transition: color 0.2s; }
+    .back-btn:hover { color: var(--primary); text-decoration: none; }
+    .class-header { margin-bottom: 2rem; }
+    .class-title { font-size: 1.5rem; margin-bottom: 0.5rem; color: var(--primary); font-weight: 800; line-height: 1.3;}
+    .class-meta { font-size: 0.95rem; color: var(--text-muted); font-weight: 500;}
+    
+    .section { margin-bottom: 2.5rem; }
+    .section-title { font-size: 1.25rem; font-weight: 800; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; border-bottom: 2px solid var(--border); padding-bottom: 0.5rem; }
+    
+    .section-theory { border-left: 5px solid #10b981; padding-left: 1rem; }
+    .section-story { border-left: 5px solid #8b5cf6; padding-left: 1rem; }
+    .section-sim { border-left: 5px solid #0ea5e9; padding-left: 1rem; }
+    .section-eval { border-left: 5px solid #f59e0b; padding-left: 1rem; }
+
+    .content-box { background: var(--surface); border: 1px solid var(--border); border-radius: 1rem; padding: 1.5rem; margin-bottom: 1.5rem; line-height: 1.8; box-shadow: 0 4px 6px rgba(0,0,0,0.02); }
+    [data-theme="dark"] .content-box { background: #1e293b; border-color: #334155; }
+
+    /* STORY & INFO BOXES */
+    .story-box { background: #f3e8ff; border: 1px solid #fbcfe8; border-radius: 0.75rem; padding: 1.5rem; color: #701a75; font-size: 1.05rem; margin-bottom: 1.5rem; }
+    [data-theme="dark"] .story-box { background: rgba(134, 25, 143, 0.2); border-color: rgba(134, 25, 143, 0.4); color: #fbcfe8; }
+    .story-title { font-weight: 800; font-size: 1.2rem; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem; }
+
+    .formula-box { background: #f0fdf4; border-left: 4px solid #16a34a; padding: 1rem; border-radius: 0.5rem; margin: 1rem 0; font-size: 0.95rem; }
+    [data-theme="dark"] .formula-box { background: rgba(22, 163, 74, 0.1); border-color: #16a34a; }
+    .formula-math { display: block; text-align: center; font-size: 1.1rem; font-weight: bold; margin-top: 0.5rem; color: #166534; }
+    [data-theme="dark"] .formula-math { color: #4ade80; }
+
+    /* TABLA DE CONCEPTOS (TEORÍA) */
+    .concept-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 1rem; }
+    .concept-card { border-radius: 0.75rem; border: 1px solid var(--border); overflow: hidden; }
+    .concept-header { padding: 1rem; font-weight: bold; text-align: center; color: white; }
+    .concept-header.reduce { background: #6b21a8; }
+    .concept-header.increase { background: #86198f; }
+    .concept-body { padding: 1rem; background: var(--surface-hover); height: 100%; box-sizing: border-box; }
+    [data-theme="dark"] .concept-body { background: #0f172a; }
+    .concept-body ul { margin: 0; padding-left: 1.2rem; display: flex; flex-direction: column; gap: 0.8rem; }
+    .concept-body strong { color: var(--primary); }
+
+    @media (max-width: 768px) { .concept-grid { grid-template-columns: 1fr; } }
+
+    /* CUADROS DE PUNNETT (PASO 4) */
+    .punnett-container { display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center; margin-top: 1.5rem; }
+    .punnett-card { background: var(--surface-hover); border: 1px solid var(--border); border-radius: 0.5rem; padding: 0.8rem; text-align: center; width: 180px; }
+    [data-theme="dark"] .punnett-card { background: #0f172a; }
+    .punnett-card h4 { margin: 0 0 0.8rem 0; color: var(--primary); font-size: 0.9rem; }
+    .punnett-table { border-collapse: collapse; margin: 0 auto; background: white; color: black; }
+    .punnett-table th, .punnett-table td { border: 2px solid #334155; width: 35px; height: 35px; text-align: center; font-weight: bold; font-size: 1rem; }
+    .punnett-table th { background: #e2e8f0; }
+
+    .calc-box { background: #fffbeb; border: 1px solid #fde68a; border-radius: 0.5rem; padding: 1.5rem; margin-top: 1.5rem; }
+    [data-theme="dark"] .calc-box { background: rgba(245, 158, 11, 0.1); border-color: rgba(245, 158, 11, 0.3); }
+
+    /* TABLA DEL SIMULADOR (PASO 8) */
+    .table-container { overflow-x: auto; margin-top: 1.5rem; border-radius: 0.5rem; border: 1px solid var(--border); }
+    .data-table { width: 100%; border-collapse: collapse; text-align: center; font-size: 0.95rem; }
+    .data-table th { background: #4c1d95; color: white; padding: 0.8rem; border: 1px solid #5b21b6; }
+    .data-table td { padding: 0.8rem; border: 1px solid var(--border); background: var(--surface); }
+    .data-table tr.highlight td { font-weight: bold; background: #f8fafc; }
+    [data-theme="dark"] .data-table th { background: #312e81; border-color: #1e1b4b; }
+    [data-theme="dark"] .data-table td { background: #0f172a; }
+    [data-theme="dark"] .data-table tr.highlight td { background: #1e293b; }
+
+    /* ESTILOS DEL SIMULADOR DE VASOS DE FRIJOLES */
+    .sim-container { display: flex; flex-direction: column; gap: 1.5rem; margin-top: 1.5rem; align-items: center; }
+    .instruction-panel { background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 0.75rem; padding: 1.25rem; font-size: 0.95rem; width: 100%; box-sizing: border-box; }
+    [data-theme="dark"] .instruction-panel { background: #0f172a; border-color: #334155; }
+    .visual-area { display: flex; flex-wrap: wrap; gap: 3rem; justify-content: center; width: 100%; margin-bottom: 1rem; }
+    
+    .cup-wrapper { display: flex; flex-direction: column; align-items: center; gap: 0.5rem; }
+    .cup-title { font-weight: bold; font-size: 1rem; color: var(--text-muted); }
+    
+    .cup { border: 4px solid rgba(148, 163, 184, 0.8); border-top: none; border-radius: 0 0 40px 40px; position: relative; display: flex; flex-wrap: wrap-reverse; align-content: flex-start; justify-content: center; gap: 2px; padding: 10px; background: linear-gradient(to bottom, rgba(255,255,255,0) 0%, rgba(226, 232, 240, 0.4) 100%); box-sizing: border-box; box-shadow: inset 0 -10px 15px rgba(0,0,0,0.1); }
+    [data-theme="dark"] .cup { border-color: #475569; background: linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(51, 65, 85, 0.4) 100%); }
+    .cup-large { width: 220px; height: 180px; }
+    .cup-small { width: 160px; height: 130px; border-color: rgba(139, 92, 246, 0.8); background: linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(139, 92, 246, 0.1) 100%); }
+
+    .bean { width: 12px; height: 16px; border-radius: 40% 60% 60% 40% / 50% 50% 50% 50%; box-shadow: inset -3px -3px 5px rgba(0,0,0,0.4), 1px 1px 2px rgba(0,0,0,0.2); }
+    .bean.red { background: radial-gradient(circle at 30% 30%, #ef4444, #991b1b); }
+    .bean.black { background: radial-gradient(circle at 30% 30%, #4b5563, #030712); }
+    
+    /* BOTONES */
+    .btn-action { display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 0.8rem 1.5rem; background: linear-gradient(135deg, #0ea5e9, #2563eb); color: white; border: none; border-radius: 0.5rem; font-weight: bold; font-size: 1.1rem; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; }
+    .btn-action:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4); }
+    .btn-submit { display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 1rem 2.5rem; background: linear-gradient(135deg, #a78bfa, #8b5cf6); color: white; border: none; border-radius: 0.75rem; font-weight: 800; font-size: 1.1rem; cursor: pointer; width: 100%; max-width: 400px; transition: transform 0.2s, box-shadow 0.2s; }
+    .btn-submit:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(139, 92, 246, 0.4); }
+    .btn-action:disabled, .btn-submit:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
+
+    /* QUIZ MODAL */
+    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(4px); z-index: 10000; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.3s; padding: 1rem; }
+    .modal-overlay.active { opacity: 1; pointer-events: auto; }
+    .modal-content { background: var(--bg); width: 100%; max-width: 700px; max-height: 90vh; border-radius: 1.5rem; padding: 2rem; display: flex; flex-direction: column; position: relative; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); overflow: hidden; box-sizing: border-box; }
+    [data-theme="dark"] .modal-content { background: #0f172a; border: 1px solid #334155; }
+    .btn-close { position: absolute; top: 1.2rem; right: 1.2rem; background: var(--surface-hover); border: none; font-size: 1.5rem; cursor: pointer; color: var(--text-muted); line-height: 1; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; z-index: 10; }
+    
+    .modal-header { flex-shrink: 0; margin-bottom: 1.5rem; padding-right: 3rem; border-bottom: 2px solid var(--border); padding-bottom: 1rem;}
+    .modal-body { overflow-y: auto; flex: 1; padding-right: 0.5rem;}
+    
+    .quiz-question { background: var(--surface-hover); padding: 1.5rem; border-radius: 0.75rem; border: 1px solid var(--border); margin-bottom: 1.5rem; }
+    .quiz-question p { margin: 0 0 1rem 0; font-weight: 600; font-size: 1.05rem; }
+    .quiz-options { display: flex; flex-direction: column; gap: 0.8rem; }
+    .quiz-option { display: flex; align-items: center; gap: 0.8rem; cursor: pointer; padding: 0.5rem; border-radius: 0.5rem; transition: background 0.2s; }
+    .quiz-option:hover { background: var(--surface); }
+    .quiz-option input[type="radio"] { width: 1.2rem; height: 1.2rem; cursor: pointer; accent-color: var(--primary); }
+
+    .result-summary { text-align: center; padding: 2rem; background: var(--surface); border: 2px solid var(--border); border-radius: 1rem; margin: 2rem auto; }
+    .loading { position: fixed; inset: 0; background: rgba(255,255,255,0.9); display: flex; justify-content: center; align-items: center; z-index: 9999; }
+    [data-theme="dark"] .loading { background: rgba(11,17,32,0.9); }
+  </style>
+</head>
+<body>
+  <div id="userbar"></div>
+  <div id="loading" class="loading">Cargando...</div>
+
+  <header class="app-container mt-4">
+    <a href="../../pages/clases.html" class="btn btn-ghost back-btn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><path d="M19 12H5"/><polyline points="12 19 5 12 12 5"/></svg>
+      Volver a Clases
+    </a>
+    <div class="class-header">
+      <h1 class="class-title">Mecanismos de evolución - Creatividad</h1>
+      <p class="class-meta">Unidad 2 • Lección 4 • Ciencias 7°</p>
+    </div>
+  </header>
+
+  <main class="app-container">
+
+    <section class="section section-theory">
+      <h2 class="section-title">🧬 Mecanismos de Evolución y Variabilidad</h2>
+      <div class="content-box">
+        <p>A partir de la actividad de los frijoles demostraremos que las poblaciones pueden cambiar sus frecuencias alélicas con el tiempo (Evolución). Estos cambios se rigen por distintos mecanismos que dividimos en dos grandes grupos:</p>
+        
+        <div class="concept-grid">
+          <div class="concept-card">
+            <div class="concept-header reduce">Mecanismos que REDUCEN la variabilidad</div>
+            <div class="concept-body">
+              <ul>
+                <li><strong>Selección natural:</strong> Propuesta por Charles Darwin y Alfred Wallace. El ambiente presiona a los individuos; solo los más aptos sobreviven y se reproducen. Elimina los alelos menos favorables.</li>
+                <li><strong>Selección sexual:</strong> Los individuos eligen pareja basados en rasgos específicos (ej. plumas de un pavo real). Los alelos no atractivos van desapareciendo.</li>
+                <li><strong>Deriva genética:</strong> Fluctuaciones en los alelos debido <em>puramente al azar</em>. Es más intensa en grupos pequeños. Un ejemplo es el <strong>efecto fundador</strong> (cuando un grupo pequeño forma una nueva aldea).</li>
+              </ul>
+            </div>
+          </div>
+          <div class="concept-card">
+            <div class="concept-header increase">Mecanismos que AUMENTAN la variabilidad</div>
+            <div class="concept-body">
+              <ul>
+                <li><strong>Mutación:</strong> Cambios aleatorios en el ADN que crean nuevos alelos que antes no existían en la población.</li>
+                <li><strong>Recombinación:</strong> Mezcla de material genético durante la reproducción sexual, creando nuevas combinaciones de rasgos.</li>
+                <li><strong>Flujo genético:</strong> Movimiento de individuos (migración) entre diferentes poblaciones, introduciendo alelos nuevos al grupo que llega.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-sim">
+      <h2 class="section-title">📊 Paso 4: Comprobación de Frecuencias con Cruces</h2>
+      <div class="content-box">
+        <p>En el <strong>Paso 4</strong> de tu Cuaderno de Trabajo debes completar cruces y calcular frecuencias. Sigue estas instrucciones para llenarlo:</p>
+        
+        <div class="formula-box">
+          <strong>¿Cómo se calcula la frecuencia de un alelo en un cruce?</strong><br>
+          <ol style="margin-top: 0.5rem; padding-left: 1.5rem;">
+            <li>Llena el Cuadro de Punnett. Obtendrás 4 combinaciones (ej: CC, Cc, cC, cc).</li>
+            <li>Como cada combinación tiene 2 letras, hay un <strong>total de 8 alelos</strong> por cuadro (4 × 2 = 8).</li>
+            <li>Cuenta cuántas veces aparece una letra específica y divídelo entre 8.</li>
+          </ol>
+        </div>
+
+        <div class="calc-box">
+          <h3 style="margin: 0 0 1rem 0; color: #b45309;">💡 Ejemplo de llenado (Primer Cruce: CC x CC)</h3>
+          <p>Al cruzar dos homocigotos dominantes, todos los cuadros se llenan con <strong>CC</strong>.</p>
+          <ul style="line-height: 1.8;">
+            <li>Si contamos las letras "C" mayúsculas en los 4 cuadros, hay <strong>8 letras C</strong>.</li>
+            <li>Si contamos las letras "c" minúsculas, hay <strong>0 letras c</strong>.</li>
+            <li>Frecuencia de C = 8 ÷ 8 = <strong>1.00</strong></li>
+            <li>Frecuencia de c = 0 ÷ 8 = <strong>0.00</strong></li>
+          </ul>
+        </div>
+
+        <p style="margin-top: 1.5rem; font-weight: bold;">Aquí tienes resueltos los 6 cruces que pide el libro para que los copies:</p>
+        <div class="punnett-container">
+          <div class="punnett-card"><h4>CC x CC</h4><table class="punnett-table"><tr><th></th><th>C</th><th>C</th></tr><tr><th>C</th><td>CC</td><td>CC</td></tr><tr><th>C</th><td>CC</td><td>CC</td></tr></table></div>
+          <div class="punnett-card"><h4>CC x Cc</h4><table class="punnett-table"><tr><th></th><th>C</th><th>C</th></tr><tr><th>C</th><td>CC</td><td>CC</td></tr><tr><th>c</th><td>Cc</td><td>Cc</td></tr></table></div>
+          <div class="punnett-card"><h4>CC x cc</h4><table class="punnett-table"><tr><th></th><th>C</th><th>C</th></tr><tr><th>c</th><td>Cc</td><td>Cc</td></tr><tr><th>c</th><td>Cc</td><td>Cc</td></tr></table></div>
+          <div class="punnett-card"><h4>Cc x Cc</h4><table class="punnett-table"><tr><th></th><th>C</th><th>c</th></tr><tr><th>C</th><td>CC</td><td>Cc</td></tr><tr><th>c</th><td>Cc</td><td>cc</td></tr></table></div>
+          <div class="punnett-card"><h4>cc x Cc</h4><table class="punnett-table"><tr><th></th><th>c</th><th>c</th></tr><tr><th>C</th><td>Cc</td><td>Cc</td></tr><tr><th>c</th><td>cc</td><td>cc</td></tr></table></div>
+          <div class="punnett-card"><h4>cc x cc</h4><table class="punnett-table"><tr><th></th><th>c</th><th>c</th></tr><tr><th>c</th><td>cc</td><td>cc</td></tr><tr><th>c</th><td>cc</td><td>cc</td></tr></table></div>
+        </div>
+
+        <div class="calc-box" style="background: #eff6ff; border-color: #bfdbfe; margin-top: 2rem;">
+          <h3 style="margin: 0 0 1rem 0; color: #1d4ed8;">📋 Llenado del recuadro final (Resumen de los 6 cruces)</h3>
+          <p>El libro te pide calcular la frecuencia <strong>total de todos los cruces juntos</strong>:</p>
+          <ul style="line-height: 1.8;">
+            <li>Si sumas los alelos de los 6 cuadros (6 cuadros × 8 alelos cada uno), el <strong>Total de alelos en los cruces es 48</strong>.</li>
+            <li>Si cuentas absolutamente todas las letras "C" de todos los cuadros, te dará <strong>24</strong>.</li>
+            <li>Si cuentas absolutamente todas las letras "c" de todos los cuadros, te dará <strong>24</strong>.</li>
+            <li>Frecuencia de alelos C: 24 ÷ 48 = <strong>0.50</strong></li>
+            <li>Frecuencia de alelos c: 24 ÷ 48 = <strong>0.50</strong></li>
+          </ul>
+          <p style="font-weight: bold; color: #1e40af; margin-top: 1rem;">Conclusión: Si no hay fuerzas evolutivas externas (como selección o deriva), las frecuencias originales (0.50 y 0.50) se mantienen estables de generación en generación.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-story">
+      <h2 class="section-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8l-4 4v16a2 2 0 0 0 2 2z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+        Simulador Visual: El Efecto Fundador (Pasos 6 al 12)
+      </h2>
+      <div class="content-box">
+        <div class="story-box">
+          <div class="story-title">📖 La Aldea de los Camanances</div>
+          <p>En un valle aislado, existía una aldea de <strong>400 habitantes</strong>. La mitad (200) poseía el alelo dominante <strong>C</strong> (frijoles rojos, con camanances) y la otra mitad el alelo recesivo <strong>c</strong> (frijoles negros, sin camanances). Su frecuencia inicial es 0.50 para ambos.</p>
+          <p>Un día, grupos pequeños deciden abandonar el valle y <strong>fundar nuevas colonias</strong> (Muestras). Como la separación es al azar, usaremos este simulador para ver cómo la <em>Deriva Genética</em> afecta a estas nuevas poblaciones.</p>
+        </div>
+
+        <div class="formula-box">
+          <strong>¿Cómo llenarás la Tabla del Paso 8?</strong><br>
+          Para cada muestra, el simulador te dará el <strong>Número de frijoles</strong> de cada color. Tú debes usar tu cuaderno para calcular la <strong>Frecuencia</strong> usando esta fórmula:<br>
+          <span class="formula-math">Frecuencia = (N° de frijoles de un color) ÷ (Total de frijoles en esa muestra)</span>
+        </div>
+
+        <div class="instruction-panel" id="instruction-text" style="text-align: center; font-size: 1.05rem;">
+          <strong>Vaso Original:</strong> Tenemos 200 frijoles rojos y 200 negros mezclados.
+        </div>
+
+        <div class="sim-container">
+          <div class="visual-area">
+            <div class="cup-wrapper">
+              <div class="cup-title">Población Original (400)</div>
+              <div class="cup cup-large" id="main-cup">
+                </div>
+            </div>
+            
+            <div class="cup-wrapper">
+              <div class="cup-title" id="sample-title" style="color: #8b5cf6;">Vaso de Muestras</div>
+              <div class="cup cup-small" id="sample-cup" style="opacity: 0.2;">
+                </div>
+            </div>
+          </div>
+
+          <div class="sim-controls">
+            <button class="btn-action" id="btn-draw" onclick="drawNextSample()">▶ Comenzar Extracción (Muestra 1)</button>
+          </div>
+
+          <div class="table-container">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th rowspan="2">Población</th>
+                  <th colspan="2">Frijol tipo 1 (Alelo C Rojo)</th>
+                  <th colspan="2">Frijol tipo 2 (Alelo c Negro)</th>
+                </tr>
+                <tr>
+                  <th>N° Frijoles</th>
+                  <th>Frecuencia</th>
+                  <th>N° Frijoles</th>
+                  <th>Frecuencia</th>
+                </tr>
+              </thead>
+              <tbody id="sim-table-body">
+                <tr class="highlight">
+                  <td>1. Población original</td>
+                  <td>200</td>
+                  <td style="color: #16a34a;">0.50</td>
+                  <td>200</td>
+                  <td style="color: #16a34a;">0.50</td>
+                </tr>
+                </tbody>
+            </table>
+          </div>
+          
+          <div class="calc-box" id="final-questions" style="display: none; border-color: #fb923c; background: #fff7ed;">
+            <h3 style="color: #c2410c; margin-top: 0;">📝 ¡A trabajar en tu Cuaderno de Trabajo!</h3>
+            <p>1. Utiliza la fórmula para calcular y llenar los espacios de "Frecuencia" en la tabla (donde aparece el signo <strong>?</strong>).</p>
+            <p>2. Con los datos calculados, responde las dos preguntas finales de la página:</p>
+            <ul style="font-weight: bold; color: var(--text);">
+              <li>a. ¿Por qué las frecuencias alélicas no son las mismas en cada muestra?</li>
+              <li>b. ¿Podrían existir cambios en las frecuencias alélicas en una población a través del tiempo?</li>
+            </ul>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-eval" id="evaluation-area">
+      <h2 class="section-title">📝 Evaluación de Aprendizaje</h2>
+      <div class="content-box" style="text-align: center;">
+        <p style="margin-bottom: 1rem; color: var(--text-muted);">Demuestra lo que has aprendido sobre Deriva Genética, Efecto Fundador y Selección Natural.</p>
+        <div id="eval-btn-container">
+            <button class="btn-submit" onclick="openQuizModal()" style="margin: 0;">Comenzar Cuestionario (5 Preguntas)</button>
+            <p style="font-size: 0.85rem; color: #ef4444; font-weight: bold; margin-top: 1rem;">
+            ⚠️ ADVERTENCIA ANTI-TRAMPAS: Al iniciar, no debes cambiar de pestaña ni minimizar tu navegador. Si lo haces, el examen se cancelará y las preguntas cambiarán.
+            </p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <div class="modal-overlay" id="quiz-modal">
+    <div class="modal-content">
+      <button class="btn-close" onclick="closeQuizModal()">×</button>
+      
+      <div class="modal-header">
+        <h2 class="modal-title">Cuestionario: Mecanismos de Evolución</h2>
+        <p class="modal-warning">Si cambias de pestaña o minimizas la ventana, tu progreso se perderá.</p>
+      </div>
+
+      <div class="modal-body" id="quiz-container">
+        </div>
+      
+      <div class="modal-footer">
+        <button class="btn-submit" id="btn-submit-quiz" style="width: 100%; margin: 0;" onclick="submitQuiz()">Terminar y Enviar Examen</button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initUserBar } from '../../js/userbar.js';
+    import { initFirebase } from '../../js/initFirebase.js';
+    import { doc, getDoc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js";
+    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-auth.js";
+    
+    initUserBar('#userbar');
+    const { db, auth } = initFirebase();
+
+    const CLASS_ID = '7cie-u2-l4-c3';
+    const MATERIA_ID = 'ciencias';
+    let currentUser = null, isQuizActive = false, isClassClosed = false;
+    let selectedQuestions = [];
+
+    // --- BANCO DE PREGUNTAS (CIENCIAS) ---
+    const quizBank = [
+      {
+        q: "¿Qué fenómeno evolutivo se simula cuando un pequeño grupo se separa de una población original para formar una nueva colonia (como los frijoles extraídos)?",
+        options: ["Mutación genética", "Efecto fundador (Deriva genética)", "Selección artificial", "Flujo genético"],
+        ans: 1
+      },
+      {
+        q: "La fluctuación o variación en las frecuencias alélicas de una población debido únicamente a factores del azar se denomina:",
+        options: ["Selección natural", "Deriva genética", "Recombinación", "Adaptación"],
+        ans: 1
+      },
+      {
+        q: "Según la tabla de teoría, ¿cuál de los siguientes mecanismos REDUCE la variabilidad genética?",
+        options: ["Mutación", "Recombinación", "Flujo genético", "Deriva genética"],
+        ans: 3
+      },
+      {
+        q: "¿Cuál de los siguientes mecanismos AUMENTA la variabilidad genética introduciendo nuevos rasgos o mezclándolos?",
+        options: ["Mutación y Recombinación", "Selección natural", "Efecto fundador", "Selección sexual"],
+        ans: 0
+      },
+      {
+        q: "Para calcular la frecuencia alélica en un cruce genético, si cuentas 6 alelos 'c' minúsculas de un total de 8, la frecuencia es:",
+        options: ["0.25", "0.75", "0.50", "0.60"],
+        ans: 1
+      },
+      {
+        q: "¿Quién propuso la teoría de la selección natural estableciendo que el ambiente presiona a los individuos para que sobrevivan los más aptos?",
+        options: ["Gregor Mendel", "Isaac Newton", "Charles Darwin y Alfred Wallace", "Louis Pasteur"],
+        ans: 2
+      },
+      {
+        q: "Si en la Muestra 4 (25 frijoles) el simulador te dio 10 rojos (Alelo C), ¿cuál debes escribir que es su frecuencia alélica en tu cuaderno?",
+        options: ["0.50", "0.40", "0.20", "0.25"],
+        ans: 1
+      },
+      {
+        q: "¿Qué sucede con las frecuencias en el Efecto Fundador cuando la muestra de individuos que se separa es muy pequeña?",
+        options: ["Se mantienen exactamente igual a la original al 50%.", "Las diferencias esperadas por el azar son mayores.", "Todos los individuos mutan automáticamente.", "Los rasgos desaparecen por completo siempre."],
+        ans: 1
+      },
+      {
+        q: "En el paso 10 del experimento, se pide regresar los frijoles de la muestra a la población original, ¿por qué es esto necesario?",
+        options: ["Para que los frijoles se reproduzcan.", "Para mantener la población inicial en 400 y asegurar que el azar funcione correctamente en cada muestra separada.", "Para cambiar la genética de la población principal.", "Para descartar los alelos defectuosos."],
+        ans: 1
+      }
+    ];
+
+    // --- LÓGICA DEL SIMULADOR DE FRIJOLES ---
+    let currentSampleIndex = 0;
+    const sampleSizes = [100, 100, 50, 25, 25, 25];
+    
+    // Rellenamos el vaso principal con 120 frijoles visuales (por rendimiento) que representan los 400.
+    function fillMainCup() {
+      const mainCup = document.getElementById('main-cup');
+      mainCup.innerHTML = '';
+      for(let i=0; i<120; i++) {
+        let bean = document.createElement('div');
+        bean.className = `bean ${i%2 === 0 ? 'red' : 'black'}`;
+        bean.style.transform = `rotate(${Math.random()*360}deg)`;
+        mainCup.appendChild(bean);
+      }
+    }
+
+    fillMainCup();
+
+    window.drawNextSample = () => {
+      const btn = document.getElementById('btn-draw');
+      const instruction = document.getElementById('instruction-text');
+      const sampleCup = document.getElementById('sample-cup');
+      const tbody = document.getElementById('sim-table-body');
+      
+      const size = sampleSizes[currentSampleIndex];
+      let stepNumber = (currentSampleIndex === 0) ? "6 al 9" : "11";
+      
+      instruction.innerHTML = `<strong>Pasos ${stepNumber}:</strong> Extrayendo Muestra ${currentSampleIndex + 1} de <strong>${size} frijoles</strong> al azar...`;
+      
+      btn.disabled = true;
+      btn.innerText = "Extrayendo...";
+      
+      // Vaciar vaso pequeño
+      sampleCup.innerHTML = '';
+      sampleCup.style.opacity = '1';
+
+      // Lógica Matemática: Extracción al azar
+      let pool = Array(200).fill('R').concat(Array(200).fill('B'));
+      let redCount = 0;
+      let blackCount = 0;
+      
+      for(let i=0; i<size; i++) {
+        let idx = Math.floor(Math.random() * pool.length);
+        if(pool[idx] === 'R') redCount++; else blackCount++;
+        pool.splice(idx, 1);
+      }
+
+      // Limitar renderizado visual para no desbordar el vaso pequeño (max 60 frijoles visuales)
+      let visualLimit = size > 60 ? 60 : size; 
+      
+      for(let i=0; i<visualLimit; i++) {
+        setTimeout(() => {
+          let bean = document.createElement('div');
+          bean.className = `bean ${i < (visualLimit * (redCount/size)) ? 'red' : 'black'}`;
+          bean.style.transform = `rotate(${Math.random()*360}deg)`;
+          sampleCup.appendChild(bean);
+        }, i * 15);
+      }
+
+      setTimeout(() => {
+        document.getElementById('sample-title').innerText = `Muestra ${currentSampleIndex+1} (${size})`;
+        
+        // Agregar a la tabla (OCULTANDO LA FRECUENCIA CON '?')
+        tbody.innerHTML += `
+          <tr>
+            <td>${currentSampleIndex + 2}. Muestra ${currentSampleIndex + 1} (${size})</td>
+            <td style="color: #dc2626; font-weight: bold;">${redCount}</td>
+            <td style="color: #94a3b8; font-style: italic;">? Calcula tú</td>
+            <td style="color: #111827; font-weight: bold;">${blackCount}</td>
+            <td style="color: #94a3b8; font-style: italic;">? Calcula tú</td>
+          </tr>
+        `;
+        
+        currentSampleIndex++;
+        
+        if (currentSampleIndex < sampleSizes.length) {
+          instruction.innerHTML = `<strong>Paso 10:</strong> Devolvemos los frijoles al vaso original y mezclamos. Preparados para la siguiente extracción.`;
+          btn.innerText = `▶ Extraer Muestra ${currentSampleIndex + 1} (${sampleSizes[currentSampleIndex]} frijoles)`;
+          btn.disabled = false;
+        } else {
+          instruction.innerHTML = `<strong>Paso 12:</strong> ¡Simulación terminada! Hemos realizado todas las extracciones requeridas.`;
+          btn.style.display = 'none';
+          document.getElementById('final-questions').style.display = 'block';
+        }
+      }, visualLimit * 15 + 300);
+    };
+
+    // --- LÓGICA DE FIREBASE Y EVALUACIÓN ---
+    async function saveToFirebase(updates) {
+      if (!currentUser || isClassClosed) return;
+      const docRef = doc(db, 'clases', MATERIA_ID, 'entregas', CLASS_ID);
+      const snap = await getDoc(docRef);
+      const fechaLocal = new Date().toLocaleString('en-GB', { timeZone: 'America/El_Salvador' }).replace(',', '');
+      let existingObj = (snap.exists() && snap.data().respuestas) ? snap.data().respuestas[currentUser.uid] || {} : {};
+      
+      existingObj = { ...existingObj, nombre: currentUser.displayName || currentUser.email, email: currentUser.email, fechaLocal, ...updates };
+      
+      let finalNota = 0, count = 0;
+      if (existingObj.notaAdicional !== undefined) { finalNota += existingObj.notaAdicional; count++; }
+      existingObj.nota = count > 0 ? Number((finalNota / count).toFixed(1)) : 0;
+
+      await setDoc(docRef, { grado: 7, año: new Date().getFullYear(), materia: MATERIA_ID, updatedAt: serverTimestamp(), respuestas: { [currentUser.uid]: existingObj } }, { merge: true });
+    }
+
+    function selectRandomQuestions() {
+      let shuffled = quizBank.sort(() => 0.5 - Math.random());
+      return shuffled.slice(0, 5); 
+    }
+
+    function applyCheatPenalty() {
+      if (isQuizActive) {
+        isQuizActive = false;
+        document.getElementById('quiz-modal').classList.remove('active');
+        document.getElementById('quiz-container').innerHTML = '';
+        sessionStorage.setItem('cheat_penalty', 'true'); 
+        window.location.reload(); 
+      }
+    }
+
+    document.addEventListener("visibilitychange", () => { if (document.hidden) applyCheatPenalty(); });
+    window.addEventListener("blur", applyCheatPenalty);
+    
+    window.addEventListener('load', () => {
+      if (sessionStorage.getItem('cheat_penalty') === 'true') {
+        sessionStorage.removeItem('cheat_penalty');
+        setTimeout(() => { alert("⚠️ PENALIZACIÓN ANTI-TRAMPAS ⚠️\n\nEl sistema detectó un cambio de ventana o pérdida de foco. Tu cuestionario fue reiniciado y las preguntas han cambiado."); }, 500);
+      }
+    });
+
+    window.openQuizModal = () => {
+      if (isClassClosed) return;
+      selectedQuestions = selectRandomQuestions();
+      
+      let html = '';
+      selectedQuestions.forEach((qObj, index) => {
+        let optionsHtml = '';
+        qObj.options.forEach((opt, optIndex) => {
+          optionsHtml += `
+            <label class="quiz-option">
+              <input type="radio" name="q${index}" value="${optIndex}">
+              ${opt}
+            </label>
+          `;
+        });
+        
+        html += `
+          <div class="quiz-question">
+            <p>${index + 1}. ${qObj.q}</p>
+            <div class="quiz-options">
+              ${optionsHtml}
+            </div>
+          </div>
+        `;
+      });
+      
+      document.getElementById('quiz-container').innerHTML = html;
+      document.getElementById('quiz-modal').classList.add('active');
+      isQuizActive = true;
+    };
+
+    window.closeQuizModal = () => {
+      if (confirm("Si cierras, tus respuestas se perderán y las preguntas cambiarán. ¿Deseas continuar?")) {
+        document.getElementById('quiz-modal').classList.remove('active');
+        isQuizActive = false;
+      }
+    };
+
+    window.submitQuiz = async () => {
+      if (!currentUser || isClassClosed) return;
+      
+      let correctAnswers = 0;
+      let allAnswered = true;
+
+      selectedQuestions.forEach((qObj, index) => {
+        const radios = document.getElementsByName(`q${index}`);
+        let answered = false;
+        for (let radio of radios) {
+          if (radio.checked) {
+            answered = true;
+            if (parseInt(radio.value) === qObj.ans) correctAnswers++;
+            break;
+          }
+        }
+        if (!answered) allAnswered = false;
+      });
+
+      if (!allAnswered) {
+        alert("Por favor responde todas las preguntas antes de enviar.");
+        return;
+      }
+
+      let score = correctAnswers * 2;
+      isQuizActive = false;
+      
+      document.getElementById('btn-submit-quiz').disabled = true;
+      document.getElementById('btn-submit-quiz').innerHTML = "Guardando...";
+
+      await saveToFirebase({ notaAdicional: score });
+      document.getElementById('quiz-modal').classList.remove('active');
+      
+      document.getElementById('evaluation-area').innerHTML = `
+        <h2 class="section-title">📝 Evaluación de Aprendizaje</h2>
+        <div class="result-summary" style="margin-top: 0; padding: 2rem;">
+          <p style="margin:0; font-weight: bold; color: var(--text-muted);">Nota Final:</p>
+          <h2 style="font-size: 3.5rem; color: var(--primary); margin: 0.5rem 0;">${score}/10</h2>
+          <p style="margin-top: 1rem; font-weight: 600; color: var(--text-muted);">¡Tu evaluación ha sido guardada con éxito!</p>
+        </div>
+      `;
+    };
+
+    function lockClassAsExpired() {
+      isClassClosed = true;
+      document.getElementById('eval-btn-container').innerHTML = `
+        <div class="result-summary" style="border-color: #ef4444; background: #fef2f2; margin: 0;">
+          <h3 style="color: #ef4444; margin: 0;">⏳ Tiempo Agotado para Evaluar (0/10)</h3>
+        </div>
+      `;
+    }
+
+    // INIT
+    onAuthStateChanged(auth, async (user) => {
+      const loadingEl = document.getElementById('loading');
+      if (user) {
+        currentUser = user;
+        const snap = await getDoc(doc(db, 'clases', MATERIA_ID, 'entregas', CLASS_ID));
+        if (snap.exists()) {
+          const docData = snap.data();
+          const now = new Date();
+          const startDate = new Date(docData.inicio);
+          const endDate = new Date(docData.fin);
+
+          if (now < startDate) {
+            alert("Esta clase aún no está disponible.");
+            window.location.href = "../../pages/clases.html";
+            return;
+          }
+
+          let hasEval = false;
+          if (docData.respuestas && docData.respuestas[user.uid]) {
+            const ud = docData.respuestas[user.uid];
+            if (ud.notaAdicional !== undefined) {
+              hasEval = true;
+              document.getElementById('evaluation-area').innerHTML = `
+                <h2 class="section-title">📝 Evaluación de Aprendizaje</h2>
+                <div class="result-summary" style="margin-top: 0; padding: 2rem;">
+                  <p style="margin:0; font-weight: bold; color: var(--text-muted);">Nota Final:</p>
+                  <h2 style="font-size: 3.5rem; color: var(--primary); margin: 0.5rem 0;">${ud.notaAdicional}/10</h2>
+                </div>
+              `;
+            }
+          }
+
+          if (now > endDate && !hasEval) {
+            lockClassAsExpired();
+          }
+        }
+      } else {
+        document.getElementById('evaluation-area').innerHTML = `
+          <div class="result-summary">
+            <h2>Sesión Requerida</h2>
+            <p>Debes iniciar sesión para realizar la evaluación.</p>
+            <a href="../../index.html" class="btn-submit" style="text-decoration:none; display:inline-flex; width:auto;">Ir al Inicio</a>
+          </div>`;
+      }
+      loadingEl.style.display = 'none';
+    });
+  </script>
+</body>
+</html>

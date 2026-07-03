@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+  <title>Common Adjectives & Descriptions | English 8°</title>
+  <link rel="stylesheet" href="../../css/styles.css">
+
+  <style>
+    .back-btn { display: inline-flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem; color: var(--text-muted); font-weight: 500; transition: color 0.2s; }
+    .back-btn:hover { color: var(--primary); text-decoration: none; }
+    .class-header { margin-bottom: 2rem; }
+    .class-title { font-size: 1.5rem; margin-bottom: 0.5rem; color: var(--primary); font-weight: 800; line-height: 1.3;}
+    .class-meta { font-size: 0.95rem; color: var(--text-muted); font-weight: 500;}
+    
+    .section { margin-bottom: 2.5rem; }
+    .section-title { font-size: 1.25rem; font-weight: 800; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; border-bottom: 2px solid var(--border); padding-bottom: 0.5rem; }
+    
+    .section-pre { border-left: 5px solid #ec4899; padding-left: 1rem; } 
+    .section-during { border-left: 5px solid #8b5cf6; padding-left: 1rem; } 
+    .section-eval { border-left: 5px solid #f59e0b; padding-left: 1rem; } 
+
+    .content-box { background: var(--surface); border: 1px solid var(--border); border-radius: 1rem; padding: 1.5rem; margin-bottom: 1.5rem; line-height: 1.8; box-shadow: 0 4px 6px rgba(0,0,0,0.02); }
+    [data-theme="dark"] .content-box { background: #1e293b; border-color: #334155; }
+
+    /* --- HOVER TRANSLATE SYSTEM --- */
+    .hover-translate {
+      position: relative;
+      cursor: help;
+      border-bottom: 2px dotted #10b981;
+      color: inherit;
+      display: inline;
+      transition: color 0.2s;
+    }
+    .hover-translate:hover { color: #059669; }
+    
+    .hover-translate::after {
+      content: attr(data-es);
+      position: absolute;
+      bottom: 100%;
+      left: 50%;
+      transform: translateX(-50%) translateY(-8px);
+      background-color: #0f172a;
+      color: #f8fafc;
+      padding: 0.6rem 1rem;
+      border-radius: 0.5rem;
+      font-size: 0.95rem;
+      font-weight: 600;
+      white-space: normal;
+      width: max-content;
+      max-width: 300px;
+      z-index: 2147483647; 
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.2s, visibility 0.2s;
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+      text-align: center;
+      line-height: 1.4;
+      pointer-events: none;
+    }
+    .hover-translate::before {
+      content: '';
+      position: absolute;
+      bottom: 100%;
+      left: 50%;
+      transform: translateX(-50%) translateY(2px);
+      border-width: 6px;
+      border-style: solid;
+      border-color: #0f172a transparent transparent transparent;
+      z-index: 2147483647;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.2s, visibility 0.2s;
+      pointer-events: none;
+    }
+    .hover-translate:hover::after, .hover-translate:hover::before {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    /* THEORY & TIPS BOXES */
+    .theory-box { background: #f0fdf4; border-left: 4px solid #10b981; padding: 1.25rem; border-radius: 0 0.5rem 0.5rem 0; margin-bottom: 1.5rem; font-size: 1.05rem; }
+    [data-theme="dark"] .theory-box { background: rgba(16, 185, 129, 0.1); }
+    
+    .tip-box { background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 0.5rem; padding: 1rem; display: flex; gap: 1rem; align-items: flex-start; margin-bottom: 1.5rem;}
+    [data-theme="dark"] .tip-box { background: rgba(59, 130, 246, 0.1); border-color: #3b82f6; }
+    .tip-icon { font-size: 2rem; }
+
+    /* INTERACTIVE ELEMENTS */
+    .exercise-list { display: flex; flex-direction: column; gap: 1rem; margin: 0; padding: 0; list-style: none; }
+    .exercise-item { background: var(--surface-hover); padding: 1.25rem; border-radius: 0.75rem; border: 1px solid var(--border); display: flex; flex-direction: column; gap: 0.8rem; font-size: 1.05rem; }
+    [data-theme="dark"] .exercise-item { background: #0f172a; border-color: #334155; }
+    
+    .ex-row { display: flex; align-items: center; gap: 0.8rem; flex-wrap: wrap; }
+    .ex-answer-row { display: flex; align-items: center; gap: 0.8rem; padding-left: 1.5rem; color: var(--text-muted); font-weight: 600; border-left: 3px solid #cbd5e1; margin-left: 0.5rem; }
+    [data-theme="dark"] .ex-answer-row { border-color: #475569; }
+
+    .gap-select, .gap-input { padding: 0.5rem 0.8rem; border-radius: 0.4rem; border: 2px solid var(--border); background: var(--bg); color: var(--text); font-weight: bold; outline: none; font-size: 1rem; width: 100%; max-width: 300px; font-family: inherit;}
+    .gap-input { cursor: text; }
+    .gap-select { cursor: pointer; }
+    .gap-input:focus, .gap-select:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2); }
+    
+    .correct { border-color: #10b981 !important; background: #ecfdf5 !important; color: #064e3b !important; }
+    .incorrect { border-color: #ef4444 !important; background: #fef2f2 !important; color: #7f1d1d !important; }
+    [data-theme="dark"] .correct { background: #064e3b !important; color: #a7f3d0 !important; }
+    [data-theme="dark"] .incorrect { background: #450a0a !important; color: #fecaca !important; }
+
+    /* BOTONES */
+    .btn-submit { display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 0.8rem 2rem; background: linear-gradient(135deg, #10b981, #059669); color: white; border: none; border-radius: 0.75rem; font-weight: 800; font-size: 1rem; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; margin-top: 1rem; }
+    .btn-submit:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(16, 185, 129, 0.4); }
+    .btn-submit:disabled { opacity: 0.5; cursor: not-allowed; filter: grayscale(1); transform: none; box-shadow: none; }
+
+    /* POSTCARD */
+    .postcard { background: #fdf8f5; border: 2px dashed #f472b6; padding: 2rem; border-radius: 1rem; font-family: 'Georgia', serif; font-size: 1.1rem; line-height: 1.8; color: #333; margin-bottom: 2rem; box-shadow: 3px 3px 10px rgba(0,0,0,0.05); }
+    [data-theme="dark"] .postcard { background: #2d1b2e; border-color: #be185d; color: #fce7f3; }
+    .postcard-adjective { font-weight: bold; color: #be185d; background: rgba(244, 114, 182, 0.2); padding: 0 4px; border-radius: 4px; }
+
+    /* MODALS */
+    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(4px); z-index: 10000; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.3s; padding: 1rem; }
+    .modal-overlay.active { opacity: 1; pointer-events: auto; }
+    .modal-content { background: var(--bg); width: 100%; max-width: 700px; max-height: 90vh; border-radius: 1.5rem; padding: 2rem; display: flex; flex-direction: column; position: relative; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); overflow: hidden; box-sizing: border-box; }
+    [data-theme="dark"] .modal-content { background: #0f172a; border: 1px solid #334155; }
+    .btn-close { position: absolute; top: 1.2rem; right: 1.2rem; background: var(--surface-hover); border: none; font-size: 1.5rem; cursor: pointer; color: var(--text-muted); width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; z-index: 10; }
+    
+    .modal-header { flex-shrink: 0; margin-bottom: 1.5rem; padding-right: 3rem; border-bottom: 2px solid var(--border); padding-bottom: 1rem;}
+    .modal-body { overflow-y: auto; flex: 1; padding-right: 0.5rem;}
+    
+    .quiz-question { background: var(--surface-hover); padding: 1.5rem; border-radius: 0.75rem; border: 1px solid var(--border); margin-bottom: 1.5rem; }
+    .quiz-options { display: flex; flex-direction: column; gap: 0.8rem; }
+    .quiz-option { display: flex; align-items: center; gap: 0.8rem; cursor: pointer; padding: 0.8rem; border-radius: 0.5rem; border: 1px solid var(--border); transition: background 0.2s; font-weight: 500; }
+    .quiz-option:hover { background: var(--surface); border-color: var(--primary); }
+    .quiz-option input[type="radio"] { width: 1.2rem; height: 1.2rem; cursor: pointer; accent-color: var(--primary); }
+
+    .result-summary { text-align: center; font-weight: bold; margin-top: 1rem; font-size: 1.1rem; padding: 1rem; border-radius: 0.5rem; }
+    .loading { position: fixed; inset: 0; background: rgba(255,255,255,0.9); display: flex; justify-content: center; align-items: center; z-index: 9999; }
+    [data-theme="dark"] .loading { background: rgba(11,17,32,0.9); }
+
+    /* IMAGE GRID FOR PART II */
+    .picture-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-bottom: 1.5rem; }
+    .picture-card { background: var(--surface-hover); border: 1px solid var(--border); border-radius: 1rem; padding: 1.5rem; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 1rem;}
+    [data-theme="dark"] .picture-card { background: #1e293b; border-color: #334155; }
+    .pic-svg { width: 100px; height: 100px; }
+  </style>
+</head>
+<body>
+  <div id="userbar"></div>
+  <div id="loading" class="loading"><span class="hover-translate" data-es="Cargando...">Loading...</span></div>
+
+  <header class="app-container mt-4">
+    <a href="../../pages/clases.html" class="btn btn-ghost back-btn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><path d="M19 12H5"/><polyline points="12 19 5 12 12 5"/></svg>
+      <span class="hover-translate" data-es="Volver a Clases">Back to Classes</span>
+    </a>
+    <div class="class-header">
+      <h1 class="class-title"><span class="hover-translate" data-es="Adjetivos Comunes y Descripciones">Common Adjectives & Descriptions</span></h1>
+      <p class="class-meta">Unit 2 • Lesson 9 • English 8°</p>
+    </div>
+  </header>
+
+  <main class="app-container">
+
+    <section class="section section-pre">
+      <h2 class="section-title">💡 <span class="hover-translate" data-es="I. Activar: Juego 'Veo, Veo'">I. Activate: "I Spy" Game</span></h2>
+      <div class="content-box">
+        <div class="theory-box">
+          <p><span class="hover-translate" data-es="En inglés, usamos adjetivos para describir sustantivos (personas, lugares, cosas).">In English, we use <strong>adjectives</strong> to describe nouns (people, places, things).</span> <span class="hover-translate" data-es="Podemos usar múltiples adjetivos para hacer descripciones detalladas.">We can use multiple adjectives together to make detailed descriptions.</span></p>
+          <p><em><span class="hover-translate" data-es="Ejemplo:">Example:</span></em> "I spy something <strong style="color:var(--primary);">small</strong>, <strong style="color:var(--primary);">expensive</strong>, <strong style="color:var(--primary);">black</strong>, and <strong style="color:var(--primary);">modern</strong>. What is it?" -> <em>A cell phone.</em></p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-during">
+      <h2 class="section-title">✏️ <span class="hover-translate" data-es="Cuaderno de Trabajo: Práctica">Worksheet: Practice</span></h2>
+      <div class="content-box" style="background: #fdf4ff; border-color: #f5d0fe; text-align: center;">
+        <p style="margin: 0; color: #701a75; font-weight: bold;"><span class="hover-translate" data-es="¡Atención! Estas tres prácticas son requisitos para desbloquear el examen final.">Attention! These three practices are requirements to unlock the final quiz. Make sure you get all answers correct.</span></p>
+      </div>
+      
+      <div class="content-box">
+        <h3 style="color: var(--primary); margin-top: 0;">Part I: Unscramble</h3>
+        <p><span class="hover-translate" data-es="Ordena las letras para formar adjetivos seleccionando la opción correcta.">Unscramble the letters to make adjectives by selecting the correct option.</span> <span class="hover-translate" data-es="Luego, escribe una oración con cada uno en tu cuaderno.">Then, write a sentence using each adjective in your notebook.</span></p>
+        
+        <ul class="exercise-list">
+          <li class="exercise-item">
+            <div class="ex-row">
+              <strong>1.</strong> (gib) 
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              <select class="gap-select" id="p1-1">
+                <option value="">Select adjective...</option>
+                <option value="cheap">cheap</option>
+                <option value="big">big</option>
+                <option value="small">small</option>
+                <option value="expensive">expensive</option>
+                <option value="medium">medium</option>
+              </select>
+            </div>
+          </li>
+          <li class="exercise-item">
+            <div class="ex-row">
+              <strong>2.</strong> (iummed) 
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              <select class="gap-select" id="p1-2">
+                <option value="">Select adjective...</option>
+                <option value="small">small</option>
+                <option value="medium">medium</option>
+                <option value="cheap">cheap</option>
+                <option value="big">big</option>
+                <option value="expensive">expensive</option>
+              </select>
+            </div>
+          </li>
+          <li class="exercise-item">
+            <div class="ex-row">
+              <strong>3.</strong> (malls) 
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              <select class="gap-select" id="p1-3">
+                <option value="">Select adjective...</option>
+                <option value="expensive">expensive</option>
+                <option value="big">big</option>
+                <option value="medium">medium</option>
+                <option value="small">small</option>
+                <option value="cheap">cheap</option>
+              </select>
+            </div>
+          </li>
+          <li class="exercise-item">
+            <div class="ex-row">
+              <strong>4.</strong> (xpeenvise) 
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              <select class="gap-select" id="p1-4">
+                <option value="">Select adjective...</option>
+                <option value="big">big</option>
+                <option value="expensive">expensive</option>
+                <option value="small">small</option>
+                <option value="cheap">cheap</option>
+                <option value="medium">medium</option>
+              </select>
+            </div>
+          </li>
+          <li class="exercise-item">
+            <div class="ex-row">
+              <strong>5.</strong> (chape) 
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              <select class="gap-select" id="p1-5">
+                <option value="">Select adjective...</option>
+                <option value="cheap">cheap</option>
+                <option value="medium">medium</option>
+                <option value="expensive">expensive</option>
+                <option value="small">small</option>
+                <option value="big">big</option>
+              </select>
+            </div>
+          </li>
+        </ul>
+        <div style="text-align: right;">
+          <button class="btn-submit" id="btn-verify-p1" onclick="validatePart1()" style="background: linear-gradient(135deg, #3b82f6, #2563eb);">✅ <span class="hover-translate" data-es="Verificar Parte I">Verify Part I</span></button>
+        </div>
+        <div id="res-p1" class="result-summary"></div>
+      </div>
+
+      <div class="content-box">
+        <h3 style="color: var(--primary); margin-top: 0;">Part II: Describe the Pictures</h3>
+        <p><span class="hover-translate" data-es="Identifica el objeto en la imagen escribiendo su nombre en inglés.">Identify the object in the picture by typing its name in English.</span></p>
+
+        <div class="picture-grid">
+          <div class="picture-card">
+            <svg class="pic-svg" viewBox="0 0 100 100">
+              <circle cx="50" cy="50" r="40" fill="none" stroke="#f472b6" stroke-width="4"/>
+              <circle cx="50" cy="10" r="8" fill="#38bdf8"/>
+              <circle cx="85" cy="30" r="8" fill="#fbbf24"/>
+              <circle cx="85" cy="70" r="8" fill="#f87171"/>
+              <circle cx="50" cy="90" r="8" fill="#a3e635"/>
+              <circle cx="15" cy="70" r="8" fill="#c084fc"/>
+              <circle cx="15" cy="30" r="8" fill="#fb923c"/>
+            </svg>
+            <div style="width: 100%;">
+              <strong>1.</strong> It is a colorful <br>
+              <input type="text" class="gap-input" id="p2-1" autocomplete="off" spellcheck="false" placeholder="Object name..." style="margin-top: 0.5rem; text-align: center;">
+            </div>
+          </div>
+
+          <div class="picture-card">
+            <svg class="pic-svg" viewBox="0 0 100 100">
+              <rect x="25" y="20" width="50" height="70" rx="20" fill="#a78bfa"/>
+              <rect x="35" y="50" width="30" height="30" rx="10" fill="#c4b5fd"/>
+              <path d="M 35 20 Q 50 0 65 20" fill="none" stroke="#8b5cf6" stroke-width="6"/>
+              <path d="M 25 40 L 15 80" stroke="#8b5cf6" stroke-width="8" stroke-linecap="round"/>
+              <path d="M 75 40 L 85 80" stroke="#8b5cf6" stroke-width="8" stroke-linecap="round"/>
+            </svg>
+            <div style="width: 100%;">
+              <strong>2.</strong> I have a big <br>
+              <input type="text" class="gap-input" id="p2-2" autocomplete="off" spellcheck="false" placeholder="Object name..." style="margin-top: 0.5rem; text-align: center;">
+            </div>
+          </div>
+
+          <div class="picture-card">
+            <svg class="pic-svg" viewBox="0 0 100 100">
+              <path d="M 70 30 Q 95 30 90 60 Q 70 80 70 70" fill="none" stroke="#2dd4bf" stroke-width="8"/>
+              <rect x="20" y="20" width="50" height="70" rx="10" fill="#5eead4"/>
+              <ellipse cx="45" cy="20" rx="25" ry="10" fill="#115e59"/>
+              <circle cx="45" cy="60" r="6" fill="#fef08a"/>
+            </svg>
+            <div style="width: 100%;">
+              <strong>3.</strong> This is a small <br>
+              <input type="text" class="gap-input" id="p2-3" autocomplete="off" spellcheck="false" placeholder="Object name..." style="margin-top: 0.5rem; text-align: center;">
+            </div>
+          </div>
+        </div>
+
+        <div style="text-align: right;">
+          <button class="btn-submit" id="btn-verify-p2" onclick="validatePart2()" style="background: linear-gradient(135deg, #3b82f6, #2563eb);">✅ <span class="hover-translate" data-es="Verificar Parte II">Verify Part II</span></button>
+        </div>
+        <div id="res-p2" class="result-summary"></div>
+      </div>
+
+      <div class="content-box">
+        <h3 style="color: var(--primary); margin-top: 0;">Part III: Reading Comprehension</h3>
+        
+        <div class="tip-box">
+          <div class="tip-icon">🔎</div>
+          <div>
+            <strong style="color: #1e3a8a;"><span class="hover-translate" data-es="Consejo de Lectura: Escaneo">Reading Tip: Scanning</span></strong><br>
+            <span class="hover-translate" data-es="Escanear es leer rápidamente para encontrar datos específicos.">Scanning is reading rapidly to find specific facts.</span> 
+            <span class="hover-translate" data-es="Puedes usar esta técnica para completar tareas más fácilmente sin leer cada palabra.">You can use this technique in your lessons to find interesting information or complete a task more easily.</span>
+          </div>
+        </div>
+
+        <p><span class="hover-translate" data-es="Lee la siguiente postal. Los adjetivos están resaltados para ayudarte. Luego responde las preguntas.">Read the postcard below. The adjectives are highlighted to help you. Then answer the questions.</span></p>
+
+        <div class="postcard">
+          Dear Norita,<br><br>
+          Guess what! Today, I continued my trip around El Salvador, and I am in Juayúa. This is a <span class="postcard-adjective">small</span> and <span class="postcard-adjective">beautiful</span> town.<br><br>
+          I love the church. It is not <span class="postcard-adjective">modern</span> but <span class="postcard-adjective">traditional</span>. It is <span class="postcard-adjective">red</span> and <span class="postcard-adjective">big</span>. In the morning, the bell ringing announces the mass.<br><br>
+          I like the <span class="postcard-adjective">local</span> market because you can buy <span class="postcard-adjective">cheap</span> souvenirs and food.<br><br>
+          I know you love food! That is why I want you to come with me to a <span class="postcard-adjective">small</span> restaurant called "Mi comidita". The food is <span class="postcard-adjective">delicious</span>, it is not <span class="postcard-adjective">expensive</span>, and the portions are <span class="postcard-adjective">big</span>.<br><br>
+          The park is <span class="postcard-adjective">traditional</span>. It has <span class="postcard-adjective">big</span> trees and a <span class="postcard-adjective">beautiful</span> fountain in the center. I took a picture of a bird drinking water from the fountain. I will show it to you when I get home.<br><br>
+          Miss you!<br>
+          Fernando.
+        </div>
+
+        <ul class="exercise-list">
+          <li class="exercise-item">
+            <div class="ex-row">
+              <strong>1.</strong> Where is Fernando?
+            </div>
+            <div class="ex-answer-row">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><polyline points="9 10 4 15 9 20"/><path d="M20 4v7a4 4 0 0 1-4 4H4"/></svg>
+              <select class="gap-select" id="p3-1" style="max-width: 400px;">
+                <option value="">Select answer...</option>
+                <option value="wrong">He is in a modern city.</option>
+                <option value="correct">He is in Juayúa, El Salvador.</option>
+                <option value="wrong">He is at home.</option>
+              </select>
+            </div>
+          </li>
+          <li class="exercise-item">
+            <div class="ex-row">
+              <strong>2.</strong> What does Juayúa Church look like?
+            </div>
+            <div class="ex-answer-row">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><polyline points="9 10 4 15 9 20"/><path d="M20 4v7a4 4 0 0 1-4 4H4"/></svg>
+              <select class="gap-select" id="p3-2" style="max-width: 400px;">
+                <option value="">Select answer...</option>
+                <option value="correct">It is traditional, red, and big.</option>
+                <option value="wrong">It is modern, white, and small.</option>
+                <option value="wrong">It is expensive and delicious.</option>
+              </select>
+            </div>
+          </li>
+          <li class="exercise-item">
+            <div class="ex-row">
+              <strong>3.</strong> Are souvenirs and food expensive at the local market?
+            </div>
+            <div class="ex-answer-row">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><polyline points="9 10 4 15 9 20"/><path d="M20 4v7a4 4 0 0 1-4 4H4"/></svg>
+              <select class="gap-select" id="p3-3" style="max-width: 400px;">
+                <option value="">Select answer...</option>
+                <option value="wrong">Yes, they are very expensive.</option>
+                <option value="wrong">Yes, they are traditional.</option>
+                <option value="correct">No, you can buy cheap souvenirs and food.</option>
+              </select>
+            </div>
+          </li>
+          <li class="exercise-item">
+            <div class="ex-row">
+              <strong>4.</strong> What does the park look like?
+            </div>
+            <div class="ex-answer-row">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><polyline points="9 10 4 15 9 20"/><path d="M20 4v7a4 4 0 0 1-4 4H4"/></svg>
+              <select class="gap-select" id="p3-4" style="max-width: 400px;">
+                <option value="">Select answer...</option>
+                <option value="correct">It is traditional with big trees and a beautiful fountain.</option>
+                <option value="wrong">It is modern with small trees.</option>
+                <option value="wrong">It has a local market in the center.</option>
+              </select>
+            </div>
+          </li>
+          <li class="exercise-item">
+            <div class="ex-row">
+              <strong>5.</strong> What is "Mi comidita" restaurant like?
+            </div>
+            <div class="ex-answer-row">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><polyline points="9 10 4 15 9 20"/><path d="M20 4v7a4 4 0 0 1-4 4H4"/></svg>
+              <select class="gap-select" id="p3-5" style="max-width: 400px;">
+                <option value="">Select answer...</option>
+                <option value="correct">It is small, not expensive, and food is delicious.</option>
+                <option value="wrong">It is a big, modern, and expensive restaurant.</option>
+                <option value="wrong">It only sells cheap souvenirs.</option>
+              </select>
+            </div>
+          </li>
+        </ul>
+
+        <div style="text-align: right; margin-top: 2rem;">
+          <button class="btn-submit" id="btn-verify-p3" onclick="validatePart3()" style="background: linear-gradient(135deg, #3b82f6, #2563eb);">
+            ✅ <span class="hover-translate" data-es="Verificar Parte III">Verify Part III</span>
+          </button>
+        </div>
+        <div id="res-p3" class="result-summary"></div>
+      </div>
+    </section>
+
+    <section class="section section-eval" id="evaluation-area">
+      <h2 class="section-title">📝 <span class="hover-translate" data-es="Evaluación Aleatoria (Cuestionario)">Random Evaluation (Quiz)</span></h2>
+      <div class="content-box" style="text-align: center;">
+        <p style="margin-bottom: 1rem; color: var(--text-muted);"><span class="hover-translate" data-es="Demuestra lo que has aprendido. Completa las tres partes de la práctica al 100% para desbloquear este botón.">Show what you have learned. Complete the three parts of the practice to 100% to unlock this button.</span></p>
+        <div id="eval-btn-container">
+            <button class="btn-submit" id="btn-start-quiz" onclick="openQuizModal()" disabled style="margin: 0; background: linear-gradient(135deg, #f59e0b, #d97706); width: auto;"><span class="hover-translate" data-es="🔒 Bloqueado: Completa la práctica">🔒 Locked: Complete Practice</span></button>
+            <p style="font-size: 0.85rem; color: #ef4444; font-weight: bold; margin-top: 1rem;">
+            <span class="hover-translate" data-es="ADVERTENCIA ANTI-TRAMPAS: Al iniciar, no debes cambiar de pestaña ni minimizar tu navegador. Si lo haces, tu intento será penalizado.">⚠️ ANTI-CHEAT WARNING: When starting, you must not change tabs or minimize your browser. If you do, your attempt will be penalized.</span>
+            </p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <div class="modal-overlay" id="quiz-modal">
+    <div class="modal-content">
+      <button class="btn-close" onclick="closeQuizModal()">×</button>
+      
+      <div class="modal-header">
+        <h2 class="modal-title" style="color: var(--primary); margin:0;"><span class="hover-translate" data-es="Cuestionario: Adjetivos">Quiz: Adjectives</span></h2>
+        <p style="color: #ef4444; font-weight: bold; margin: 0.5rem 0 0 0; font-size: 0.9rem;"><span class="hover-translate" data-es="Si cambias de pestaña o minimizas la ventana, tu progreso se perderá.">If you change tabs or minimize the window, your progress will be lost.</span></p>
+      </div>
+
+      <div class="modal-body" id="quiz-container">
+        </div>
+      
+      <div class="modal-footer" style="margin-top: 1.5rem; flex-shrink: 0;">
+        <button class="btn-submit" id="btn-submit-quiz" style="width: 100%; margin: 0; background: linear-gradient(135deg, #8b5cf6, #6d28d9);" onclick="submitQuiz()"><span class="hover-translate" data-es="Enviar Respuestas">Submit Answers</span></button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initUserBar } from '../../js/userbar.js';
+    import { initFirebase } from '../../js/initFirebase.js';
+    import { doc, getDoc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js";
+    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-auth.js";
+    
+    initUserBar('#userbar');
+    const { db, auth } = initFirebase();
+
+    const CLASS_ID = '8ing-u2-l9-c9';
+    const MATERIA_ID = 'ingles'; 
+    let currentUser = null, isClassClosed = false, isQuizActive = false;
+    let selectedQuestions = [];
+
+    // LOCAL STORAGE STATE
+    let localState = {
+      part1Passed: false,
+      part2Passed: false,
+      part3Passed: false
+    };
+
+    function saveLocalState() {
+      localStorage.setItem('8ing_u2_l9_c9_state', JSON.stringify(localState));
+      checkUnlockQuiz();
+    }
+
+    function loadLocalState() {
+      let saved = localStorage.getItem('8ing_u2_l9_c9_state');
+      if(saved) {
+        localState = JSON.parse(saved);
+        if(localState.part1Passed) forcePassPart1();
+        if(localState.part2Passed) forcePassPart2();
+        if(localState.part3Passed) forcePassPart3();
+        checkUnlockQuiz();
+      }
+    }
+
+    function checkUnlockQuiz() {
+      if (localState.part1Passed && localState.part2Passed && localState.part3Passed) {
+        const btn = document.getElementById('btn-start-quiz');
+        if(btn && !isClassClosed) {
+          btn.disabled = false;
+          btn.innerHTML = `<span class="hover-translate" data-es="Comenzar Cuestionario Final">Start Final Quiz</span>`;
+        }
+      }
+    }
+
+    // --- FIREBASE SAVE ---
+    async function saveToFirebase(updates) {
+      if (!currentUser || isClassClosed) return;
+      const docRef = doc(db, 'clases', MATERIA_ID, 'entregas', CLASS_ID);
+      const snap = await getDoc(docRef);
+      const fechaLocal = new Date().toLocaleString('en-GB', { timeZone: 'America/El_Salvador' }).replace(',', '');
+      let existingObj = (snap.exists() && snap.data().respuestas) ? snap.data().respuestas[currentUser.uid] || {} : {};
+
+      existingObj = { ...existingObj, nombre: currentUser.displayName || currentUser.email, email: currentUser.email, fechaLocal, ...updates };
+
+      // Nota de la clase (únicamente el Quiz)
+      existingObj.nota = existingObj.notaAdicional || 0;
+
+      await setDoc(docRef, { grado: 8, año: new Date().getFullYear(), materia: MATERIA_ID, updatedAt: serverTimestamp(), respuestas: { [currentUser.uid]: existingObj } }, { merge: true });
+    }
+
+    // --- PRACTICE LOGIC ---
+    function cleanText(str) { return str.trim().toLowerCase().replace(/[^a-z]/g, ''); }
+
+    // PART 1
+    const ansPart1 = ['big', 'medium', 'small', 'expensive', 'cheap'];
+    window.validatePart1 = () => {
+      let correct = 0;
+      for(let i=1; i<=5; i++) {
+        let el = document.getElementById(`p1-${i}`);
+        if(el.value === ansPart1[i-1]) {
+          correct++; el.classList.add('correct'); el.classList.remove('incorrect');
+        } else {
+          el.classList.add('incorrect'); el.classList.remove('correct');
+        }
+      }
+      if (correct === 5) {
+        forcePassPart1();
+        localState.part1Passed = true;
+        saveLocalState();
+      } else {
+        const res = document.getElementById('res-p1');
+        res.innerHTML = `<span style="color: #ef4444;" class="hover-translate" data-es="Tienes ${correct}/5 correctas. Corrige e intenta de nuevo.">You have ${correct}/5 correct. Fix and try again.</span>`;
+      }
+    };
+    function forcePassPart1() {
+      for(let i=1; i<=5; i++) {
+        let el = document.getElementById(`p1-${i}`);
+        el.value = ansPart1[i-1];
+        el.classList.add('correct'); el.classList.remove('incorrect'); el.disabled = true;
+      }
+      document.getElementById('btn-verify-p1').style.display = 'none';
+      document.getElementById('res-p1').innerHTML = `<span style="color: #059669; font-weight: bold;" class="hover-translate" data-es="¡Parte I Completada!">Part I Completed!</span>`;
+    }
+
+    // PART 2
+    const ansPart2 = ['bracelet', 'backpack', 'cup'];
+    window.validatePart2 = () => {
+      let correct = 0;
+      for(let i=1; i<=3; i++) {
+        let el = document.getElementById(`p2-${i}`);
+        if(cleanText(el.value) === ansPart2[i-1]) {
+          correct++; el.classList.add('correct'); el.classList.remove('incorrect');
+        } else {
+          el.classList.add('incorrect'); el.classList.remove('correct');
+        }
+      }
+      if (correct === 3) {
+        forcePassPart2();
+        localState.part2Passed = true;
+        saveLocalState();
+      } else {
+        const res = document.getElementById('res-p2');
+        res.innerHTML = `<span style="color: #ef4444;" class="hover-translate" data-es="Tienes ${correct}/3 correctas. Corrige e intenta de nuevo.">You have ${correct}/3 correct. Fix and try again.</span>`;
+      }
+    };
+    function forcePassPart2() {
+      for(let i=1; i<=3; i++) {
+        let el = document.getElementById(`p2-${i}`);
+        el.value = ansPart2[i-1];
+        el.classList.add('correct'); el.classList.remove('incorrect'); el.disabled = true;
+      }
+      document.getElementById('btn-verify-p2').style.display = 'none';
+      document.getElementById('res-p2').innerHTML = `<span style="color: #059669; font-weight: bold;" class="hover-translate" data-es="¡Parte II Completada!">Part II Completed!</span>`;
+    }
+
+    // PART 3
+    window.validatePart3 = () => {
+      let correct = 0;
+      for(let i=1; i<=5; i++) {
+        let el = document.getElementById(`p3-${i}`);
+        if(el.value === 'correct') {
+          correct++; el.classList.add('correct'); el.classList.remove('incorrect');
+        } else {
+          el.classList.add('incorrect'); el.classList.remove('correct');
+        }
+      }
+      if (correct === 5) {
+        forcePassPart3();
+        localState.part3Passed = true;
+        saveLocalState();
+      } else {
+        const res = document.getElementById('res-p3');
+        res.innerHTML = `<span style="color: #ef4444;" class="hover-translate" data-es="Tienes ${correct}/5 correctas. Corrige e intenta de nuevo.">You have ${correct}/5 correct. Fix and try again.</span>`;
+      }
+    };
+    function forcePassPart3() {
+      for(let i=1; i<=5; i++) {
+        let el = document.getElementById(`p3-${i}`);
+        el.value = 'correct';
+        el.classList.add('correct'); el.classList.remove('incorrect'); el.disabled = true;
+      }
+      document.getElementById('btn-verify-p3').style.display = 'none';
+      document.getElementById('res-p3').innerHTML = `<span style="color: #059669; font-weight: bold;" class="hover-translate" data-es="¡Parte III Completada!">Part III Completed!</span>`;
+    }
+
+    // --- QUIZ LOGIC ---
+    const quizBank = [
+      { q: "<span class='hover-translate' data-es='¿Cuál es el opuesto de \"expensive\"?'>What is the opposite of \"expensive\"?</span>", options: ["cheap", "big", "modern"], ans: 0 },
+      { q: "<span class='hover-translate' data-es='¿Qué técnica de lectura implica leer rápidamente para encontrar datos específicos?'>What reading technique involves reading rapidly to find specific facts?</span>", options: ["Speaking", "Scanning", "Listening"], ans: 1 },
+      { q: "<span class='hover-translate' data-es='Identifica el adjetivo en: \"I have a modern phone.\"'>Identify the adjective in: \"I have a modern phone.\"</span>", options: ["phone", "have", "modern"], ans: 2 },
+      { q: "<span class='hover-translate' data-es='¿Cuál de estos NO es un adjetivo?'>Which of these is NOT an adjective?</span>", options: ["Market", "Beautiful", "Small"], ans: 0 },
+      { q: "<span class='hover-translate' data-es='Si un pueblo es \"beautiful\", es...'>If a town is \"beautiful,\" it is...</span>", options: ["ugly", "pretty / nice", "bad"], ans: 1 },
+      { q: "<span class='hover-translate' data-es='¿Cuál es el opuesto de \"modern\"?'>What is the opposite of \"modern\"?</span>", options: ["traditional", "delicious", "small"], ans: 0 },
+      { q: "<span class='hover-translate' data-es='Si la comida es \"delicious\", sabe...'>If food is \"delicious,\" it tastes...</span>", options: ["very bad", "very good", "expensive"], ans: 1 },
+      { q: "<span class='hover-translate' data-es='Identifica los adjetivos en: \"The small red bird.\"'>Identify the adjectives in: \"The small red bird.\"</span>", options: ["The, bird", "small, bird", "small, red"], ans: 2 },
+      { q: "<span class='hover-translate' data-es='¿Para qué se usan los adjetivos en inglés?'>What are adjectives used for in English?</span>", options: ["To describe verbs", "To describe nouns", "To replace nouns"], ans: 1 },
+      { q: "<span class='hover-translate' data-es='Ordena las letras para formar un adjetivo: M I U E M D'>Unscramble the letters to make an adjective: M I U E M D</span>", options: ["Medium", "Modern", "Market"], ans: 0 }
+    ];
+
+    function applyCheatPenalty() {
+      if (isQuizActive) {
+        isQuizActive = false;
+        document.getElementById('quiz-modal').classList.remove('active');
+        sessionStorage.setItem('cheat_penalty', 'true'); 
+        window.location.reload(); 
+      }
+    }
+
+    document.addEventListener("visibilitychange", () => { if (document.hidden) applyCheatPenalty(); });
+    window.addEventListener("blur", applyCheatPenalty);
+    
+    window.addEventListener('load', () => {
+      if (sessionStorage.getItem('cheat_penalty') === 'true') {
+        sessionStorage.removeItem('cheat_penalty');
+        setTimeout(() => { alert("⚠️ ANTI-CHEAT PENALTY ⚠️\n\nThe system detected a window change or focus loss. Your quiz was restarted."); }, 500);
+      }
+      loadLocalState(); // Reload the practice state
+    });
+
+    window.openQuizModal = () => {
+      if (isClassClosed) return;
+      
+      // Select 5 random questions
+      selectedQuestions = quizBank.sort(() => 0.5 - Math.random()).slice(0, 5);
+      
+      let html = '';
+      selectedQuestions.forEach((qObj, index) => {
+        let optionsHtml = '';
+        qObj.options.forEach((opt, optIndex) => {
+          optionsHtml += `
+            <label class="quiz-option">
+              <input type="radio" name="q${index}" value="${optIndex}">
+              ${opt}
+            </label>
+          `;
+        });
+        
+        html += `
+          <div class="quiz-question">
+            <p>${index + 1}. ${qObj.q}</p>
+            <div class="quiz-options">
+              ${optionsHtml}
+            </div>
+          </div>
+        `;
+      });
+      
+      document.getElementById('quiz-container').innerHTML = html;
+      document.getElementById('quiz-modal').classList.add('active');
+      isQuizActive = true;
+    };
+
+    window.closeQuizModal = () => {
+      if (confirm("If you close this, your answers will be lost. Continue?")) {
+        document.getElementById('quiz-modal').classList.remove('active');
+        isQuizActive = false;
+      }
+    };
+
+    window.submitQuiz = async () => {
+      isQuizActive = false; // Disable anti-cheat while saving
+      
+      let correctAnswers = 0;
+      let allAnswered = true;
+
+      selectedQuestions.forEach((qObj, index) => {
+        const radios = document.getElementsByName(`q${index}`);
+        let answered = false;
+        for (let radio of radios) {
+          if (radio.checked) {
+            answered = true;
+            if (parseInt(radio.value) === qObj.ans) correctAnswers++;
+            break;
+          }
+        }
+        if (!answered) allAnswered = false;
+      });
+
+      if (!allAnswered) {
+        alert("Please answer all questions before submitting.");
+        isQuizActive = true; // Reactivate anti-cheat
+        return;
+      }
+
+      // 5 questions, 2 pts each = 10 pts
+      let qScore = correctAnswers * 2; 
+      
+      document.getElementById('btn-submit-quiz').disabled = true;
+      document.getElementById('btn-submit-quiz').innerHTML = "Saving...";
+      
+      await saveToFirebase({ notaAdicional: qScore });
+
+      // Clean local storage since it's fully done
+      localStorage.removeItem('8ing_u2_l9_c9_state');
+      
+      document.getElementById('quiz-modal').classList.remove('active');
+      showQuizResult(qScore);
+    };
+
+    function showQuizResult(score) {
+      document.getElementById('evaluation-area').innerHTML = `
+        <h2 class="section-title">📝 <span class="hover-translate" data-es="Evaluación Final">Final Evaluation</span></h2>
+        <div class="result-summary" style="margin-top: 0; padding: 2rem;">
+          <p style="margin:0; font-weight: bold; color: var(--text-muted);"><span class="hover-translate" data-es="Puntaje:">Quiz Score:</span></p>
+          <h2 style="font-size: 3.5rem; color: var(--primary); margin: 0.5rem 0;">${score}/10</h2>
+          <p style="margin-top: 1rem; font-weight: 600; color: var(--text-muted);"><span class="hover-translate" data-es="¡Evaluación guardada con éxito!">Evaluation saved successfully!</span></p>
+        </div>
+      `;
+    }
+
+    function lockClassAsExpired() {
+      isClassClosed = true;
+      document.getElementById('eval-btn-container').innerHTML = `
+        <div class="result-summary" style="border-color: #ef4444; background: #fef2f2; padding: 1.5rem; margin: 0;">
+          <h3 style="color: #ef4444; margin: 0;"><span class="hover-translate" data-es="Tiempo Agotado para Evaluar">Time Expired</span></h3>
+        </div>
+      `;
+      let b1 = document.getElementById('btn-verify-p1'); if(b1) b1.disabled = true;
+      let b2 = document.getElementById('btn-verify-p2'); if(b2) b2.disabled = true;
+      let b3 = document.getElementById('btn-verify-p3'); if(b3) b3.disabled = true;
+    }
+
+    // INIT
+    onAuthStateChanged(auth, async (user) => {
+      const loadingEl = document.getElementById('loading');
+      if (user) {
+        currentUser = user;
+        const snap = await getDoc(doc(db, 'clases', MATERIA_ID, 'entregas', CLASS_ID));
+        
+        if (!snap.exists()) {
+          alert("The class has not been configured in the database.");
+          window.location.href = "../../pages/clases.html";
+          return;
+        }
+
+        const docData = snap.data();
+        const now = new Date();
+        const startDate = new Date(docData.inicio);
+        const endDate = new Date(docData.fin);
+
+        if (now < startDate) {
+          alert("This class is not available yet.");
+          window.location.href = "../../pages/clases.html";
+          return;
+        }
+
+        let hasEval = false;
+        if (docData.respuestas && docData.respuestas[user.uid]) {
+          const userData = docData.respuestas[user.uid];
+          
+          if (userData.notaAdicional !== undefined) {
+             showQuizResult(userData.notaAdicional);
+             forcePassPart1(); // Visual completion
+             forcePassPart2(); // Visual completion
+             forcePassPart3(); // Visual completion
+             hasEval = true;
+          }
+        } 
+        
+        if (now > endDate && !hasEval) {
+           lockClassAsExpired();
+        }
+
+      } else {
+        document.getElementById('evaluation-area').innerHTML = `
+          <div class="result-summary">
+            <h2><span class="hover-translate" data-es="Sesión Requerida">Login Required</span></h2>
+            <p><span class="hover-translate" data-es="Debes iniciar sesión para guardar tu avance.">You must log in to save your progress.</span></p>
+            <a href="../../index.html" class="btn-submit" style="text-decoration:none; display:inline-flex; width:auto;"><span class="hover-translate" data-es="Ir al Inicio">Go to Home</span></a>
+          </div>`;
+      }
+      loadingEl.style.display = 'none';
+    });
+  </script>
+</body>
+</html>

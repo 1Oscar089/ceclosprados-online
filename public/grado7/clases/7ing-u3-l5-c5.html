@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+  <title>Practice & Listening | English 7°</title>
+  <link rel="stylesheet" href="../../css/styles.css">
+
+  <style>
+    .back-btn { display: inline-flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem; color: var(--text-muted); font-weight: 500; transition: color 0.2s; }
+    .back-btn:hover { color: var(--primary); text-decoration: none; }
+    .class-header { margin-bottom: 2rem; }
+    .class-title { font-size: 1.5rem; margin-bottom: 0.5rem; color: var(--primary); font-weight: 800; line-height: 1.3;}
+    .class-meta { font-size: 0.95rem; color: var(--text-muted); font-weight: 500;}
+    
+    .section { margin-bottom: 2.5rem; }
+    .section-title { font-size: 1.25rem; font-weight: 800; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; border-bottom: 2px solid var(--border); padding-bottom: 0.5rem; }
+    
+    .section-pre { border-left: 5px solid #ec4899; padding-left: 1rem; } 
+    .section-during { border-left: 5px solid #8b5cf6; padding-left: 1rem; } 
+    .section-post { border-left: 5px solid #0ea5e9; padding-left: 1rem; } 
+    .section-eval { border-left: 5px solid #f59e0b; padding-left: 1rem; } 
+
+    .content-box { background: var(--surface); border: 1px solid var(--border); border-radius: 1rem; padding: 1.5rem; margin-bottom: 1.5rem; line-height: 1.8; box-shadow: 0 4px 6px rgba(0,0,0,0.02); }
+    [data-theme="dark"] .content-box { background: #1e293b; border-color: #334155; }
+
+    /* --- HOVER TRANSLATE SYSTEM (ALWAYS ON TOP) --- */
+    .hover-translate {
+      position: relative;
+      cursor: help;
+      border-bottom: 2px dotted #10b981;
+      color: inherit;
+      display: inline;
+      transition: color 0.2s;
+    }
+    .hover-translate:hover { color: #059669; }
+    
+    .hover-translate::after {
+      content: attr(data-es);
+      position: absolute;
+      bottom: 100%;
+      left: 50%;
+      transform: translateX(-50%) translateY(-8px);
+      background-color: #0f172a;
+      color: #f8fafc;
+      padding: 0.6rem 1rem;
+      border-radius: 0.5rem;
+      font-size: 0.95rem;
+      font-weight: 600;
+      white-space: normal;
+      width: max-content;
+      max-width: 300px;
+      z-index: 2147483647; 
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.2s, visibility 0.2s;
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+      text-align: center;
+      line-height: 1.4;
+      pointer-events: none;
+    }
+    .hover-translate::before {
+      content: '';
+      position: absolute;
+      bottom: 100%;
+      left: 50%;
+      transform: translateX(-50%) translateY(2px);
+      border-width: 6px;
+      border-style: solid;
+      border-color: #0f172a transparent transparent transparent;
+      z-index: 2147483647;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.2s, visibility 0.2s;
+      pointer-events: none;
+    }
+    .hover-translate:hover::after, .hover-translate:hover::before {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    /* NOTEBOOK & THEORY BOXES */
+    .notebook-box { background: #fffbeb; border: 1px solid #fde68a; border-radius: 0.5rem; padding: 1rem; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 1rem; font-weight: 600; color: #b45309; }
+    [data-theme="dark"] .notebook-box { background: rgba(245, 158, 11, 0.1); border-color: rgba(245, 158, 11, 0.3); color: #fcd34d; }
+    .notebook-icon { font-size: 1.5rem; }
+
+    .theory-box { background: #f0fdf4; border-left: 4px solid #10b981; padding: 1.25rem; border-radius: 0 0.5rem 0.5rem 0; margin-bottom: 1.5rem; font-size: 1.05rem; }
+    [data-theme="dark"] .theory-box { background: rgba(16, 185, 129, 0.1); }
+    
+    /* INTERACTIVE ELEMENTS */
+    .exercise-list { display: flex; flex-direction: column; gap: 0.8rem; margin: 0; padding: 0; list-style: none; }
+    .exercise-item { background: var(--surface-hover); padding: 1rem; border-radius: 0.5rem; border: 1px solid var(--border); display: flex; align-items: center; gap: 0.8rem; font-size: 1.05rem; flex-wrap: wrap; }
+    [data-theme="dark"] .exercise-item { background: #0f172a; border-color: #334155; }
+    
+    .gap-select, .gap-input { padding: 0.4rem 0.6rem; border-radius: 0.4rem; border: 2px solid var(--primary); background: var(--bg); color: var(--text); font-weight: bold; cursor: pointer; outline: none; font-size: 1rem; }
+    .gap-input { width: 140px; text-align: center; text-transform: lowercase; cursor: text; }
+    .correct { border-color: #10b981 !important; background: #ecfdf5 !important; color: #064e3b !important; }
+    .incorrect { border-color: #ef4444 !important; background: #fef2f2 !important; color: #7f1d1d !important; }
+    [data-theme="dark"] .correct { background: #064e3b !important; color: #a7f3d0 !important; }
+    [data-theme="dark"] .incorrect { background: #450a0a !important; color: #fecaca !important; }
+
+    .jumbled-word { font-family: monospace; font-size: 1.2rem; font-weight: bold; color: #db2777; background: #fce7f3; padding: 0.3rem 0.6rem; border-radius: 0.3rem; letter-spacing: 2px; }
+    [data-theme="dark"] .jumbled-word { background: rgba(219, 39, 119, 0.2); color: #f9a8d4; }
+
+    .audio-player-container { background: var(--surface-hover); padding: 1rem; border-radius: 0.75rem; border: 1px solid var(--border); text-align: center; margin-bottom: 1.5rem; }
+    audio { width: 100%; max-width: 400px; outline: none; }
+
+    .matching-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; align-items: center; }
+    .match-col { display: flex; flex-direction: column; gap: 0.5rem; }
+    .match-option { background: var(--surface); border: 1px solid var(--border); padding: 0.8rem; border-radius: 0.5rem; font-weight: 500; text-align: center; }
+    @media (max-width: 600px) { .matching-grid { grid-template-columns: 1fr; } }
+
+    /* AUDIO BUTTON */
+    .btn-audio { display: inline-flex; align-items: center; gap: 0.4rem; background: #3b82f6; color: white; border: none; padding: 0.5rem 1rem; border-radius: 0.5rem; font-weight: bold; cursor: pointer; transition: background 0.2s; }
+    .btn-audio:hover { background: #2563eb; }
+    .btn-audio:disabled { background: #94a3b8; cursor: not-allowed; }
+
+    /* BOTONES SUBMIT */
+    .btn-submit { display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 0.8rem 2rem; background: linear-gradient(135deg, #10b981, #059669); color: white; border: none; border-radius: 0.75rem; font-weight: 800; font-size: 1rem; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; margin-top: 1rem; }
+    .btn-submit:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(16, 185, 129, 0.4); }
+    .btn-submit:disabled { opacity: 0.5; cursor: not-allowed; filter: grayscale(1); transform: none; box-shadow: none; }
+
+    /* QUIZ MODAL */
+    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(4px); z-index: 10000; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.3s; padding: 1rem; }
+    .modal-overlay.active { opacity: 1; pointer-events: auto; }
+    .modal-content { background: var(--bg); width: 100%; max-width: 700px; max-height: 90vh; border-radius: 1.5rem; padding: 2rem; display: flex; flex-direction: column; position: relative; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); overflow: hidden; box-sizing: border-box; }
+    [data-theme="dark"] .modal-content { background: #0f172a; border: 1px solid #334155; }
+    .btn-close { position: absolute; top: 1.2rem; right: 1.2rem; background: var(--surface-hover); border: none; font-size: 1.5rem; cursor: pointer; color: var(--text-muted); width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; z-index: 10; }
+    
+    .modal-header { flex-shrink: 0; margin-bottom: 1.5rem; padding-right: 3rem; border-bottom: 2px solid var(--border); padding-bottom: 1rem;}
+    .modal-body { overflow-y: auto; flex: 1; padding-right: 0.5rem;}
+    
+    .quiz-question { background: var(--surface-hover); padding: 1.5rem; border-radius: 0.75rem; border: 1px solid var(--border); margin-bottom: 1.5rem; }
+    .quiz-options { display: flex; flex-direction: column; gap: 0.8rem; }
+    .quiz-option { display: flex; align-items: center; gap: 0.8rem; cursor: pointer; padding: 0.8rem; border-radius: 0.5rem; border: 1px solid var(--border); transition: background 0.2s; font-weight: 500; }
+    .quiz-option:hover { background: var(--surface); border-color: var(--primary); }
+    .quiz-option input[type="radio"] { width: 1.2rem; height: 1.2rem; cursor: pointer; accent-color: var(--primary); }
+
+    .result-summary { text-align: right; font-weight: bold; margin-top: 1rem; font-size: 1.1rem; }
+    .loading { position: fixed; inset: 0; background: rgba(255,255,255,0.9); display: flex; justify-content: center; align-items: center; z-index: 9999; }
+    [data-theme="dark"] .loading { background: rgba(11,17,32,0.9); }
+  </style>
+</head>
+<body>
+  <div id="userbar"></div>
+  <div id="loading" class="loading"><span class="hover-translate" data-es="Cargando...">Loading...</span></div>
+
+  <header class="app-container mt-4">
+    <a href="../../pages/clases.html" class="btn btn-ghost back-btn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><path d="M19 12H5"/><polyline points="12 19 5 12 12 5"/></svg>
+      <span class="hover-translate" data-es="Volver a Clases">Back to Classes</span>
+    </a>
+    <div class="class-header">
+      <h1 class="class-title"><span class="hover-translate" data-es="Práctica y Escucha de Vocabulario">Practice & Listening</span></h1>
+      <p class="class-meta">Unit 3 • Lesson 5 • English 7°</p>
+    </div>
+  </header>
+
+  <main class="app-container">
+
+    <section class="section section-pre">
+      <h2 class="section-title">⏱️ <span class="hover-translate" data-es="I. Activar: Juego de Ortografía">I. Activate: ABC Caps Game</span></h2>
+      <div class="content-box">
+        
+        <div class="notebook-box">
+          <div class="notebook-icon">📓</div>
+          <div>
+            <strong class="hover-translate" data-es="Instrucción para el cuaderno:">Notebook Instruction:</strong> 
+            <span class="hover-translate" data-es="Copia la teoría de abajo tanto en inglés como su traducción al español.">Copy the theory below in both English and its Spanish translation.</span> 
+            <span class="hover-translate" data-es="Al finalizar el ejercicio interactivo, copia las palabras correctas en tu cuaderno.">When finishing the interactive exercise, copy the correct words into your notebook.</span>
+          </div>
+        </div>
+
+        <div class="theory-box">
+          <span class="hover-translate" data-es="La ortografía es la forma correcta de escribir una palabra letra por letra.">Spelling is the correct way to write a word letter by letter.</span><br><br>
+          <span class="hover-translate" data-es="Es muy importante en inglés porque muchas palabras no se escriben como suenan.">It is very important in English because many words are not spelled the way they sound.</span> 
+          <span class="hover-translate" data-es="En este ejercicio, debes ordenar las letras revueltas para formar miembros de la familia.">In this exercise, you must unscramble the mixed letters to form family members.</span>
+        </div>
+
+        <p><span class="hover-translate" data-es="Ordena las letras para escribir el miembro de la familia correcto.">Unscramble the letters to write the correct family member.</span></p>
+        
+        <ul class="exercise-list">
+          <li class="exercise-item">
+            1. <span class="jumbled-word">U-N-C-E-L</span> 
+            <span class="hover-translate" data-es="Respuesta:">Answer:</span> <input type="text" class="gap-input" id="pre-1" autocomplete="off" spellcheck="false">
+          </li>
+          <li class="exercise-item">
+            2. <span class="jumbled-word">A-U-T-N</span> 
+            <span class="hover-translate" data-es="Respuesta:">Answer:</span> <input type="text" class="gap-input" id="pre-2" autocomplete="off" spellcheck="false">
+          </li>
+          <li class="exercise-item">
+            3. <span class="jumbled-word">C-O-S-U-I-N</span> 
+            <span class="hover-translate" data-es="Respuesta:">Answer:</span> <input type="text" class="gap-input" id="pre-3" autocomplete="off" spellcheck="false">
+          </li>
+          <li class="exercise-item">
+            4. <span class="jumbled-word">N-I-C-E-E</span> 
+            <span class="hover-translate" data-es="Respuesta:">Answer:</span> <input type="text" class="gap-input" id="pre-4" autocomplete="off" spellcheck="false">
+          </li>
+          <li class="exercise-item">
+            5. <span class="jumbled-word">N-E-P-H-W-E</span> 
+            <span class="hover-translate" data-es="Respuesta:">Answer:</span> <input type="text" class="gap-input" id="pre-5" autocomplete="off" spellcheck="false">
+          </li>
+        </ul>
+        <div style="text-align: right;">
+          <button class="btn-submit" id="btn-submit-pre" onclick="validatePre()">✅ <span class="hover-translate" data-es="Verificar Parte I">Verify Part I</span></button>
+        </div>
+        <div id="res-pre" class="result-summary"></div>
+      </div>
+    </section>
+
+    <section class="section section-during">
+      <h2 class="section-title">🎧 <span class="hover-translate" data-es="II. Durante: La Familia de Luisa (Práctica Auditiva)">II. During: Luisa's Family (Listening Practice)</span></h2>
+      <div class="content-box">
+        
+        <div class="notebook-box">
+          <div class="notebook-icon">📓</div>
+          <div>
+            <strong class="hover-translate" data-es="Instrucción para el cuaderno:">Notebook Instruction:</strong> 
+            <span class="hover-translate" data-es="Copia la teoría en inglés y español.">Copy the theory in English and Spanish.</span> 
+            <span class="hover-translate" data-es="Luego, copia el ejercicio de emparejamiento resuelto en tu cuaderno.">Then, copy the solved matching exercise in your notebook.</span>
+          </div>
+        </div>
+
+        <div class="theory-box">
+          <span class="hover-translate" data-es="¡Ten en cuenta! En inglés, a menudo usamos palabras más cortas y cariñosas para la familia cercana.">Keep in mind! In English, we often use shorter, affectionate words for close family.</span><br><br>
+          <span class="hover-translate" data-es="Por ejemplo, las palabras entre paréntesis tienen el mismo significado:">For example, the words in parentheses have the same meaning:</span><br>
+          <ul>
+            <li><span class="hover-translate" data-es="Madre = mamá"><strong>mother</strong> = <em>mom</em></span></li>
+            <li><span class="hover-translate" data-es="Padre = papá"><strong>father</strong> = <em>dad</em></span></li>
+            <li><span class="hover-translate" data-es="Abuela = abuelita"><strong>grandmother</strong> = <em>grandma</em></span></li>
+            <li><span class="hover-translate" data-es="Abuelo = abuelito"><strong>grandfather</strong> = <em>grandpa</em></span></li>
+          </ul>
+        </div>
+        
+        <p><span class="hover-translate" data-es="Escucha el audio e identifica los nombres de los miembros de la familia de Luisa.">Listen to the audio and identify the names of Luisa's family members.</span></p>
+
+        <div class="audio-player-container">
+          <audio controls>
+            <source src="../audios/UNIDAD3OPCIONB.mp3" type="audio/mpeg">
+            <span class="hover-translate" data-es="Tu navegador no soporta el elemento de audio.">Your browser does not support the audio element.</span>
+          </audio>
+        </div>
+
+        <p style="font-weight: bold; color: var(--primary);"><span class="hover-translate" data-es="Escucha y empareja los miembros de la familia con sus nombres.">Listen and match the family members with their names.</span></p>
+        
+        <div class="matching-grid">
+          <div class="match-col">
+            <div class="exercise-item">1. mother (mom) 
+              <select class="gap-select" id="dur-1" style="margin-left: auto;">
+                <option value="">---</option><option value="a">a. Sam</option><option value="b">b. Tom</option><option value="c">c. Hannah</option><option value="d">d. Helen</option><option value="e">e. Emma</option><option value="f">f. Max</option><option value="g">g. William</option>
+              </select>
+            </div>
+            <div class="exercise-item">2. father (dad) 
+              <select class="gap-select" id="dur-2" style="margin-left: auto;">
+                <option value="">---</option><option value="a">a. Sam</option><option value="b">b. Tom</option><option value="c">c. Hannah</option><option value="d">d. Helen</option><option value="e">e. Emma</option><option value="f">f. Max</option><option value="g">g. William</option>
+              </select>
+            </div>
+            <div class="exercise-item">3. brother 
+              <select class="gap-select" id="dur-3" style="margin-left: auto;">
+                <option value="">---</option><option value="a">a. Sam</option><option value="b">b. Tom</option><option value="c">c. Hannah</option><option value="d">d. Helen</option><option value="e">e. Emma</option><option value="f">f. Max</option><option value="g">g. William</option>
+              </select>
+            </div>
+            <div class="exercise-item">4. sister 
+              <select class="gap-select" id="dur-4" style="margin-left: auto;">
+                <option value="">---</option><option value="a">a. Sam</option><option value="b">b. Tom</option><option value="c">c. Hannah</option><option value="d">d. Helen</option><option value="e">e. Emma</option><option value="f">f. Max</option><option value="g">g. William</option>
+              </select>
+            </div>
+            <div class="exercise-item">5. grandmother (grandma) 
+              <select class="gap-select" id="dur-5" style="margin-left: auto;">
+                <option value="">---</option><option value="a">a. Sam</option><option value="b">b. Tom</option><option value="c">c. Hannah</option><option value="d">d. Helen</option><option value="e">e. Emma</option><option value="f">f. Max</option><option value="g">g. William</option>
+              </select>
+            </div>
+            <div class="exercise-item">6. grandfather (grandpa) 
+              <select class="gap-select" id="dur-6" style="margin-left: auto;">
+                <option value="">---</option><option value="a">a. Sam</option><option value="b">b. Tom</option><option value="c">c. Hannah</option><option value="d">d. Helen</option><option value="e">e. Emma</option><option value="f">f. Max</option><option value="g">g. William</option>
+              </select>
+            </div>
+            <div class="exercise-item">7. dog 
+              <select class="gap-select" id="dur-7" style="margin-left: auto;">
+                <option value="">---</option><option value="a">a. Sam</option><option value="b">b. Tom</option><option value="c">c. Hannah</option><option value="d">d. Helen</option><option value="e">e. Emma</option><option value="f">f. Max</option><option value="g">g. William</option>
+              </select>
+            </div>
+          </div>
+          <div class="match-col">
+            <div class="match-option">a. Sam</div>
+            <div class="match-option">b. Tom</div>
+            <div class="match-option">c. Hannah</div>
+            <div class="match-option">d. Helen</div>
+            <div class="match-option">e. Emma</div>
+            <div class="match-option">f. Max</div>
+            <div class="match-option">g. William</div>
+          </div>
+        </div>
+
+        <div style="text-align: right;">
+          <button class="btn-submit" id="btn-submit-dur" onclick="validateDuring()" style="background: linear-gradient(135deg, #8b5cf6, #6d28d9);">✅ <span class="hover-translate" data-es="Verificar Parte II">Verify Part II</span></button>
+        </div>
+        <div id="res-dur" class="result-summary"></div>
+      </div>
+    </section>
+
+    <section class="section section-post">
+      <h2 class="section-title">👨‍👩‍👦 <span class="hover-translate" data-es="III. Post: Otros Miembros de la Familia">III. Post: Other Family Members</span></h2>
+      <div class="content-box">
+        
+        <div class="notebook-box">
+          <div class="notebook-icon">📓</div>
+          <div>
+            <strong class="hover-translate" data-es="Instrucción para el cuaderno:">Notebook Instruction:</strong> 
+            <span class="hover-translate" data-es="Copia la teoría en inglés y español.">Copy the theory in English and Spanish.</span> 
+            <span class="hover-translate" data-es="Al resolver el ejercicio, copia las 4 oraciones de vocabulario en tu cuaderno.">When solving the exercise, copy the 4 vocabulary sentences in your notebook.</span>
+          </div>
+        </div>
+
+        <div class="theory-box">
+          <span class="hover-translate" data-es="Algunas familias tienen miembros no biológicos.">Some families have some non-biological family members.</span><br><br>
+          <span class="hover-translate" data-es="Por ejemplo, si el esposo de tu madre no es tu padre biológico, él es tu padrastro (stepfather).">For example, if your mother's husband is not your biological father, he is your <strong>stepfather</strong>.</span> 
+          <span class="hover-translate" data-es="La esposa de tu padre es tu madrastra (stepmother).">The wife of your father is your <strong>stepmother</strong>.</span> 
+          <span class="hover-translate" data-es="Los hijos de ellos de relaciones anteriores son hijastros/hijastras (stepson / stepdaughter).">Their children from previous relationships are <strong>stepson</strong> or <strong>stepdaughter</strong>.</span>
+        </div>
+
+        <p><span class="hover-translate" data-es="Lee la definición y escribe el miembro de la familia correcto.">Read the definition and write the correct family member.</span></p>
+
+        <ul class="exercise-list">
+          <li class="exercise-item">
+            1. <span class="hover-translate" data-es="La esposa de tu padre (no biológica) es tu...">The wife of your father (not biological) is your...</span> 
+            <input type="text" class="gap-input" id="pos-1" autocomplete="off" spellcheck="false">
+          </li>
+          <li class="exercise-item">
+            2. <span class="hover-translate" data-es="El esposo de tu madre (no biológico) es tu...">The husband of your mother (not biological) is your...</span> 
+            <input type="text" class="gap-input" id="pos-2" autocomplete="off" spellcheck="false">
+          </li>
+          <li class="exercise-item">
+            3. <span class="hover-translate" data-es="El hijo de tu esposo/esposa es tu...">The son of your husband/wife is your...</span> 
+            <input type="text" class="gap-input" id="pos-3" autocomplete="off" spellcheck="false">
+          </li>
+          <li class="exercise-item">
+            4. <span class="hover-translate" data-es="La hija de tu esposo/esposa es tu...">The daughter of your husband/wife is your...</span> 
+            <input type="text" class="gap-input" id="pos-4" autocomplete="off" spellcheck="false">
+          </li>
+        </ul>
+        <div style="text-align: right;">
+          <button class="btn-submit" id="btn-submit-pos" onclick="validatePost()" style="background: linear-gradient(135deg, #3b82f6, #2563eb);">✅ <span class="hover-translate" data-es="Verificar Parte III">Verify Part III</span></button>
+        </div>
+        <div id="res-pos" class="result-summary"></div>
+      </div>
+    </section>
+
+    <section class="section section-eval" id="evaluation-area">
+      <h2 class="section-title">📝 <span class="hover-translate" data-es="Evaluación Aleatoria (Cuestionario)">Random Evaluation (Quiz)</span></h2>
+      <div class="content-box" style="text-align: center;">
+        <p style="margin-bottom: 1rem; color: var(--text-muted);"><span class="hover-translate" data-es="Demuestra lo que has aprendido. Esta sección sí se guardará y enviará a tu profesor.">Show what you have learned. This section will be saved and sent to your teacher.</span></p>
+        <div id="eval-btn-container">
+            <button class="btn-submit" onclick="openQuizModal()" style="margin: 0; background: linear-gradient(135deg, #f59e0b, #d97706); width: auto;"><span class="hover-translate" data-es="Comenzar Evaluación (5 Preguntas)">Start Evaluation (5 Questions)</span></button>
+            <p style="font-size: 0.85rem; color: #ef4444; font-weight: bold; margin-top: 1rem;">
+            <span class="hover-translate" data-es="ADVERTENCIA ANTI-TRAMPAS: Al iniciar, no debes cambiar de pestaña ni minimizar tu navegador. Si lo haces, tu intento será penalizado.">⚠️ ANTI-CHEAT WARNING: When starting, you must not change tabs or minimize your browser. If you do, your attempt will be penalized.</span>
+            </p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <div class="modal-overlay" id="quiz-modal">
+    <div class="modal-content">
+      <button class="btn-close" onclick="closeQuizModal()">×</button>
+      
+      <div class="modal-header">
+        <h2 class="modal-title" style="color: var(--primary); margin:0;"><span class="hover-translate" data-es="Cuestionario: Familia Extendida">Quiz: Extended Family</span></h2>
+        <p style="color: #ef4444; font-weight: bold; margin: 0.5rem 0 0 0; font-size: 0.9rem;"><span class="hover-translate" data-es="Si cambias de pestaña o minimizas la ventana, tu progreso se perderá.">If you change tabs or minimize the window, your progress will be lost.</span></p>
+      </div>
+
+      <div class="modal-body" id="quiz-container">
+        </div>
+      
+      <div class="modal-footer" style="margin-top: 1.5rem; flex-shrink: 0;">
+        <button class="btn-submit" id="btn-submit-quiz" style="width: 100%; margin: 0; background: linear-gradient(135deg, #8b5cf6, #6d28d9);" onclick="submitQuiz()"><span class="hover-translate" data-es="Enviar Respuestas">Send Answers</span></button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initUserBar } from '../../js/userbar.js';
+    import { initFirebase } from '../../js/initFirebase.js';
+    import { doc, getDoc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js";
+    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-auth.js";
+    
+    initUserBar('#userbar');
+    const { db, auth } = initFirebase();
+
+    const CLASS_ID = '7ing-u3-l5-c5';
+    const MATERIA_ID = 'ingles'; 
+    let currentUser = null, isClassClosed = false, isQuizActive = false;
+    let selectedQuestions = [];
+
+    // --- RESPUESTAS CORRECTAS ---
+    const answers = {
+      pre: ["uncle", "aunt", "cousin", "niece", "nephew"],
+      during: ["d", "g", "a", "e", "c", "b", "f"], // Respuestas según el audio
+      post: ["stepmother", "stepfather", "stepson", "stepdaughter"]
+    };
+
+    // --- BANCO DE PREGUNTAS (INGLÉS) ---
+    const quizBank = [
+      { q: "<span class='hover-translate' data-es='¿Cuál es otra forma de decir mother?'>Another word for 'mother' is...</span>", options: ["mom", "grandma", "aunt"], ans: 0 },
+      { q: "<span class='hover-translate' data-es='¿Cuál es otra forma de decir grandfather?'>Another word for 'grandfather' is...</span>", options: ["dad", "grandpa", "uncle"], ans: 1 },
+      { q: "<span class='hover-translate' data-es='La esposa no biológica de tu padre es tu...'>The non-biological wife of your father is your...</span>", options: ["stepdaughter", "stepmother", "aunt"], ans: 1 },
+      { q: "<span class='hover-translate' data-es='El hijo no biológico de tu esposa es tu...'>The non-biological son of your wife is your...</span>", options: ["nephew", "stepson", "cousin"], ans: 1 },
+      { q: "<span class='hover-translate' data-es='Descifra la palabra: N-I-C-E-E'>Unscramble the word: N-I-C-E-E</span>", options: ["niece", "uncle", "nephew"], ans: 0 },
+      { q: "<span class='hover-translate' data-es='Descifra la palabra: N-E-P-H-E-W'>Unscramble the word: N-E-P-H-W-E</span>", options: ["cousin", "nephew", "niece"], ans: 1 },
+      { q: "<span class='hover-translate' data-es='El esposo de tu madre (no biológico) es tu...'>The husband of your mother (not biological) is your...</span>", options: ["stepfather", "stepson", "uncle"], ans: 0 },
+      { q: "<span class='hover-translate' data-es='¿Cuál es otra forma de decir grandmother?'>Another word for 'grandmother' is...</span>", options: ["mom", "grandma", "aunt"], ans: 1 },
+      { q: "<span class='hover-translate' data-es='La hija no biológica de tu esposo es tu...'>The non-biological daughter of your husband is your...</span>", options: ["niece", "stepdaughter", "stepmother"], ans: 1 },
+      { q: "<span class='hover-translate' data-es='¿Cuál es otra forma de decir father?'>Another word for 'father' is...</span>", options: ["grandpa", "uncle", "dad"], ans: 2 }
+    ];
+
+    function cleanText(str) { return str.trim().toLowerCase().replace(/[^a-z-]/g, ''); }
+
+    // --- VALIDACIONES LOCALES (NO GUARDAN EN FIREBASE) ---
+    window.validatePre = () => {
+      let correct = 0;
+      for(let i=0; i<answers.pre.length; i++) {
+        let el = document.getElementById(`pre-${i+1}`);
+        if(cleanText(el.value) === answers.pre[i]) { 
+          correct++; 
+          el.classList.add('correct'); 
+          el.classList.remove('incorrect');
+          el.disabled = true; 
+        } else { 
+          el.classList.add('incorrect'); 
+          el.classList.remove('correct');
+        }
+      }
+      const res = document.getElementById('res-pre');
+      if (correct === answers.pre.length) {
+        res.innerHTML = `<span style="color: #059669; font-weight: bold;" class="hover-translate" data-es="¡Excelente! Tienes todas correctas. Cópialas en tu cuaderno.">Excellent! You got them all right. Copy them into your notebook.</span>`;
+        document.getElementById('btn-submit-pre').style.display = 'none';
+      } else {
+        res.innerHTML = `<span style="color: #ea580c; font-weight: bold;" class="hover-translate" data-es="Tienes ${correct} de ${answers.pre.length} correctas. ¡Corrige los errores e intenta de nuevo!">You have ${correct} out of ${answers.pre.length} correct. Fix the errors and try again!</span>`;
+      }
+    };
+
+    window.validateDuring = () => {
+      let correct = 0;
+      for(let i=0; i<answers.during.length; i++) {
+        let el = document.getElementById(`dur-${i+1}`);
+        if(el.value === answers.during[i]) { 
+          correct++; 
+          el.classList.add('correct'); 
+          el.classList.remove('incorrect');
+          el.disabled = true; 
+        } else { 
+          el.classList.add('incorrect'); 
+          el.classList.remove('correct');
+        }
+      }
+      const res = document.getElementById('res-dur');
+      if (correct === answers.during.length) {
+        res.innerHTML = `<span style="color: #6d28d9; font-weight: bold;" class="hover-translate" data-es="¡Excelente! Ahora copia el ejercicio en tu cuaderno.">Excellent! Now copy the exercise into your notebook.</span>`;
+        document.getElementById('btn-submit-dur').style.display = 'none';
+      } else {
+        res.innerHTML = `<span style="color: #ea580c; font-weight: bold;" class="hover-translate" data-es="Tienes ${correct} de ${answers.during.length} correctas. ¡Vuelve a escuchar e intenta de nuevo!">You have ${correct} out of ${answers.during.length} correct. Listen again and try again!</span>`;
+      }
+    };
+
+    window.validatePost = () => {
+      let correct = 0;
+      for(let i=0; i<answers.post.length; i++) {
+        let el = document.getElementById(`pos-${i+1}`);
+        if(cleanText(el.value) === answers.post[i]) { 
+          correct++; 
+          el.classList.add('correct'); 
+          el.classList.remove('incorrect');
+          el.disabled = true; 
+        } else { 
+          el.classList.add('incorrect'); 
+          el.classList.remove('correct');
+        }
+      }
+      const res = document.getElementById('res-pos');
+      if (correct === answers.post.length) {
+        res.innerHTML = `<span style="color: #2563eb; font-weight: bold;" class="hover-translate" data-es="¡Excelente! Copia las palabras en tu cuaderno.">Excellent! Copy the words into your notebook.</span>`;
+        document.getElementById('btn-submit-pos').style.display = 'none';
+      } else {
+        res.innerHTML = `<span style="color: #ea580c; font-weight: bold;" class="hover-translate" data-es="Tienes ${correct} de ${answers.post.length} correctas. ¡Corrige e intenta de nuevo!">You have ${correct} out of ${answers.post.length} correct. Fix errors and try again!</span>`;
+      }
+    };
+
+    // --- LÓGICA DEL QUIZ (ÉSTE SÍ SE GUARDA EN FIREBASE) ---
+    function selectRandomQuestions() {
+      let shuffled = quizBank.sort(() => 0.5 - Math.random());
+      return shuffled.slice(0, 5); 
+    }
+
+    function applyCheatPenalty() {
+      if (isQuizActive) {
+        isQuizActive = false;
+        document.getElementById('quiz-modal').classList.remove('active');
+        document.getElementById('quiz-container').innerHTML = '';
+        sessionStorage.setItem('cheat_penalty', 'true'); 
+        window.location.reload(); 
+      }
+    }
+
+    document.addEventListener("visibilitychange", () => { if (document.hidden) applyCheatPenalty(); });
+    window.addEventListener("blur", applyCheatPenalty);
+    
+    window.addEventListener('load', () => {
+      if (sessionStorage.getItem('cheat_penalty') === 'true') {
+        sessionStorage.removeItem('cheat_penalty');
+        setTimeout(() => { alert("⚠️ PENALIZACIÓN ANTI-TRAMPAS / ANTI-CHEAT PENALTY ⚠️\n\nEl sistema detectó un cambio de ventana o pérdida de foco. Tu cuestionario fue reiniciado.\nThe system detected a window change. Your quiz was restarted."); }, 500);
+      }
+    });
+
+    window.openQuizModal = () => {
+      if (isClassClosed) return;
+      selectedQuestions = selectRandomQuestions();
+      
+      let html = '';
+      selectedQuestions.forEach((qObj, index) => {
+        let optionsHtml = '';
+        qObj.options.forEach((opt, optIndex) => {
+          optionsHtml += `
+            <label class="quiz-option">
+              <input type="radio" name="q${index}" value="${optIndex}">
+              ${opt}
+            </label>
+          `;
+        });
+        
+        html += `
+          <div class="quiz-question">
+            <p>${index + 1}. ${qObj.q}</p>
+            <div class="quiz-options">
+              ${optionsHtml}
+            </div>
+          </div>
+        `;
+      });
+      
+      document.getElementById('quiz-container').innerHTML = html;
+      document.getElementById('quiz-modal').classList.add('active');
+      isQuizActive = true;
+    };
+
+    window.closeQuizModal = () => {
+      if (confirm("If you close this, your answers will be lost and the questions will change. Continue? / ¿Continuar y perder el progreso?")) {
+        document.getElementById('quiz-modal').classList.remove('active');
+        isQuizActive = false;
+      }
+    };
+
+    window.submitQuiz = async () => {
+      if (!currentUser || isClassClosed) return;
+      
+      let correctAnswers = 0;
+      let allAnswered = true;
+
+      selectedQuestions.forEach((qObj, index) => {
+        const radios = document.getElementsByName(`q${index}`);
+        let answered = false;
+        for (let radio of radios) {
+          if (radio.checked) {
+            answered = true;
+            if (parseInt(radio.value) === qObj.ans) correctAnswers++;
+            break;
+          }
+        }
+        if (!answered) allAnswered = false;
+      });
+
+      if (!allAnswered) {
+        alert("Please answer all questions before submitting. / Por favor responde todas las preguntas.");
+        return;
+      }
+
+      let score = correctAnswers * 2; 
+      isQuizActive = false;
+      
+      document.getElementById('btn-submit-quiz').disabled = true;
+      document.getElementById('btn-submit-quiz').innerHTML = "Saving...";
+
+      const docRef = doc(db, 'clases', MATERIA_ID, 'entregas', CLASS_ID);
+      const snap = await getDoc(docRef);
+      const fechaLocal = new Date().toLocaleString('en-GB', { timeZone: 'America/El_Salvador' }).replace(',', '');
+      let existingObj = (snap.exists() && snap.data().respuestas) ? snap.data().respuestas[currentUser.uid] || {} : {};
+      
+      // Solo guardamos la notaAdicional
+      existingObj = { ...existingObj, nombre: currentUser.displayName || currentUser.email, email: currentUser.email, fechaLocal, notaAdicional: score };
+      existingObj.nota = score; // Al no haber notaPractica, la nota total es la del quiz
+
+      await setDoc(docRef, { grado: 7, año: new Date().getFullYear(), materia: MATERIA_ID, updatedAt: serverTimestamp(), respuestas: { [currentUser.uid]: existingObj } }, { merge: true });
+
+      document.getElementById('quiz-modal').classList.remove('active');
+      showQuizGrade(score);
+    };
+
+    function showQuizGrade(score) {
+        document.getElementById('evaluation-area').innerHTML = `
+        <h2 class="section-title">📝 <span class="hover-translate" data-es="Evaluación Aleatoria">Random Evaluation (Quiz)</span></h2>
+        <div class="result-summary" style="margin-top: 0; padding: 2rem; text-align:center;">
+          <p style="margin:0; font-weight: bold; color: var(--text-muted);"><span class="hover-translate" data-es="Puntaje del cuestionario:">Quiz Score:</span></p>
+          <h2 style="font-size: 3.5rem; color: #d97706; margin: 0.5rem 0;">${score}/10</h2>
+          <p style="margin-top: 1rem; font-weight: 600; color: var(--text-muted);"><span class="hover-translate" data-es="¡Tu evaluación ha sido guardada con éxito!">Your evaluation has been successfully saved!</span></p>
+        </div>
+      `;
+    }
+
+    function lockClassAsExpired() {
+      isClassClosed = true;
+      const expiredHTML = `
+        <div class="result-summary" style="border-color: #ef4444; background: #fef2f2; padding: 1.5rem; margin: 1rem 0; text-align:center;">
+          <h3 style="color: #ef4444; margin: 0;"><span class="hover-translate" data-es="Tiempo Agotado (0/10)">Time Expired (0/10)</span></h3>
+        </div>
+      `;
+      document.getElementById('res-pre').innerHTML = expiredHTML;
+      document.getElementById('res-dur').innerHTML = expiredHTML;
+      document.getElementById('res-pos').innerHTML = expiredHTML;
+      document.getElementById('eval-btn-container').innerHTML = expiredHTML;
+      
+      ['pre', 'dur', 'pos'].forEach(sec => {
+        let btn = document.getElementById(`btn-submit-${sec}`);
+        if(btn) { btn.disabled = true; btn.innerHTML = `<span class="hover-translate" data-es="Tiempo Agotado">Time Expired</span>`; }
+      });
+      for(let i=1; i<=5; i++) { let el = document.getElementById(`pre-${i}`); if(el) el.disabled = true; }
+      for(let i=1; i<=7; i++) { let el = document.getElementById(`dur-${i}`); if(el) el.disabled = true; }
+      for(let i=1; i<=4; i++) { let el = document.getElementById(`pos-${i}`); if(el) el.disabled = true; }
+    }
+
+    // INIT
+    onAuthStateChanged(auth, async (user) => {
+      const loadingEl = document.getElementById('loading');
+      if (user) {
+        currentUser = user;
+        const snap = await getDoc(doc(db, 'clases', MATERIA_ID, 'entregas', CLASS_ID));
+        
+        if (!snap.exists()) {
+          alert("The class has not been configured in the database.");
+          window.location.href = "../../pages/clases.html";
+          return;
+        }
+
+        const docData = snap.data();
+        const now = new Date();
+        const startDate = new Date(docData.inicio);
+        const endDate = new Date(docData.fin);
+
+        if (now < startDate) {
+          alert("This class is not available yet.");
+          window.location.href = "../../pages/clases.html";
+          return;
+        }
+
+        let hasEval = false;
+        if (docData.respuestas && docData.respuestas[user.uid]) {
+          const userData = docData.respuestas[user.uid];
+          
+          if (userData.notaAdicional !== undefined) {
+             showQuizGrade(userData.notaAdicional);
+             hasEval = true;
+          }
+        }
+
+        if (now > endDate && !hasEval) {
+           lockClassAsExpired();
+        }
+
+      } else {
+        document.getElementById('evaluation-area').innerHTML = `
+          <div class="result-summary" style="text-align:center;">
+            <h2><span class="hover-translate" data-es="Sesión Requerida">Login Required</span></h2>
+            <p><span class="hover-translate" data-es="Debes iniciar sesión para realizar la actividad.">You must log in to do the activity.</span></p>
+            <a href="../../index.html" class="btn-submit" style="text-decoration:none; display:inline-flex; width:auto;"><span class="hover-translate" data-es="Ir al Inicio">Go to Home</span></a>
+          </div>`;
+      }
+      loadingEl.style.display = 'none';
+    });
+  </script>
+</body>
+</html>

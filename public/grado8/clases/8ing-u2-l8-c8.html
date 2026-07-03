@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+  <title>Adjectives & Tic-Tac-Toe | English 8°</title>
+  <link rel="stylesheet" href="../../css/styles.css">
+
+  <style>
+    .back-btn { display: inline-flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem; color: var(--text-muted); font-weight: 500; transition: color 0.2s; }
+    .back-btn:hover { color: var(--primary); text-decoration: none; }
+    .class-header { margin-bottom: 2rem; }
+    .class-title { font-size: 1.5rem; margin-bottom: 0.5rem; color: var(--primary); font-weight: 800; line-height: 1.3;}
+    .class-meta { font-size: 0.95rem; color: var(--text-muted); font-weight: 500;}
+    
+    .section { margin-bottom: 2.5rem; }
+    .section-title { font-size: 1.25rem; font-weight: 800; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; border-bottom: 2px solid var(--border); padding-bottom: 0.5rem; }
+    
+    .section-pre { border-left: 5px solid #ec4899; padding-left: 1rem; } 
+    .section-during { border-left: 5px solid #8b5cf6; padding-left: 1rem; } 
+    .section-post { border-left: 5px solid #0ea5e9; padding-left: 1rem; } 
+    .section-eval { border-left: 5px solid #f59e0b; padding-left: 1rem; } 
+
+    .content-box { background: var(--surface); border: 1px solid var(--border); border-radius: 1rem; padding: 1.5rem; margin-bottom: 1.5rem; line-height: 1.8; box-shadow: 0 4px 6px rgba(0,0,0,0.02); }
+    [data-theme="dark"] .content-box { background: #1e293b; border-color: #334155; }
+
+    /* --- HOVER TRANSLATE SYSTEM --- */
+    .hover-translate {
+      position: relative;
+      cursor: help;
+      border-bottom: 2px dotted #10b981;
+      color: inherit;
+      display: inline;
+      transition: color 0.2s;
+    }
+    .hover-translate:hover { color: #059669; }
+    
+    .hover-translate::after {
+      content: attr(data-es);
+      position: absolute;
+      bottom: 100%;
+      left: 50%;
+      transform: translateX(-50%) translateY(-8px);
+      background-color: #0f172a;
+      color: #f8fafc;
+      padding: 0.6rem 1rem;
+      border-radius: 0.5rem;
+      font-size: 0.95rem;
+      font-weight: 600;
+      white-space: normal;
+      width: max-content;
+      max-width: 300px;
+      z-index: 2147483647; 
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.2s, visibility 0.2s;
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+      text-align: center;
+      line-height: 1.4;
+      pointer-events: none;
+    }
+    .hover-translate::before {
+      content: '';
+      position: absolute;
+      bottom: 100%;
+      left: 50%;
+      transform: translateX(-50%) translateY(2px);
+      border-width: 6px;
+      border-style: solid;
+      border-color: #0f172a transparent transparent transparent;
+      z-index: 2147483647;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.2s, visibility 0.2s;
+      pointer-events: none;
+    }
+    .hover-translate:hover::after, .hover-translate:hover::before {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    /* NOTEBOOK & THEORY BOXES */
+    .notebook-box { background: #fffbeb; border: 1px solid #fde68a; border-radius: 0.5rem; padding: 1rem; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 1rem; font-weight: 600; color: #b45309; }
+    [data-theme="dark"] .notebook-box { background: rgba(245, 158, 11, 0.1); border-color: rgba(245, 158, 11, 0.3); color: #fcd34d; }
+    .notebook-icon { font-size: 1.5rem; }
+
+    .theory-box { background: #f0fdf4; border-left: 4px solid #10b981; padding: 1.25rem; border-radius: 0 0.5rem 0.5rem 0; margin-bottom: 1.5rem; font-size: 1.05rem; }
+    [data-theme="dark"] .theory-box { background: rgba(16, 185, 129, 0.1); }
+    
+    /* INTERACTIVE ELEMENTS */
+    .exercise-list { display: flex; flex-direction: column; gap: 0.8rem; margin: 0; padding: 0; list-style: none; }
+    .exercise-item { background: var(--surface-hover); padding: 1rem; border-radius: 0.5rem; border: 1px solid var(--border); display: flex; align-items: center; gap: 0.8rem; font-size: 1.05rem; flex-wrap: wrap; }
+    [data-theme="dark"] .exercise-item { background: #0f172a; border-color: #334155; }
+    
+    .gap-select { padding: 0.4rem 0.6rem; border-radius: 0.4rem; border: 2px solid var(--primary); background: var(--bg); color: var(--text); font-weight: bold; cursor: pointer; outline: none; font-size: 1rem; }
+    .correct { border-color: #10b981 !important; background: #ecfdf5 !important; color: #064e3b !important; }
+    .incorrect { border-color: #ef4444 !important; background: #fef2f2 !important; color: #7f1d1d !important; }
+
+    /* TIC TAC TOE GRID (ADJECTIVE VERSION) */
+    .ttt-container { text-align: center; margin: 1.5rem 0; display: flex; flex-direction: column; align-items: center; }
+    
+    .ttt-input-area { background: #e0f2fe; padding: 1rem; border-radius: 0.5rem; border: 1px solid #bae6fd; margin-bottom: 1rem; width: 100%; max-width: 320px; }
+    [data-theme="dark"] .ttt-input-area { background: rgba(14, 165, 233, 0.1); border-color: rgba(14, 165, 233, 0.3); }
+    
+    .ttt-input { padding: 0.5rem; width: 100%; border-radius: 0.5rem; border: 2px solid var(--primary); font-size: 1.1rem; font-weight: bold; text-align: center; margin-bottom: 0.5rem; outline: none; box-sizing: border-box; }
+    
+    /* Whiteboard style for the board */
+    .ttt-board-wrapper { background: white; border: 8px solid #cbd5e1; border-radius: 8px; padding: 10px; position: relative; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+    [data-theme="dark"] .ttt-board-wrapper { border-color: #475569; }
+    .ttt-board-wrapper::after { content: ''; position: absolute; bottom: -8px; left: 20%; width: 20px; height: 6px; background: #ef4444; border-radius: 2px; } /* Red marker */
+    .ttt-board-wrapper::before { content: ''; position: absolute; bottom: -8px; left: 30%; width: 20px; height: 6px; background: #10b981; border-radius: 2px; } /* Green marker */
+    
+    .ttt-board { display: grid; grid-template-columns: repeat(3, 100px); grid-template-rows: repeat(3, 100px); background: #312e81; gap: 4px; }
+    
+    .ttt-cell { background: white; display: flex; align-items: center; justify-content: center; font-size: 1rem; font-weight: bold; cursor: pointer; transition: background 0.2s; word-break: break-all; padding: 5px; text-transform: capitalize; }
+    .ttt-cell:hover { background: #f8fafc; }
+    .ttt-cell.user { color: #2563eb; } /* Blue for user */
+    .ttt-cell.ai { color: #ef4444; } /* Red for AI */
+    .ttt-cell.winning-cell { background: #fef08a; color: #b45309; }
+    
+    .ttt-status { margin-top: 1rem; font-size: 1.2rem; font-weight: bold; height: 1.5rem; color: var(--text); }
+    .ttt-counter { font-size: 1.1rem; color: var(--primary); font-weight: bold; margin-bottom: 1rem; }
+
+    /* BOTONES */
+    .btn-submit { display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 0.8rem 2rem; background: linear-gradient(135deg, #10b981, #059669); color: white; border: none; border-radius: 0.75rem; font-weight: 800; font-size: 1rem; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; margin-top: 1rem; }
+    .btn-submit:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(16, 185, 129, 0.4); }
+    .btn-submit:disabled { opacity: 0.5; cursor: not-allowed; filter: grayscale(1); transform: none; box-shadow: none; }
+    
+    .btn-small { padding: 0.5rem 1.2rem; font-size: 0.95rem; border-radius: 0.5rem; }
+
+    /* QUIZ MODAL */
+    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(4px); z-index: 10000; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.3s; padding: 1rem; }
+    .modal-overlay.active { opacity: 1; pointer-events: auto; }
+    .modal-content { background: var(--bg); width: 100%; max-width: 700px; max-height: 90vh; border-radius: 1.5rem; padding: 2rem; display: flex; flex-direction: column; position: relative; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); overflow: hidden; box-sizing: border-box; }
+    [data-theme="dark"] .modal-content { background: #0f172a; border: 1px solid #334155; }
+    .btn-close { position: absolute; top: 1.2rem; right: 1.2rem; background: var(--surface-hover); border: none; font-size: 1.5rem; cursor: pointer; color: var(--text-muted); width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; z-index: 10; }
+    
+    .modal-header { flex-shrink: 0; margin-bottom: 1.5rem; padding-right: 3rem; border-bottom: 2px solid var(--border); padding-bottom: 1rem;}
+    .modal-body { overflow-y: auto; flex: 1; padding-right: 0.5rem;}
+    
+    .quiz-question { background: var(--surface-hover); padding: 1.5rem; border-radius: 0.75rem; border: 1px solid var(--border); margin-bottom: 1.5rem; }
+    .quiz-options { display: flex; flex-direction: column; gap: 0.8rem; }
+    .quiz-option { display: flex; align-items: center; gap: 0.8rem; cursor: pointer; padding: 0.8rem; border-radius: 0.5rem; border: 1px solid var(--border); transition: background 0.2s; font-weight: 500; }
+    .quiz-option:hover { background: var(--surface); border-color: var(--primary); }
+    .quiz-option input[type="radio"] { width: 1.2rem; height: 1.2rem; cursor: pointer; accent-color: var(--primary); }
+
+    .result-summary { text-align: right; font-weight: bold; margin-top: 1rem; font-size: 1.1rem; }
+    .loading { position: fixed; inset: 0; background: rgba(255,255,255,0.9); display: flex; justify-content: center; align-items: center; z-index: 9999; }
+    [data-theme="dark"] .loading { background: rgba(11,17,32,0.9); }
+  </style>
+</head>
+<body>
+  <div id="userbar"></div>
+  <div id="loading" class="loading"><span class="hover-translate" data-es="Cargando...">Loading...</span></div>
+
+  <header class="app-container mt-4">
+    <a href="../../pages/clases.html" class="btn btn-ghost back-btn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><path d="M19 12H5"/><polyline points="12 19 5 12 12 5"/></svg>
+      <span class="hover-translate" data-es="Volver a Clases">Back to Classes</span>
+    </a>
+    <div class="class-header">
+      <h1 class="class-title"><span class="hover-translate" data-es="Adjetivos y Tres en Línea">Adjectives & Tic-Tac-Toe</span></h1>
+      <p class="class-meta">Unit 2 • Lesson 8 • English 8°</p>
+    </div>
+  </header>
+
+  <main class="app-container">
+
+    <section class="section section-pre">
+      <h2 class="section-title">⏱️ <span class="hover-translate" data-es="I. Activar: Infiriendo Adjetivos">I. Activate: Inferring Adjectives</span></h2>
+      <div class="content-box">
+        
+        <div class="notebook-box">
+          <div class="notebook-icon">📓</div>
+          <div>
+            <strong class="hover-translate" data-es="Instrucción para el cuaderno:">Notebook Instruction:</strong> 
+            <span class="hover-translate" data-es="Copia la teoría de abajo en inglés y su traducción.">Copy the theory below in English and its translation.</span> 
+            <span class="hover-translate" data-es="Al terminar, copia las oraciones correctas en tu cuaderno.">When finished, copy the correct sentences into your notebook.</span>
+          </div>
+        </div>
+
+        <div class="theory-box">
+          <ul style="margin:0; padding-left: 1.2rem; line-height: 1.8;">
+            <li><span class="hover-translate" data-es="En inglés, los adjetivos NUNCA se pluralizan. No llevan una 's' al final.">In English, adjectives are NEVER pluralized. They don't take an 's' at the end.</span> (e.g., <em>expensive bracelets</em>, <span style="color:#ef4444; text-decoration:line-through;">expensives bracelets</span>).</li>
+            <li><span class="hover-translate" data-es="Los adjetivos no tienen distinción masculina o femenina.">Adjectives do not have masculine or feminine distinction.</span> (e.g., <em>tall man</em> / <em>tall woman</em>).</li>
+            <li><span class="hover-translate" data-es="Excepción: Usamos 'handsome' para hombres y 'beautiful' para mujeres. Ambos significan atractivo.">Exception: We use 'handsome' for men and 'beautiful' for women. Both mean attractive.</span></li>
+          </ul>
+        </div>
+
+        <p><span class="hover-translate" data-es="Elige el adjetivo correcto basándote en las reglas anteriores.">Choose the correct adjective based on the rules above.</span></p>
+        
+        <ul class="exercise-list">
+          <li class="exercise-item">1. They have very <select class="gap-select" id="pre-1"><option value="">---</option><option value="fast">fast</option><option value="fasts">fasts</option></select> cars.</li>
+          <li class="exercise-item">2. My mother is a <select class="gap-select" id="pre-2"><option value="">---</option><option value="handsome">handsome</option><option value="beautiful">beautiful</option></select> woman.</li>
+          <li class="exercise-item">3. My father is a <select class="gap-select" id="pre-3"><option value="">---</option><option value="handsome">handsome</option><option value="beautiful">beautiful</option></select> man.</li>
+          <li class="exercise-item">4. I bought two <select class="gap-select" id="pre-4"><option value="">---</option><option value="expensive">expensive</option><option value="expensives">expensives</option></select> cell phones.</li>
+          <li class="exercise-item">5. We live in <select class="gap-select" id="pre-5"><option value="">---</option><option value="bigs">bigs</option><option value="big">big</option></select> houses.</li>
+        </ul>
+        <div style="text-align: right;">
+          <button class="btn-submit" id="btn-submit-pre" onclick="validatePre()">✅ <span class="hover-translate" data-es="Verificar Parte I">Verify Part I</span></button>
+        </div>
+        <div id="res-pre" class="result-summary"></div>
+      </div>
+    </section>
+
+    <section class="section section-during">
+      <h2 class="section-title">🧠 <span class="hover-translate" data-es="II. Durante: Lluvia de Ideas de Adjetivos">II. During: Adjectives Brainstorm</span></h2>
+      <div class="content-box">
+        
+        <div class="notebook-box">
+          <div class="notebook-icon">📓</div>
+          <div>
+            <strong class="hover-translate" data-es="Instrucción para el cuaderno:">Notebook Instruction:</strong> 
+            <span class="hover-translate" data-es="Dibuja un mapa mental con adjetivos en tu cuaderno.">Draw a mind map with adjectives in your notebook.</span> 
+            <span class="hover-translate" data-es="Luego completa el ejercicio y copia las oraciones.">Then complete the exercise and copy the sentences.</span>
+          </div>
+        </div>
+
+        <div class="theory-box">
+          <span class="hover-translate" data-es="Los adjetivos describen sustantivos (personas, lugares, cosas).">Adjectives describe nouns (people, places, things).</span><br>
+          <span class="hover-translate" data-es="Ejemplos de adjetivos: grande, pequeño, caro, barato, alto.">Examples of adjectives: <strong>big, small, expensive, cheap, tall</strong>.</span>
+        </div>
+
+        <p><span class="hover-translate" data-es="Elige el adjetivo que mejor describa al sustantivo en la oración.">Choose the adjective that best describes the noun in the sentence.</span></p>
+        <ul class="exercise-list">
+          <li class="exercise-item">1. An elephant is a very <select class="gap-select" id="dur-1"><option value="">---</option><option value="small">small</option><option value="big">big</option><option value="cheap">cheap</option></select> animal.</li>
+          <li class="exercise-item">2. A mouse is a <select class="gap-select" id="dur-2"><option value="">---</option><option value="big">big</option><option value="expensive">expensive</option><option value="small">small</option></select> animal.</li>
+          <li class="exercise-item">3. A Ferrari is an <select class="gap-select" id="dur-3"><option value="">---</option><option value="expensive">expensive</option><option value="cheap">cheap</option><option value="tall">tall</option></select> car.</li>
+          <li class="exercise-item">4. A normal pencil is a <select class="gap-select" id="dur-4"><option value="">---</option><option value="expensive">expensive</option><option value="cheap">cheap</option><option value="tall">tall</option></select> object.</li>
+          <li class="exercise-item">5. A professional basketball player is usually <select class="gap-select" id="dur-5"><option value="">---</option><option value="small">small</option><option value="tall">tall</option><option value="cheap">cheap</option></select>.</li>
+        </ul>
+        <div style="text-align: right;">
+          <button class="btn-submit" id="btn-submit-dur" onclick="validateDuring()" style="background: linear-gradient(135deg, #8b5cf6, #6d28d9);">✅ <span class="hover-translate" data-es="Verificar Parte II">Verify Part II</span></button>
+        </div>
+        <div id="res-dur" class="result-summary"></div>
+      </div>
+    </section>
+
+    <section class="section section-post">
+      <h2 class="section-title">❌⭕ <span class="hover-translate" data-es="III. Post: Tres en Línea de Adjetivos">III. Post: Tic-tac-toe</span></h2>
+      <div class="content-box">
+        
+        <div class="notebook-box">
+          <div class="notebook-icon">📓</div>
+          <div>
+            <strong class="hover-translate" data-es="Instrucción para el cuaderno:">Notebook Instruction:</strong> 
+            <span class="hover-translate" data-es="Dibuja una cuadrícula de tres en línea en tu cuaderno.">Draw a tic-tac-toe grid in your notebook.</span> 
+            <span class="hover-translate" data-es="Escribe una oración completa usando el adjetivo por cada cuadro que le ganes a la computadora.">Write a complete sentence using the adjective for each square you win against the computer.</span>
+          </div>
+        </div>
+
+        <div class="theory-box">
+          <span class="hover-translate" data-es="¡Juega contra la computadora en esta pizarra virtual!">Play against the computer on this virtual whiteboard!</span><br>
+          <span class="hover-translate" data-es="Escribe un adjetivo válido en la caja de texto y haz clic en una casilla para reclamarla.">Write a valid adjective in the text box and click a square to claim it.</span><br>
+          <span class="hover-translate" data-es="Debes jugar al menos 10 partidas para desbloquear la evaluación final.">You must play at least 10 games to unlock the final evaluation.</span>
+        </div>
+
+        <div class="ttt-container">
+          <div class="ttt-counter" id="ttt-counter"><span class="hover-translate" data-es="Partidas jugadas: 0 / 10">Games played: 0 / 10</span></div>
+          
+          <div class="ttt-input-area">
+            <span class="hover-translate" data-es="1. Escribe un adjetivo:">1. Write an adjective:</span>
+            <input type="text" id="ttt-adj-input" class="ttt-input" placeholder="e.g. small, big, tall..." autocomplete="off">
+            <span class="hover-translate" data-es="2. Luego haz clic en un cuadro vacío" style="font-size: 0.9rem; color: var(--text-muted);">2. Then click an empty square</span>
+          </div>
+
+          <div class="ttt-board-wrapper">
+            <div class="ttt-board" id="board">
+              <div class="ttt-cell" onclick="makeMove(0)"></div>
+              <div class="ttt-cell" onclick="makeMove(1)"></div>
+              <div class="ttt-cell" onclick="makeMove(2)"></div>
+              <div class="ttt-cell" onclick="makeMove(3)"></div>
+              <div class="ttt-cell" onclick="makeMove(4)"></div>
+              <div class="ttt-cell" onclick="makeMove(5)"></div>
+              <div class="ttt-cell" onclick="makeMove(6)"></div>
+              <div class="ttt-cell" onclick="makeMove(7)"></div>
+              <div class="ttt-cell" onclick="makeMove(8)"></div>
+            </div>
+          </div>
+          
+          <div class="ttt-status" id="ttt-status"></div>
+          <button class="btn-submit btn-small" id="btn-restart-ttt" onclick="resetBoard()" style="display:none; margin: 1rem auto; background: linear-gradient(135deg, #3b82f6, #2563eb);">🔄 <span class="hover-translate" data-es="Jugar de Nuevo">Play Again</span></button>
+        </div>
+
+        <div id="res-pos" class="result-summary"></div>
+      </div>
+    </section>
+
+    <section class="section section-eval" id="evaluation-area">
+      <h2 class="section-title">📝 <span class="hover-translate" data-es="Evaluación Aleatoria (Cuestionario)">Random Evaluation (Quiz)</span></h2>
+      <div class="content-box" style="text-align: center;">
+        <p style="margin-bottom: 1rem; color: var(--text-muted);"><span class="hover-translate" data-es="Demuestra lo que has aprendido. Completa las 3 actividades de arriba para desbloquear este botón.">Show what you have learned. Complete the 3 activities above to unlock this button.</span></p>
+        <div id="eval-btn-container">
+            <button class="btn-submit" id="btn-start-quiz" onclick="openQuizModal()" disabled style="margin: 0; background: linear-gradient(135deg, #f59e0b, #d97706); width: auto;"><span class="hover-translate" data-es="🔒 Bloqueado: Completa las actividades">🔒 Locked: Complete activities</span></button>
+            <p style="font-size: 0.85rem; color: #ef4444; font-weight: bold; margin-top: 1rem;">
+            <span class="hover-translate" data-es="ADVERTENCIA ANTI-TRAMPAS: Al iniciar, no debes cambiar de pestaña ni minimizar tu navegador.">⚠️ ANTI-CHEAT WARNING: When starting, you must not change tabs or minimize your browser.</span>
+            </p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <div class="modal-overlay" id="quiz-modal">
+    <div class="modal-content">
+      <button class="btn-close" onclick="closeQuizModal()">×</button>
+      
+      <div class="modal-header">
+        <h2 class="modal-title" style="color: var(--primary); margin:0;"><span class="hover-translate" data-es="Cuestionario: Adjetivos">Quiz: Adjectives</span></h2>
+        <p style="color: #ef4444; font-weight: bold; margin: 0.5rem 0 0 0; font-size: 0.9rem;"><span class="hover-translate" data-es="Si cambias de pestaña o minimizas la ventana, tu progreso se perderá.">If you change tabs or minimize the window, your progress will be lost.</span></p>
+      </div>
+
+      <div class="modal-body" id="quiz-container">
+        </div>
+      
+      <div class="modal-footer" style="margin-top: 1.5rem; flex-shrink: 0;">
+        <button class="btn-submit" id="btn-submit-quiz" style="width: 100%; margin: 0; background: linear-gradient(135deg, #8b5cf6, #6d28d9);" onclick="submitQuiz()"><span class="hover-translate" data-es="Enviar Respuestas">Send Answers</span></button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initUserBar } from '../../js/userbar.js';
+    import { initFirebase } from '../../js/initFirebase.js';
+    import { doc, getDoc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js";
+    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-auth.js";
+    
+    initUserBar('#userbar');
+    const { db, auth } = initFirebase();
+
+    const CLASS_ID = '8ing-u2-l8-c8';
+    const MATERIA_ID = 'ingles'; 
+    let currentUser = null, isClassClosed = false, isQuizActive = false;
+    let selectedQuestions = [];
+
+    // --- LOCAL STORAGE (ESTADO DE PRÁCTICA TEMPORAL) ---
+    let localState = {
+      prePassed: false,
+      durPassed: false,
+      postPassed: false,
+      gamesPlayed: 0
+    };
+
+    function saveLocalState() {
+      localStorage.setItem('8ing_u2_l8_c8_state', JSON.stringify(localState));
+      checkUnlockQuiz();
+    }
+
+    function loadLocalState() {
+      let saved = localStorage.getItem('8ing_u2_l8_c8_state');
+      if(saved) {
+        localState = JSON.parse(saved);
+        if(localState.prePassed) forcePassPre();
+        if(localState.durPassed) forcePassDuring();
+        updateTTTUI();
+        if(localState.postPassed) forcePassPost();
+        checkUnlockQuiz();
+      }
+    }
+
+    function checkUnlockQuiz() {
+      if (localState.prePassed && localState.durPassed && localState.postPassed) {
+        const btn = document.getElementById('btn-start-quiz');
+        if(btn && !isClassClosed) {
+          btn.disabled = false;
+          btn.innerHTML = `<span class="hover-translate" data-es="Comenzar Evaluación (5 Preguntas)">Start Evaluation (5 Questions)</span>`;
+        }
+      }
+    }
+
+    // --- RESPUESTAS DE PRÁCTICA ---
+    const ansPre = ["fast", "beautiful", "handsome", "expensive", "big"];
+    const ansDur = ["big", "small", "expensive", "cheap", "tall"];
+
+    // --- VALIDACIONES PRE & DURING ---
+    window.validatePre = () => {
+      let correct = 0;
+      for(let i=0; i<ansPre.length; i++) {
+        let el = document.getElementById(`pre-${i+1}`);
+        if(el.value === ansPre[i]) { 
+          correct++; el.classList.add('correct'); el.classList.remove('incorrect');
+        } else { 
+          el.classList.add('incorrect'); el.classList.remove('correct');
+        }
+      }
+      if (correct === ansPre.length) {
+        forcePassPre();
+        localState.prePassed = true;
+        saveLocalState();
+      } else {
+        document.getElementById('res-pre').innerHTML = `<span style="color: #ea580c;" class="hover-translate" data-es="Tienes ${correct} correctas. ¡Corrige e intenta de nuevo!">You have ${correct} correct. Fix errors and try again!</span>`;
+      }
+    };
+
+    function forcePassPre() {
+      for(let i=0; i<ansPre.length; i++) {
+        let el = document.getElementById(`pre-${i+1}`);
+        if(el) { el.value = ansPre[i]; el.classList.add('correct'); el.disabled = true; }
+      }
+      document.getElementById('btn-submit-pre').style.display = 'none';
+      document.getElementById('res-pre').innerHTML = `<span style="color: #059669; font-weight: bold;" class="hover-translate" data-es="¡Completado! Copia en tu cuaderno.">Completed! Copy into your notebook.</span>`;
+    }
+
+    window.validateDuring = () => {
+      let correct = 0;
+      for(let i=0; i<ansDur.length; i++) {
+        let el = document.getElementById(`dur-${i+1}`);
+        if(el.value === ansDur[i]) { 
+          correct++; el.classList.add('correct'); el.classList.remove('incorrect');
+        } else { 
+          el.classList.add('incorrect'); el.classList.remove('correct');
+        }
+      }
+      if (correct === ansDur.length) {
+        forcePassDuring();
+        localState.durPassed = true;
+        saveLocalState();
+      } else {
+        document.getElementById('res-dur').innerHTML = `<span style="color: #ea580c;" class="hover-translate" data-es="Tienes ${correct} correctas. ¡Corrige e intenta de nuevo!">You have ${correct} correct. Fix errors and try again!</span>`;
+      }
+    };
+
+    function forcePassDuring() {
+      for(let i=0; i<ansDur.length; i++) {
+        let el = document.getElementById(`dur-${i+1}`);
+        if(el) { el.value = ansDur[i]; el.classList.add('correct'); el.disabled = true; }
+      }
+      document.getElementById('btn-submit-dur').style.display = 'none';
+      document.getElementById('res-dur').innerHTML = `<span style="color: #6d28d9; font-weight: bold;" class="hover-translate" data-es="¡Completado! Haz el mapa mental.">Completed! Draw the mind map.</span>`;
+    }
+
+    function forcePassPost() {
+      document.getElementById('res-pos').innerHTML = `<span style="color: #2563eb; font-weight: bold;" class="hover-translate" data-es="¡Completado! Has jugado las 10 partidas.">Completed! You have played the 10 games.</span>`;
+    }
+
+    // --- TIC TAC TOE LOGIC (Adjective Version) ---
+    // Estructura: board[i] = { owner: 'user'|'ai'|'', word: 'adjective' }
+    let board = Array(9).fill({owner: '', word: ''});
+    let gameActive = true;
+
+    const validAdjectives = ['big', 'small', 'tall', 'short', 'expensive', 'cheap', 'beautiful', 'handsome', 'fast', 'slow', 'good', 'bad', 'happy', 'sad', 'new', 'old', 'hot', 'cold', 'long', 'fat', 'thin'];
+    const winCombos = [ [0,1,2],[3,4,5],[6,7,8], [0,3,6],[1,4,7],[2,5,8], [0,4,8],[2,4,6] ];
+
+    function drawBoard() {
+      let cells = document.querySelectorAll('.ttt-cell');
+      for(let i=0; i<9; i++) {
+        cells[i].innerText = board[i].word;
+        cells[i].className = "ttt-cell " + board[i].owner;
+      }
+    }
+
+    window.makeMove = (index) => {
+      if(!gameActive || board[index].owner !== "") return;
+      
+      const inputEl = document.getElementById('ttt-adj-input');
+      const adj = inputEl.value.trim().toLowerCase();
+      
+      if(!validAdjectives.includes(adj)) {
+          alert("Please enter a valid English adjective! (e.g. big, small, tall, short, expensive, fast...)\n¡Por favor ingresa un adjetivo válido en inglés!");
+          return;
+      }
+      
+      // Check if word already on board
+      for(let i=0; i<9; i++){
+          if(board[i].word === adj) {
+              alert("That adjective is already on the board! Pick a different one.\n¡Ese adjetivo ya está en el tablero! Elige otro.");
+              return;
+          }
+      }
+      
+      board[index] = { owner: 'user', word: adj };
+      inputEl.value = "";
+      drawBoard();
+      
+      if(!checkGameEnd('user')) {
+        gameActive = false;
+        document.getElementById('ttt-status').innerHTML = `<span class="hover-translate" data-es="La computadora está pensando...">AI is thinking...</span>`;
+        setTimeout(aiMove, 600);
+      }
+    };
+
+    function aiMove() {
+      let move = findWinningMove('ai'); 
+      if(move === -1) move = findWinningMove('user'); 
+      if(move === -1) { 
+        if(board[4].owner === "") move = 4;
+        else {
+          let empty = [];
+          for(let i=0; i<9; i++) if(board[i].owner === "") empty.push(i);
+          move = empty[Math.floor(Math.random() * empty.length)];
+        }
+      }
+      
+      // Pick random unused adj
+      let usedAdjs = board.map(c => c.word);
+      let availableAdjs = validAdjectives.filter(a => !usedAdjs.includes(a));
+      let aiAdj = availableAdjs[Math.floor(Math.random()*availableAdjs.length)];
+      
+      board[move] = { owner: 'ai', word: aiAdj };
+      drawBoard();
+      document.getElementById('ttt-status').innerHTML = `<span class="hover-translate" data-es="Tu turno">Your turn</span>`;
+      
+      if(!checkGameEnd('ai')) {
+        gameActive = true;
+      }
+    }
+
+    function findWinningMove(mark) {
+      for(let combo of winCombos) {
+        let [a,b,c] = combo;
+        let vals = [board[a].owner, board[b].owner, board[c].owner];
+        let markCount = vals.filter(v => v === mark).length;
+        let emptyCount = vals.filter(v => v === "").length;
+        if(markCount === 2 && emptyCount === 1) {
+          if(board[a].owner === "") return a;
+          if(board[b].owner === "") return b;
+          if(board[c].owner === "") return c;
+        }
+      }
+      return -1;
+    }
+
+    function checkGameEnd(lastMark) {
+      // Check win
+      for(let combo of winCombos) {
+        if(board[combo[0]].owner !== "" && board[combo[0]].owner === board[combo[1]].owner && board[combo[1]].owner === board[combo[2]].owner) {
+          
+          // Highlight winning cells
+          let cells = document.querySelectorAll('.ttt-cell');
+          cells[combo[0]].classList.add('winning-cell');
+          cells[combo[1]].classList.add('winning-cell');
+          cells[combo[2]].classList.add('winning-cell');
+
+          endMatch(board[combo[0]].owner === 'user' ? `<span class="hover-translate" data-es="¡Ganaste! Escribe 3 oraciones en tu cuaderno.">You Win! Write 3 sentences in your notebook.</span>` : `<span class="hover-translate" data-es="¡La IA Gana!">AI Wins!</span>`);
+          return true;
+        }
+      }
+      // Check draw
+      let isFull = true;
+      for(let i=0; i<9; i++) if(board[i].owner === "") isFull = false;
+      
+      if(isFull) {
+        endMatch(`<span class="hover-translate" data-es="¡Empate!">It's a Draw!</span>`);
+        return true;
+      }
+      return false;
+    }
+
+    function endMatch(msg) {
+      gameActive = false;
+      document.getElementById('ttt-status').innerHTML = msg;
+      document.getElementById('btn-restart-ttt').style.display = "inline-flex";
+      
+      localState.gamesPlayed++;
+      updateTTTUI();
+      
+      if(localState.gamesPlayed >= 10 && !localState.postPassed) {
+        localState.postPassed = true;
+        forcePassPost();
+      }
+      saveLocalState();
+    }
+
+    function updateTTTUI() {
+      let gp = localState.gamesPlayed > 10 ? 10 : localState.gamesPlayed;
+      document.getElementById('ttt-counter').innerHTML = `<span class="hover-translate" data-es="Partidas jugadas: ${gp} / 10">Games played: ${gp} / 10</span>`;
+    }
+
+    window.resetBoard = () => {
+      board = Array(9).fill({owner: '', word: ''});
+      
+      // Clear highlights
+      let cells = document.querySelectorAll('.ttt-cell');
+      cells.forEach(c => c.classList.remove('winning-cell'));
+
+      drawBoard();
+      gameActive = true;
+      document.getElementById('ttt-status').innerText = "";
+      document.getElementById('btn-restart-ttt').style.display = "none";
+    };
+
+    // --- BANCO DE PREGUNTAS (QUIZ FINAL) ---
+    const quizBank = [
+      { q: "<span class='hover-translate' data-es='Los autos son rápidos (The cars are ____).'>The cars are ____.</span>", options: ["fast", "fasts"], ans: 0 },
+      { q: "<span class='hover-translate' data-es='Los adjetivos en inglés tienen forma plural. (Verdadero/Falso)'>Adjectives in English have plural forms. (True/False)</span>", options: ["True", "False"], ans: 1 },
+      { q: "<span class='hover-translate' data-es='Ella es una mujer hermosa. (She is a ____ woman).'>She is a ____ woman.</span>", options: ["handsome", "beautiful"], ans: 1 },
+      { q: "<span class='hover-translate' data-es='Él es un hombre apuesto. (He is a ____ man).'>He is a ____ man.</span>", options: ["beautiful", "handsome"], ans: 1 },
+      { q: "<span class='hover-translate' data-es='Las manzanas son rojas. (The apples are ____).'>The apples are ____.</span>", options: ["red", "reds"], ans: 0 },
+      { q: "<span class='hover-translate' data-es='Ellos son estudiantes inteligentes. (They are ____ students).'>They are ____ students.</span>", options: ["intelligents", "intelligent"], ans: 1 },
+      { q: "<span class='hover-translate' data-es='¿Es \"expensive\" un adjetivo?'>Is 'expensive' an adjective?</span>", options: ["Yes", "No"], ans: 0 },
+      { q: "<span class='hover-translate' data-es='Las casas son grandes. (The houses are ____).'>The houses are ____.</span>", options: ["bigs", "big"], ans: 1 },
+      { q: "<span class='hover-translate' data-es='¿Qué oración es correcta?'>Which sentence is correct?</span>", options: ["They are tall boys.", "They are talls boys."], ans: 0 },
+      { q: "<span class='hover-translate' data-es='¿Qué oración es correcta?'>Which sentence is correct?</span>", options: ["It is an expensive car.", "It is an expensives car."], ans: 0 }
+    ];
+
+    function selectRandomQuestions() {
+      let shuffled = quizBank.sort(() => 0.5 - Math.random());
+      return shuffled.slice(0, 5); 
+    }
+
+    function applyCheatPenalty() {
+      if (isQuizActive) {
+        isQuizActive = false;
+        document.getElementById('quiz-modal').classList.remove('active');
+        document.getElementById('quiz-container').innerHTML = '';
+        sessionStorage.setItem('cheat_penalty', 'true'); 
+        window.location.reload(); 
+      }
+    }
+
+    document.addEventListener("visibilitychange", () => { if (document.hidden) applyCheatPenalty(); });
+    window.addEventListener("blur", applyCheatPenalty);
+    
+    window.addEventListener('load', () => {
+      if (sessionStorage.getItem('cheat_penalty') === 'true') {
+        sessionStorage.removeItem('cheat_penalty');
+        setTimeout(() => { alert("⚠️ PENALIZACIÓN ANTI-TRAMPAS / ANTI-CHEAT PENALTY ⚠️\n\nEl sistema detectó un cambio de ventana o pérdida de foco. Tu cuestionario fue reiniciado.\nThe system detected a window change. Your quiz was restarted."); }, 500);
+      }
+      loadLocalState(); // Restore local progress
+    });
+
+    window.openQuizModal = () => {
+      if (isClassClosed) return;
+      selectedQuestions = selectRandomQuestions();
+      
+      let html = '';
+      selectedQuestions.forEach((qObj, index) => {
+        let optionsHtml = '';
+        qObj.options.forEach((opt, optIndex) => {
+          optionsHtml += `
+            <label class="quiz-option">
+              <input type="radio" name="q${index}" value="${optIndex}">
+              ${opt}
+            </label>
+          `;
+        });
+        
+        html += `
+          <div class="quiz-question">
+            <p>${index + 1}. ${qObj.q}</p>
+            <div class="quiz-options">
+              ${optionsHtml}
+            </div>
+          </div>
+        `;
+      });
+      
+      document.getElementById('quiz-container').innerHTML = html;
+      document.getElementById('quiz-modal').classList.add('active');
+      isQuizActive = true;
+    };
+
+    window.closeQuizModal = () => {
+      if (confirm("If you close this, your answers will be lost and the questions will change. Continue? / ¿Continuar y perder el progreso?")) {
+        document.getElementById('quiz-modal').classList.remove('active');
+        isQuizActive = false;
+      }
+    };
+
+    window.submitQuiz = async () => {
+      if (!currentUser || isClassClosed) return;
+      
+      let correctAnswers = 0;
+      let allAnswered = true;
+
+      selectedQuestions.forEach((qObj, index) => {
+        const radios = document.getElementsByName(`q${index}`);
+        let answered = false;
+        for (let radio of radios) {
+          if (radio.checked) {
+            answered = true;
+            if (parseInt(radio.value) === qObj.ans) correctAnswers++;
+            break;
+          }
+        }
+        if (!answered) allAnswered = false;
+      });
+
+      if (!allAnswered) {
+        alert("Please answer all questions before submitting. / Por favor responde todas las preguntas.");
+        return;
+      }
+
+      let score = correctAnswers * 2; 
+      isQuizActive = false;
+      
+      document.getElementById('btn-submit-quiz').disabled = true;
+      document.getElementById('btn-submit-quiz').innerHTML = "Saving...";
+
+      const docRef = doc(db, 'clases', MATERIA_ID, 'entregas', CLASS_ID);
+      const snap = await getDoc(docRef);
+      const fechaLocal = new Date().toLocaleString('en-GB', { timeZone: 'America/El_Salvador' }).replace(',', '');
+      let existingObj = (snap.exists() && snap.data().respuestas) ? snap.data().respuestas[currentUser.uid] || {} : {};
+      
+      existingObj = { ...existingObj, nombre: currentUser.displayName || currentUser.email, email: currentUser.email, fechaLocal, notaAdicional: score };
+      existingObj.nota = score; 
+
+      await setDoc(docRef, { grado: 8, año: new Date().getFullYear(), materia: MATERIA_ID, updatedAt: serverTimestamp(), respuestas: { [currentUser.uid]: existingObj } }, { merge: true });
+
+      // Clean local storage since it's fully done
+      localStorage.removeItem('8ing_u2_l8_c8_state');
+
+      document.getElementById('quiz-modal').classList.remove('active');
+      showQuizGrade(score);
+    };
+
+    function showQuizGrade(score) {
+        document.getElementById('evaluation-area').innerHTML = `
+        <h2 class="section-title">📝 <span class="hover-translate" data-es="Evaluación Aleatoria">Random Evaluation (Quiz)</span></h2>
+        <div class="result-summary" style="margin-top: 0; padding: 2rem; text-align:center;">
+          <p style="margin:0; font-weight: bold; color: var(--text-muted);"><span class="hover-translate" data-es="Puntaje del cuestionario:">Quiz Score:</span></p>
+          <h2 style="font-size: 3.5rem; color: #d97706; margin: 0.5rem 0;">${score}/10</h2>
+          <p style="margin-top: 1rem; font-weight: 600; color: var(--text-muted);"><span class="hover-translate" data-es="¡Tu evaluación ha sido guardada con éxito!">Your evaluation has been successfully saved!</span></p>
+        </div>
+      `;
+    }
+
+    function lockClassAsExpired() {
+      isClassClosed = true;
+      const expiredHTML = `
+        <div class="result-summary" style="border-color: #ef4444; background: #fef2f2; padding: 1.5rem; margin: 1rem 0; text-align:center;">
+          <h3 style="color: #ef4444; margin: 0;"><span class="hover-translate" data-es="Tiempo Agotado (0/10)">Time Expired (0/10)</span></h3>
+        </div>
+      `;
+      document.getElementById('eval-btn-container').innerHTML = expiredHTML;
+      
+      // Disable buttons
+      let b1 = document.getElementById('btn-submit-pre'); if(b1) b1.disabled = true;
+      let b2 = document.getElementById('btn-submit-dur'); if(b2) b2.disabled = true;
+      let b3 = document.getElementById('btn-start-quiz'); if(b3) b3.disabled = true;
+      gameActive = false; // Disable tic tac toe
+    }
+
+    // INIT
+    onAuthStateChanged(auth, async (user) => {
+      const loadingEl = document.getElementById('loading');
+      if (user) {
+        currentUser = user;
+        const snap = await getDoc(doc(db, 'clases', MATERIA_ID, 'entregas', CLASS_ID));
+        
+        if (!snap.exists()) {
+          alert("The class has not been configured in the database.");
+          window.location.href = "../../pages/clases.html";
+          return;
+        }
+
+        const docData = snap.data();
+        const now = new Date();
+        const startDate = new Date(docData.inicio);
+        const endDate = new Date(docData.fin);
+
+        if (now < startDate) {
+          alert("This class is not available yet.");
+          window.location.href = "../../pages/clases.html";
+          return;
+        }
+
+        let hasEval = false;
+        if (docData.respuestas && docData.respuestas[user.uid]) {
+          const userData = docData.respuestas[user.uid];
+          if (userData.notaAdicional !== undefined) {
+             showQuizGrade(userData.notaAdicional);
+             hasEval = true;
+          }
+        }
+
+        if (now > endDate && !hasEval) {
+           lockClassAsExpired();
+        }
+
+      } else {
+        document.getElementById('evaluation-area').innerHTML = `
+          <div class="result-summary" style="text-align:center;">
+            <h2><span class="hover-translate" data-es="Sesión Requerida">Login Required</span></h2>
+            <p><span class="hover-translate" data-es="Debes iniciar sesión para realizar la actividad.">You must log in to do the activity.</span></p>
+            <a href="../../index.html" class="btn-submit" style="text-decoration:none; display:inline-flex; width:auto;"><span class="hover-translate" data-es="Ir al Inicio">Go to Home</span></a>
+          </div>`;
+      }
+      loadingEl.style.display = 'none';
+    });
+  </script>
+</body>
+</html>

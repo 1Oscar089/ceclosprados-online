@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+  <title>Recursos | CENTRO ESCOLAR CANTÓN LOS PRADOS</title>
+  <link rel="stylesheet" href="../css/styles.css">
+  <style>
+    .back-btn { 
+      display: inline-flex; align-items: center; gap: 0.5rem; 
+      margin-bottom: 1.5rem; color: var(--text-muted); font-weight: 500; 
+      padding: 0.5rem 0.8rem; border-radius: 0.6rem;
+      transition: all 0.2s;
+    }
+    .back-btn:hover { 
+      color: var(--primary); background: var(--surface-hover); 
+      transform: translateX(-2px); text-decoration: none; 
+    }
+    
+    .grade-badge { 
+      margin-left: 0.5rem; vertical-align: middle; 
+      background: linear-gradient(135deg, #34d399, #10b981);
+      color: white; padding: 0.2rem 0.6rem; border-radius: 999px;
+      font-size: 0.75rem; font-weight: 700;
+      box-shadow: 0 2px 6px rgba(16, 185, 129, 0.3);
+    }
+    
+    .resources-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.5rem;
+      padding-bottom: 3rem;
+    }
+    
+    .resource-card {
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(12px);
+      border: 2px solid rgba(167, 139, 250, 0.2);
+      border-radius: 1rem;
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+      box-shadow: 0 4px 16px rgba(139, 92, 246, 0.08);
+      animation: fadeInUp 0.4s ease forwards;
+    }
+    
+    [data-theme="dark"] .resource-card {
+      background: rgba(30, 27, 75, 0.85);
+      border-color: rgba(99, 102, 241, 0.3);
+    }
+    
+    .resource-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 24px rgba(139, 92, 246, 0.2);
+      border-color: var(--primary);
+    }
+    
+    .resource-header { display: flex; align-items: flex-start; gap: 1rem; }
+    
+    .resource-icon {
+      width: 48px; height: 48px;
+      background: linear-gradient(135deg, #ede9fe, #ddd6fe);
+      border-radius: 12px;
+      display: grid; place-items: center;
+      color: #7c3aed; flex-shrink: 0;
+    }
+    [data-theme="dark"] .resource-icon {
+      background: linear-gradient(135deg, #312e81, #1e1b4b);
+      color: #a78bfa;
+    }
+    .resource-icon svg { width: 24px; height: 24px; }
+    
+    .resource-title { 
+      margin: 0 0 0.5rem 0; 
+      font-size: 1.05rem; 
+      font-weight: 700; 
+      color: var(--text); 
+      line-height: 1.3; 
+    }
+    
+    .resource-meta { 
+      display: flex; 
+      flex-wrap: wrap; 
+      gap: 0.5rem; 
+    }
+    
+    .resource-tag {
+      font-size: 0.75rem; 
+      padding: 0.2rem 0.6rem;
+      background: var(--surface-hover); 
+      color: var(--text-muted);
+      border-radius: 999px; 
+      border: 1px solid var(--border);
+    }
+    
+    .resource-actions { margin-top: auto; }
+    
+    .btn-ver {
+      display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
+      width: 100%; padding: 0.75rem;
+      background: linear-gradient(135deg, #a78bfa, #8b5cf6);
+      color: white; border-radius: 0.75rem;
+      font-weight: 600; font-size: 0.95rem;
+      text-decoration: none; transition: all 0.2s;
+      box-shadow: 0 2px 6px rgba(139, 92, 246, 0.3);
+    }
+    .btn-ver:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(139, 92, 246, 0.4);
+    }
+    
+    .empty-state { 
+      text-align: center; padding: 4rem 1rem; color: var(--text-muted);
+      grid-column: 1 / -1;
+    }
+    .empty-state svg { 
+      width: 80px; height: 80px; margin-bottom: 1rem; opacity: 0.3; 
+    }
+    
+    @keyframes fadeInUp { 
+      from { opacity: 0; transform: translateY(15px); } 
+      to { opacity: 1; transform: translateY(0); } 
+    }
+    
+    @media (max-width: 768px) {
+      .resources-grid { grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1rem; }
+      .resource-card { padding: 1.25rem; }
+    }
+    @media (max-width: 480px) {
+      .resources-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div id="userbar"></div>
+
+  <header class="app-container mt-6">
+    <a href="home.html" class="btn btn-ghost back-btn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><path d="M19 12H5"/><polyline points="12 19 5 12 12 5"/></svg>
+      Volver al Inicio
+    </a>
+    
+    <!-- HEADER CON ICONO Y TÍTULO EN LA MISMA LÍNEA -->
+    <h1 class="text-xl font-bold mb-2" style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+      <span class="icon icon-md" style="color: var(--primary); display: inline-flex;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
+          <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+          <path d="M8 7h8"/><path d="M8 11h6"/><path d="M8 15h4"/>
+        </svg>
+      </span>
+      <span>Recursos</span>
+      <span id="grade-label" class="grade-badge">Cargando...</span>
+    </h1>
+    <p class="text-muted">Biblioteca digital: libros, guías y materiales de apoyo</p>
+  </header>
+
+  <main class="app-container">
+    <div id="resources-grid" class="resources-grid"></div>
+  </main>
+
+  <script type="module">
+    import { initFirebase } from '../js/initFirebase.js';
+    import { initUserBar } from '../js/userbar.js';
+    import { doc, getDoc } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js";
+    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-auth.js";
+    
+    initUserBar('#userbar');
+    const { db, auth } = initFirebase();
+
+    const RECURSOS_DB = {
+      7: [
+        { id: 'rec-7-mat-1', titulo: 'Matemática 7° (Libro Oficial)', materia: 'Matemática y datos', url: 'https://ejemplo.com/mat7.pdf', tipo: 'PDF' },
+        { id: 'rec-7-cie-1', titulo: 'Guía de Laboratorio Ciencias', materia: 'Ciencia y tecnología', url: 'https://ejemplo.com/cie7.pdf', tipo: 'PDF' },
+        { id: 'rec-7-ing-1', titulo: 'Vocabulario Visual Unit 1', materia: 'Inglés', url: 'https://ejemplo.com/ing7', tipo: 'Interactivo' }
+      ],
+      8: [
+        { id: 'rec-8-mat-1', titulo: 'Matemática 8° (Libro Oficial)', materia: 'Matemática y datos', url: 'https://ejemplo.com/mat8.pdf', tipo: 'PDF' },
+        { id: 'rec-8-cie-1', titulo: 'Manual de Ecosistemas', materia: 'Ciencia y tecnología', url: 'https://ejemplo.com/cie8.pdf', tipo: 'PDF' },
+        { id: 'rec-8-ing-1', titulo: 'Gramática: Past Tense', materia: 'Inglés', url: 'https://ejemplo.com/ing8.pdf', tipo: 'PDF' }
+      ],
+      9: [
+        { id: 'rec-9-mat-1', titulo: 'Matemática 9° (Libro Oficial)', materia: 'Matemática y datos', url: 'https://ejemplo.com/mat9.pdf', tipo: 'PDF' },
+        { id: 'rec-9-cie-1', titulo: 'Guía de Electricidad', materia: 'Ciencia y tecnología', url: 'https://ejemplo.com/cie9.pdf', tipo: 'PDF' },
+        { id: 'rec-9-ing-1', titulo: 'Conditionals Quiz', materia: 'Inglés', url: 'https://ejemplo.com/ing9', tipo: 'Interactivo' }
+      ]
+    };
+
+    async function detectGrado() {
+      const params = new URLSearchParams(window.location.search);
+      if (params.has('grado')) return parseInt(params.get('grado')) || 7;
+      
+      if (typeof window.getUserGrade === 'function') {
+        const cached = window.getUserGrade();
+        if (cached) return cached;
+      }
+      
+      const demo = sessionStorage.getItem('demoUser');
+      if (demo) return JSON.parse(demo).grado || 7;
+      
+      return new Promise((resolve) => {
+        const unsubscribe = onAuthStateChanged(auth, async (user) => {
+          unsubscribe();
+          if (user) {
+            try {
+              const initials = (user.displayName || 'USR').split(' ').map(n => n[0]).join('').slice(0, 3).toUpperCase();
+              const local = user.email?.split('@')[0] || '';
+              const docId = `est_${local}_${initials}`;
+              const snap = await getDoc(doc(db, 'users', docId));
+              resolve(snap.exists() ? snap.data().grado || 7 : 7);
+            } catch (e) { resolve(7); }
+          } else { resolve(7); }
+        });
+        setTimeout(() => { unsubscribe(); resolve(7); }, 3000);
+      });
+    }
+
+    const ICONS = {
+      book: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>`,
+      eye: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>`
+    };
+
+    function renderRecursos(recursos, grado) {
+      const container = document.getElementById('resources-grid');
+      container.innerHTML = '';
+      
+      if (!recursos || recursos.length === 0) {
+        container.innerHTML = `
+          <div class="empty-state">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+            </svg>
+            <h3>No hay recursos disponibles</h3>
+            <p>Por ahora no hay materiales para ${grado}° grado.</p>
+          </div>`;
+        return;
+      }
+
+      recursos.forEach((recurso, index) => {
+        const card = document.createElement('div');
+        card.className = 'resource-card';
+        card.style.animationDelay = `${index * 0.05}s`;
+        card.innerHTML = `
+          <div class="resource-header">
+            <div class="resource-icon">${ICONS.book}</div>
+            <div style="flex:1;min-width:0;">
+              <h3 class="resource-title">${recurso.titulo}</h3>
+              <div class="resource-meta">
+                <span class="resource-tag">${recurso.materia}</span>
+                <span class="resource-tag">${recurso.tipo}</span>
+              </div>
+            </div>
+          </div>
+          <div class="resource-actions">
+            <a href="${recurso.url}" class="btn-ver" target="_blank" rel="noopener noreferrer">
+              ${ICONS.eye} Ver Recurso
+            </a>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    (async function init() {
+      try {
+        const grado = await detectGrado();
+        document.getElementById('grade-label').textContent = `${grado}° Grado`;
+        const recursos = RECURSOS_DB[grado] || [];
+        renderRecursos(recursos, grado);
+      } catch (error) {
+        console.error('Error cargando recursos:', error);
+      }
+    })();
+  </script>
+</body>
+</html>

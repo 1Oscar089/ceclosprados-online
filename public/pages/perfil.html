@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+  <title>Perfil | CENTRO ESCOLAR CANTÓN LOS PRADOS</title>
+  <link rel="stylesheet" href="../css/styles.css">
+  <style>
+    /* ===== PERFIL PREMIUM - PASTEL DESIGN ===== */
+    .profile-layout { 
+      display: grid; 
+      grid-template-columns: 340px 1fr; 
+      gap: 1.5rem; 
+      padding-bottom: 3rem; 
+    }
+    
+    .profile-card {
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(12px);
+      border: 2px solid rgba(167, 139, 250, 0.2);
+      border-radius: 1.25rem;
+      padding: 2rem;
+      text-align: center;
+      box-shadow: 0 4px 16px rgba(139, 92, 246, 0.08);
+      transition: all 0.3s ease;
+    }
+    [data-theme="dark"] .profile-card {
+      background: rgba(30, 27, 75, 0.85);
+      border-color: rgba(99, 102, 241, 0.3);
+    }
+    
+    .profile-avatar {
+      width: 96px; height: 96px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #a78bfa, #8b5cf6);
+      display: grid; place-items: center;
+      font-size: 2.5rem; font-weight: 800; color: #fff;
+      margin: 0 auto 1rem;
+      box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+    }
+    [data-theme="dark"] .profile-avatar {
+      background: linear-gradient(135deg, #4f46e5, #7c3aed);
+    }
+    
+    .profile-name { margin: 0; font-size: 1.5rem; font-weight: 800; color: var(--text); }
+    .profile-role { margin: 0.5rem 0 1.5rem; color: var(--text-muted); font-size: 0.95rem; }
+    
+    .profile-stats { 
+      display: grid; 
+      grid-template-columns: 1fr 1fr; 
+      gap: 0.75rem; 
+      margin-bottom: 1.5rem; 
+    }
+    .stat-box { 
+      background: var(--surface-hover); 
+      border-radius: 0.75rem; 
+      padding: 0.75rem; 
+      text-align: center; 
+      border: 1px solid var(--border);
+    }
+    .stat-value { display: block; font-size: 1.25rem; font-weight: 800; color: var(--primary); }
+    .stat-label { font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+    
+    .btn-sync { 
+      width: 100%; 
+      background: transparent; 
+      border: 1px solid var(--border); 
+      color: var(--text); 
+      border-radius: 0.75rem; 
+      padding: 0.75rem; 
+      font-weight: 600; 
+      cursor: pointer; 
+      transition: all 0.2s;
+    }
+    .btn-sync:hover { background: var(--surface-hover); border-color: var(--primary); }
+    
+    .profile-details { display: grid; gap: 1.5rem; }
+    
+    .detail-card {
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(12px);
+      border: 2px solid rgba(167, 139, 250, 0.2);
+      border-radius: 1rem;
+      padding: 1.5rem;
+      box-shadow: 0 4px 16px rgba(139, 92, 246, 0.08);
+    }
+    [data-theme="dark"] .detail-card {
+      background: rgba(30, 27, 75, 0.85);
+      border-color: rgba(99, 102, 241, 0.3);
+    }
+    
+    .detail-card h3 { 
+      margin: 0 0 1rem; 
+      font-size: 1.1rem; 
+      display: flex; 
+      align-items: center; 
+      gap: 0.5rem; 
+      color: var(--text);
+    }
+    
+    .info-list { list-style: none; padding: 0; margin: 0; }
+    .info-list li { 
+      display: flex; 
+      justify-content: space-between; 
+      align-items: center;
+      padding: 0.85rem 0; 
+      border-bottom: 1px solid var(--border); 
+      font-size: 0.95rem; 
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    .info-list li:last-child { border-bottom: none; }
+    .info-label { color: var(--text-muted); font-weight: 500; }
+    .info-value { font-weight: 600; color: var(--text); text-align: right; }
+    
+    .skeleton { animation: pulse 1.5s infinite; background: var(--surface-hover); border-radius: 0.5rem; }
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+    
+    @media (max-width: 900px) { 
+      .profile-layout { grid-template-columns: 1fr; } 
+      .profile-card { order: -1; }
+    }
+  </style>
+</head>
+<body>
+  <div id="userbar"></div>
+
+  <header class="app-container mt-6">
+    <a href="home.html" class="btn btn-ghost back-btn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><path d="M19 12H5"/><polyline points="12 19 5 12 12 5"/></svg>
+      Volver al Inicio
+    </a>
+    <h1 class="text-xl font-bold mb-2" style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+      <span class="icon icon-md" style="color: var(--primary); display: inline-flex;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+        </svg>
+      </span>
+      <span>Mi Perfil</span>
+    </h1>
+    <p class="text-muted">Información de tu cuenta, estadísticas y preferencias</p>
+  </header>
+
+  <main class="app-container">
+    <div class="profile-layout">
+      <!-- Columna Izquierda: Tarjeta Principal -->
+      <section class="profile-card">
+        <div class="profile-avatar" id="avatar-initial">
+          <span class="skeleton" style="width:100%;height:100%;border-radius:50%;display:block;"></span>
+        </div>
+        <h2 class="profile-name" id="profile-name">Cargando...</h2>
+        <p class="profile-role" id="profile-role">Estudiante</p>
+        
+        <div class="profile-stats">
+          <div class="stat-box"><span class="stat-value" id="stat-puntos">-</span><span class="stat-label">Puntos</span></div>
+          <div class="stat-box"><span class="stat-value" id="stat-nivel">-</span><span class="stat-label">Nivel</span></div>
+          <div class="stat-box"><span class="stat-value" id="stat-energia">-</span><span class="stat-label">Energía</span></div>
+          <div class="stat-box"><span class="stat-value" id="stat-racha">-</span><span class="stat-label">Racha</span></div>
+        </div>
+        
+        <button class="btn-sync" id="btn-sync">🔄 Sincronizar Datos</button>
+      </section>
+
+      <!-- Columna Derecha: Detalles -->
+      <div class="profile-details">
+        <div class="detail-card">
+          <h3>📧 Información de la Cuenta</h3>
+          <ul class="info-list">
+            <li><span class="info-label">Correo Electrónico</span><span class="info-value" id="info-email">-</span></li>
+            <li><span class="info-label">Grado Asignado</span><span class="info-value" id="info-grado">-</span></li>
+            <li><span class="info-label">Rol</span><span class="info-value" id="info-rol">-</span></li>
+            <li><span class="info-label">Último Acceso</span><span class="info-value" id="info-login">-</span></li>
+          </ul>
+        </div>
+
+        <div class="detail-card">
+          <h3>📊 Rendimiento & Progreso</h3>
+          <ul class="info-list">
+            <li><span class="info-label">Tareas Entregadas</span><span class="info-value">12</span></li>
+            <li><span class="info-label">Exámenes Realizados</span><span class="info-value">5</span></li>
+            <li><span class="info-label">Juegos Completados</span><span class="info-value">3</span></li>
+            <li><span class="info-label">Precisión Promedio</span><span class="info-value">85%</span></li>
+          </ul>
+        </div>
+
+        <div class="detail-card">
+          <h3>⚙️ Preferencias del Sistema</h3>
+          <ul class="info-list">
+            <li><span class="info-label">Tema Visual</span><span class="info-value" id="pref-theme">-</span></li>
+            <li><span class="info-label">Notificaciones</span><span class="info-value">Activadas</span></li>
+            <li><span class="info-label">Idioma</span><span class="info-value">Español (SV)</span></li>
+            <li><span class="info-label">Versión</span><span class="info-value">2.4.0</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script type="module">
+    import { initFirebase } from '../js/initFirebase.js';
+    import { initUserBar } from '../js/userbar.js';
+    import { doc, getDoc } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js";
+    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-auth.js";
+    
+    initUserBar('#userbar');
+    const { db, auth } = initFirebase();
+
+    // ===== RENDERIZADO DE PERFIL =====
+    function renderProfile(data) {
+      const name = data.nombre || data.name || 'Usuario';
+      const initial = name.charAt(0).toUpperCase();
+      
+      document.getElementById('avatar-initial').textContent = initial;
+      document.getElementById('profile-name').textContent = name;
+      document.getElementById('profile-role').textContent = `Estudiante • ${data.grado || 7}° Grado`;
+      
+      document.getElementById('stat-puntos').textContent = data.puntos ?? 0;
+      document.getElementById('stat-nivel').textContent = data.nivel ?? 1;
+      document.getElementById('stat-energia').textContent = data.energia ?? 5;
+      document.getElementById('stat-racha').textContent = data.racha ?? 0;
+      
+      document.getElementById('info-email').textContent = auth.currentUser?.email || 'No disponible';
+      document.getElementById('info-grado').textContent = `${data.grado || 7}° Grado`;
+      document.getElementById('info-rol').textContent = data.rol || 'Estudiante';
+      document.getElementById('info-login').textContent = data.lastLogin || 'Hoy';
+      
+      const theme = localStorage.getItem('theme') || 'light';
+      document.getElementById('pref-theme').textContent = theme === 'dark' ? ' Modo Oscuro' : '☀️ Modo Claro';
+    }
+
+    // ===== CARGA DE DATOS (Cache → Firebase) =====
+    async function loadProfile() {
+      // 1. Cargar caché instantáneo
+      const cached = JSON.parse(localStorage.getItem('cecp_user_data') || '{}');
+      if (cached.nombre) renderProfile(cached);
+
+      // 2. Sincronizar con Firebase si hay sesión
+      const unsubscribe = onAuthStateChanged(auth, async (user) => {
+        if (!user) return;
+        try {
+          const initials = (user.displayName || 'USR').split(' ').map(n => n[0]).join('').slice(0, 3).toUpperCase();
+          const local = user.email?.split('@')[0] || '';
+          const docId = `est_${local}_${initials}`;
+          const snap = await getDoc(doc(db, 'users', docId));
+          
+          if (snap.exists()) {
+            const data = snap.data();
+            localStorage.setItem('cecp_user_data', JSON.stringify(data));
+            renderProfile(data);
+          }
+        } catch (e) {
+          console.error('Error cargando perfil:', e);
+          window.showToast('Error al sincronizar datos', 'error');
+        } finally {
+          unsubscribe();
+        }
+      });
+    }
+
+    // ===== BOTÓN SINCRONIZAR =====
+    document.getElementById('btn-sync').addEventListener('click', async () => {
+      window.showToast('Sincronizando con la nube...', 'info', 2000);
+      await loadProfile();
+      setTimeout(() => window.showToast('Datos actualizados correctamente ✅', 'success'), 800);
+    });
+
+    // ===== INICIALIZACIÓN =====
+    document.addEventListener('DOMContentLoaded', loadProfile);
+  </script>
+</body>
+</html>

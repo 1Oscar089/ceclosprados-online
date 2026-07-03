@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tarea 7-u3-117 | CENTRO ESCOLAR CANTÓN LOS PRADOS</title>
+  <link rel="stylesheet" href="../../css/styles.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/mathlive@0.98.0/dist/mathlive.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mathlive@0.98.0/dist/mathlive-fonts.css">
+  <style>
+    .back-btn { display: inline-flex; align-items: center; gap: 0.5rem; margin-bottom: 1.5rem; padding: 0.5rem 0.8rem; border-radius: 0.6rem; cursor: pointer; text-decoration: none; color: var(--text-muted); }
+    .back-btn:hover { color: var(--primary); background: var(--surface-hover); }
+    .task-header { background: rgba(255,255,255,0.85); border: 2px solid rgba(167,139,250,0.2); border-radius: 1rem; padding: 1.5rem; margin-bottom: 2rem; }
+    .exercise-box { background: rgba(255,255,255,0.85); border: 2px solid rgba(167,139,250,0.2); border-radius: 1rem; padding: 2rem; margin-bottom: 2rem; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
+    .problem { background: var(--surface-hover); border: 2px solid var(--border); border-radius: 0.75rem; padding: 1.25rem; }
+    .label { font-weight: 700; margin-bottom: 0.5rem; }
+    .values { color: var(--text-muted); margin-bottom: 1rem; font-size: 0.9rem; }
+    math-field { width: 100%; font-size: 1.2rem; padding: 0.5rem; border: 2px solid var(--border); border-radius: 0.5rem; background: white; outline: none; }
+    math-field:focus-within { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(167, 139, 250, 0.2); }
+    .hint { font-size: 0.75rem; color: var(--text-muted); margin-top: 0.5rem; }
+    .btn-submit { display: inline-flex; align-items: center; gap: 0.5rem; padding: 1rem 2rem; background: linear-gradient(135deg, #a78bfa, #8b5cf6); color: white; border: none; border-radius: 0.75rem; font-weight: 700; cursor: pointer; margin: 2rem auto; display: block; }
+    .btn-submit:disabled { opacity: 0.6; cursor: not-allowed; }
+    .result { text-align: center; padding: 3rem; background: rgba(255,255,255,0.85); border-radius: 1rem; margin: 2rem auto; max-width: 600px; box-shadow: 0 4px 16px rgba(0,0,0,0.05); }
+    .grade { font-size: 4rem; font-weight: 900; color: var(--primary); margin: 1rem 0; line-height: 1; }
+    .loading { position: fixed; inset: 0; background: rgba(255,255,255,0.9); display: flex; justify-content: center; align-items: center; z-index: 9999; }
+    .alert { padding: 1.5rem; border-radius: 0.75rem; margin: 1rem 0; text-align: left; }
+    .alert-error { background: #fee2e2; border: 2px solid #ef4444; color: #991b1b; }
+    .btn-retry { background: #10b981; color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 0.5rem; font-weight: 600; cursor: pointer; margin-top: 1rem; }
+    @media (max-width: 768px) { .grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <div id="userbar"></div>
+  <div id="loading" class="loading">Cargando...</div>
+
+  <header class="app-container mt-6">
+    <a href="../../pages/tareas.html" class="back-btn">← Volver</a>
+    <div class="task-header">
+      <h1>Ejercicios U4 1.7</h1>
+      <p style="color: var(--text-muted)">Matemática</p>
+    </div>
+  </header>
+
+  <main class="app-container" id="content"></main>
+
+  <script type="module">
+    import { initUserBar } from '../../js/userbar.js';
+    import { initFirebase } from '../../js/initFirebase.js';
+    import { doc, getDoc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js";
+    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-auth.js";
+    
+    initUserBar('#userbar');
+    const { db, auth } = initFirebase();
+
+    const MATERIA_ID = 'matematica';
+    const TASK_ID = '7-u3-117';
+    
+    const ANSWERS = {
+      e1a: '5', e1b: '-9', e1c: '5', e1d: '6', e1e: '\\frac{2}{7}', e1f: '-\\frac{1}{4}',
+      e2a: '-5', e2b: '9', e2c: '-5', e2d: '-6', e2e: '-\\frac{2}{7}', e2f: '\\frac{1}{4}',
+      e3a: '-5', e3b: '5', e3c: '-35', e3d: '\\frac{17}{4}'
+    };
+
+    const PROBLEMS = [
+      { ex: 1, expr: 'x + y', items: [
+        { id: 'e1a', label: 'a)', vals: 'x = 2, y = 3' },
+        { id: 'e1b', label: 'b)', vals: 'x = -4, y = -5' },
+        { id: 'e1c', label: 'c)', vals: 'x = 7, y = -2' },
+        { id: 'e1d', label: 'd)', vals: 'x = -3, y = 9' },
+        { id: 'e1e', label: 'e)', vals: 'x = 5/7, y = -3/7' },
+        { id: 'e1f', label: 'f)', vals: 'x = -1/2, y = 1/4' }
+      ]},
+      { ex: 2, expr: '-x - y', items: [
+        { id: 'e2a', label: 'a)', vals: 'x = 2, y = 3' },
+        { id: 'e2b', label: 'b)', vals: 'x = -4, y = -5' },
+        { id: 'e2c', label: 'c)', vals: 'x = 7, y = -2' },
+        { id: 'e2d', label: 'd)', vals: 'x = -3, y = 9' },
+        { id: 'e2e', label: 'e)', vals: 'x = 5/7, y = -3/7' },
+        { id: 'e2f', label: 'f)', vals: 'x = -1/2, y = 1/4' }
+      ]},
+      { ex: 3, expr: '5a - 10b', items: [
+        { id: 'e3a', label: 'a)', vals: 'a = 3, b = 2' },
+        { id: 'e3b', label: 'b)', vals: 'a = -3, b = -2' },
+        { id: 'e3c', label: 'c)', vals: 'a = -3, b = 2' },
+        { id: 'e3d', label: 'd)', vals: 'a = 3/20, b = -7/20' }
+      ]}
+    ];
+
+    let currentUser = null;
+    let alreadySubmitted = false;
+
+    function validate() {
+      let correct = 0;
+      let respuestasUsuario = {}; 
+      const parseMath = (str) => {
+        if (!str) return NaN;
+        let eq = str.replace(/\s/g, '').replace(/−/g, '-').replace(/\\left/g, '').replace(/\\right/g, '').replace(/\\mleft/g, '').replace(/\\mright/g, '').replace(/\\displaystyle/g, '');
+        let prev; do { prev = eq; eq = eq.replace(/\\frac\{([^{}]+)\}\{([^{}]+)\}/g, '($1/$2)'); } while (eq !== prev);
+        eq = eq.replace(/\\frac(\d)(\d)/g, '($1/$2)');
+        eq = eq.replace(/--/g, '+');
+        try { return Function('"use strict";return (' + eq + ')')(); } catch(e) { return NaN; }
+      };
+
+      for (const [id, correctAns] of Object.entries(ANSWERS)) {
+        const field = document.getElementById(id);
+        if (!field) continue;
+        const userVal = field.value || '';
+        respuestasUsuario[id] = userVal; 
+        const numUser = parseMath(userVal);
+        const numTarget = parseMath(correctAns);
+        if (!isNaN(numUser) && !isNaN(numTarget) && Math.abs(numUser - numTarget) < 1e-6) correct++;
+      }
+      return { correct, respuestasUsuario };
+    }
+
+    function getFechaElSalvador() {
+      return new Intl.DateTimeFormat('es-SV', {
+        timeZone: 'America/El_Salvador',
+        day: '2-digit', month: '2-digit', year: 'numeric',
+        hour: '2-digit', minute: '2-digit', second: '2-digit'
+      }).format(new Date());
+    }
+
+    function renderForm() {
+      const html = PROBLEMS.map(({ ex, expr, items }) => `
+        <div class="exercise-box">
+          <h3 style="color: var(--primary); margin-bottom: 0.5rem">Ejercicio ${ex}</h3>
+          <p style="margin-bottom: 1.5rem">Expresión: <strong>${expr}</strong></p>
+          <div class="grid">
+            ${items.map(({ id, label, vals }) => `
+              <div class="problem">
+                <div class="label">${label}</div>
+                <div class="values">${vals}</div>
+                <math-field id="${id}" virtual-keyboard-mode="onfocus"></math-field>
+                <div class="hint">⌨️ Puedes usar tu teclado o presionar para abrir el virtual</div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `).join('');
+      document.getElementById('content').innerHTML = html + `<button class="btn-submit" onclick="submitAnswers()">Enviar Respuestas</button>`;
+    }
+
+    function showGrade(nota, correct, total) {
+      document.getElementById('content').innerHTML = `
+        <div class="result">
+          <div style="color: var(--text-muted); font-size: 1.2rem; font-weight: 600;">Calificación Final</div>
+          <div class="grade">${nota}/10</div>
+          <p style="color: var(--text); margin-bottom: 0.5rem; font-size: 1.1rem;">Respuestas correctas: <strong>${correct}</strong> de ${total}</p>
+          <p style="color: var(--text-muted); margin-bottom: 2rem;">Resultados guardados correctamente en la base de datos.</p>
+          <a href="../../pages/tareas.html" class="btn-submit" style="text-decoration:none;display:inline-block">Volver a Tareas</a>
+        </div>
+      `;
+    }
+
+    window.submitAnswers = async function() {
+      if (!currentUser) return alert('Error: No hay usuario logueado');
+      if (alreadySubmitted) return alert('Ya has enviado esta tarea.');
+      
+      const btn = document.querySelector('.btn-submit');
+      btn.disabled = true;
+      btn.textContent = '⏳ Evaluando y guardando...';
+
+      try {
+        const { correct, respuestasUsuario } = validate();
+        const total = Object.keys(ANSWERS).length;
+        const nota = Number(((correct / total) * 10).toFixed(1));
+
+        // GUARDADO CON AÑO Y GRADO COMO FILTROS PARA EL DOCENTE
+        const taskDocRef = doc(db, 'tareas', MATERIA_ID, 'entregas', TASK_ID);
+        await setDoc(taskDocRef, {
+          grado: 7,
+          año: new Date().getFullYear(),
+          materia: MATERIA_ID,
+          updatedAt: serverTimestamp(),
+          respuestas: {
+            [currentUser.uid]: {
+              nombre: currentUser.displayName || currentUser.email || 'Sin nombre',
+              email: currentUser.email,
+              nota: nota,
+              respuestasUsuario: respuestasUsuario,
+              fechaLocal: getFechaElSalvador()
+            }
+          }
+        }, { merge: true });
+
+        alreadySubmitted = true;
+        showGrade(nota, correct, total);
+        
+      } catch(error) {
+        console.error('❌ Error:', error);
+        alert('Error al guardar: ' + error.message);
+        btn.disabled = false;
+        btn.textContent = 'Enviar Respuestas';
+      }
+    };
+
+    onAuthStateChanged(auth, async (user) => {
+      const loadingEl = document.getElementById('loading');
+      if (user) {
+        currentUser = user;
+        try {
+          const taskDocRef = doc(db, 'tareas', MATERIA_ID, 'entregas', TASK_ID);
+          const snap = await getDoc(taskDocRef);
+          if (snap.exists() && snap.data().respuestas && snap.data().respuestas[user.uid]) {
+            alreadySubmitted = true;
+            const userData = snap.data().respuestas[user.uid];
+            const total = Object.keys(ANSWERS).length;
+            const correctVisual = Math.round((userData.nota / 10) * total);
+            loadingEl.style.display = 'none'; 
+            showGrade(userData.nota, correctVisual, total);
+            return;
+          }
+          renderForm();
+        } catch(e) { renderForm(); }
+      } else {
+        document.getElementById('content').innerHTML = `
+          <div class="result"><h2 style="margin-bottom:1rem">Sesión Requerida</h2><p>Debes iniciar sesión.</p></div>`;
+      }
+      loadingEl.style.display = 'none';
+    });
+  </script>
+</body>
+</html>

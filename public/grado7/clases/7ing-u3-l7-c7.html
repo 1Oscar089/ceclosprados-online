@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+  <title>Possessive Adjectives | English 7°</title>
+  <link rel="stylesheet" href="../../css/styles.css">
+
+  <style>
+    .back-btn { display: inline-flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem; color: var(--text-muted); font-weight: 500; transition: color 0.2s; }
+    .back-btn:hover { color: var(--primary); text-decoration: none; }
+    .class-header { margin-bottom: 2rem; border-bottom: 2px solid var(--border); padding-bottom: 1rem; }
+    .class-title { font-size: 1.8rem; color: var(--primary); font-weight: 800; }
+    
+    .section { margin-bottom: 3rem; opacity: 0.4; pointer-events: none; transition: all 0.5s ease; position: relative;}
+    .section.unlocked { opacity: 1; pointer-events: auto; }
+    
+    .section-title { font-size: 1.5rem; font-weight: 800; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.7rem; }
+    .section-pre { border-left: 5px solid #ec4899; padding-left: 1rem; }
+    .section-during { border-left: 5px solid #8b5cf6; padding-left: 1rem; }
+    .section-post { border-left: 5px solid #0ea5e9; padding-left: 1rem; }
+    .section-eval { border-left: 5px solid #f59e0b; padding-left: 1rem; }
+
+    .content-box { background: var(--surface); border: 1px solid var(--border); border-radius: 1rem; padding: 1.5rem; margin-bottom: 1.5rem; line-height: 1.8; }
+    [data-theme="dark"] .content-box { background: #1e293b; border-color: #334155; }
+
+    .notice-banner { background: #fef2f2; border: 2px dashed #ef4444; color: #b91c1c; padding: 1rem; border-radius: 0.75rem; text-align: center; font-weight: bold; font-size: 1.1rem; margin-bottom: 2rem;}
+    [data-theme="dark"] .notice-banner { background: #450a0a; border-color: #ef4444; color: #fca5a5; }
+
+    /* TRADUCCIÓN HOVER */
+    .hover-translate { border-bottom: 2px dotted #10b981; cursor: help; position: relative; display: inline; transition: color 0.2s;}
+    .hover-translate:hover { color: #059669; }
+    .hover-translate:hover::after {
+      content: attr(data-es); position: absolute; bottom: 125%; left: 50%; transform: translateX(-50%);
+      background: #1e293b; color: white; padding: 0.5rem 1rem; border-radius: 0.5rem; font-size: 0.95rem; font-weight: normal;
+      white-space: normal; width: max-content; max-width: 300px; z-index: 100; box-shadow: 0 10px 15px rgba(0,0,0,0.2); text-align: center; line-height: 1.4;
+    }
+
+    /* HANGMAN GAME (PRE) */
+    .hm-container { background: #fdf4ff; border: 2px solid #f5d0fe; border-radius: 1rem; padding: 2rem; text-align: center; margin-bottom: 1.5rem; }
+    [data-theme="dark"] .hm-container { background: #4a044e; border-color: #86198f; }
+    .hm-stars { font-size: 2.5rem; margin-bottom: 1rem; letter-spacing: 5px; color: #f59e0b;}
+    .hm-clue { font-size: 1.2rem; font-weight: bold; color: #86198f; margin-bottom: 1.5rem; }
+    [data-theme="dark"] .hm-clue { color: #fbcfe8; }
+    .hm-word { font-size: 3rem; font-weight: 800; letter-spacing: 15px; color: var(--primary); margin-bottom: 2rem; font-family: monospace; }
+    .hm-keyboard { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.5rem; max-width: 600px; margin: 0 auto; }
+    .hm-key { background: white; border: 2px solid #cbd5e1; border-radius: 0.5rem; width: 45px; height: 45px; font-size: 1.2rem; font-weight: bold; color: #334155; cursor: pointer; transition: 0.2s; }
+    .hm-key:hover:not(:disabled) { background: #e2e8f0; transform: scale(1.1); }
+    .hm-key:disabled { opacity: 0.4; cursor: not-allowed; background: #f1f5f9; }
+    .hm-success { color: #10b981; font-size: 1.5rem; font-weight: bold; display: none; margin-top: 1rem;}
+
+    /* INPUTS & SELECTS */
+    .gap-select { padding: 0.6rem; border-radius: 0.5rem; border: 2px solid var(--border); font-weight: bold; cursor: pointer; background: var(--bg); color: var(--primary); outline: none; transition: 0.2s; font-family: inherit; font-size: 1rem; width: 100%; max-width: 250px;}
+    .gap-select:focus { border-color: var(--primary); }
+    .correct { border-color: #10b981 !important; background: #ecfdf5 !important; color: #064e3b !important; }
+    .incorrect { border-color: #ef4444 !important; background: #fef2f2 !important; color: #7f1d1d !important; }
+    .gap-select:disabled { opacity: 0.7; cursor: not-allowed; }
+
+    .btn-unlock { background: var(--primary); color: white; border: none; padding: 0.8rem 2rem; border-radius: 0.75rem; font-weight: 800; font-size: 1.1rem; cursor: pointer; margin-top: 1.5rem; transition: transform 0.2s, box-shadow 0.2s; }
+    .btn-unlock:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(0,0,0,0.2); }
+    .btn-unlock:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+    /* THEORY CARDS */
+    .theory-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-top: 1.5rem;}
+    .theory-card { background: #f8fafc; border: 1px solid #cbd5e1; border-top: 5px solid #8b5cf6; padding: 1.5rem; border-radius: 0.5rem; box-shadow: 0 4px 6px rgba(0,0,0,0.02);}
+    [data-theme="dark"] .theory-card { background: #0f172a; border-color: #334155; border-top-color: #8b5cf6; }
+    .pronoun-row { display: flex; align-items: center; justify-content: space-between; padding: 0.5rem 0; border-bottom: 1px solid var(--border); font-size: 1.1rem;}
+    .pronoun-row:last-child { border-bottom: none; }
+    .chip { background: var(--surface-hover); padding: 0.3rem 0.8rem; border-radius: 0.5rem; font-weight: bold; border: 1px solid var(--border);}
+
+    /* MODALS & QUIZ */
+    .quiz-option { display: flex; align-items: center; gap: 0.8rem; padding: 1rem; border: 1px solid var(--border); border-radius: 0.5rem; cursor: pointer; margin-bottom: 0.5rem; transition: background 0.2s; font-weight: 500;}
+    .quiz-option:hover { background: var(--surface-hover); }
+    .quiz-option input { accent-color: var(--primary); width: 1.2rem; height: 1.2rem; cursor: pointer;}
+    
+    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(4px); z-index: 10000; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.3s; padding: 1rem; }
+    .modal-overlay.active { opacity: 1; pointer-events: auto; }
+    .modal-content { background: var(--bg); width: 100%; max-width: 700px; max-height: 90vh; border-radius: 1.5rem; padding: 2rem; display: flex; flex-direction: column; position: relative; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); overflow: hidden; box-sizing: border-box; }
+    [data-theme="dark"] .modal-content { background: #0f172a; border: 1px solid #334155; }
+    .btn-close { position: absolute; top: 1.2rem; right: 1.2rem; background: var(--surface-hover); border: none; font-size: 1.5rem; cursor: pointer; color: var(--text-muted); width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; z-index: 10; }
+    
+    /* El modal de confirmación debe tener mayor Z-Index para verse por encima del quiz */
+    #confirm-modal { z-index: 10005 !important; }
+    
+    .modal-header { flex-shrink: 0; margin-bottom: 1.5rem; padding-right: 3rem; border-bottom: 2px solid var(--border); padding-bottom: 1rem;}
+    .modal-body { overflow-y: auto; flex: 1; padding-right: 0.5rem;}
+    .result-summary { text-align: center; margin-top: 1rem; font-weight: bold; font-size: 1.2rem; padding: 1rem; border-radius: 0.5rem; }
+    
+    .loading { position: fixed; inset: 0; background: rgba(255,255,255,0.9); display: flex; justify-content: center; align-items: center; z-index: 9999; }
+    [data-theme="dark"] .loading { background: rgba(11,17,32,0.9); }
+  </style>
+</head>
+<body>
+  <div id="userbar"></div>
+  <div id="loading" class="loading">Loading Lesson...</div>
+
+  <header class="app-container mt-4">
+    <a href="../../pages/clases.html" class="btn btn-ghost back-btn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><path d="M19 12H5"/><polyline points="12 19 5 12 12 5"/></svg>
+      <span class="hover-translate" data-es="Volver a Clases">Back to Classes</span>
+    </a>
+    
+    <div class="notice-banner">
+      📝 <span class="hover-translate" data-es="¡IMPORTANTE! Recuerda copiar todo el contenido de esta lección en tu cuaderno, escribiendo primero el tema de la clase.">IMPORTANT! Remember to copy all the content of this lesson in your notebook, writing down the topic first.</span>
+    </div>
+
+    <div class="class-header">
+      <h1 class="class-title"><span class="hover-translate" data-es="Adjetivos Posesivos y Familia Extendida">Possessive Adjectives & Extended Family</span></h1>
+      <p class="class-meta">Unit 3 • Lesson 7 • English 7°</p>
+    </div>
+  </header>
+
+  <main class="app-container">
+
+    <!-- I. PRE-ACTIVITY (HANGMAN) -->
+    <section class="section unlocked" id="sec-pre">
+      <h2 class="section-title section-pre">🎮 <span class="hover-translate" data-es="Pre: Juego 'Rescata las Estrellas'">Pre: Keeping my Stars! (Vocabulary)</span></h2>
+      <div class="content-box">
+        <p><span class="hover-translate" data-es="Descifra las palabras ocultas leyendo la pista sobre los miembros de la familia extendida.">Unscramble the hidden words by reading the clue about the extended family members.</span> <span class="hover-translate" data-es="¡Tienes 6 estrellas (vidas), no las pierdas!">You have 6 stars (lives), don't lose them!</span></p>
+        
+        <div class="hm-container">
+          <div class="hm-stars" id="hm-stars">⭐⭐⭐⭐⭐⭐</div>
+          <div class="hm-clue" id="hm-clue">Clue loading...</div>
+          <div class="hm-word" id="hm-word">_ _ _ _</div>
+          <div class="hm-keyboard" id="hm-keyboard">
+            <!-- Buttons injected by JS -->
+          </div>
+          <div class="hm-success" id="hm-success">
+            ✨ Excellent! You finished the vocabulary game! ✨
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- II. DURING ACTIVITY (THEORY) -->
+    <section class="section unlocked" id="sec-during">
+      <h2 class="section-title section-during">📖 <span class="hover-translate" data-es="Durante: Teoría Pura de los Adjetivos Posesivos">During: Theory of Possessive Adjectives</span></h2>
+      <div class="content-box">
+        <p><span class="hover-translate" data-es="Usamos los Adjetivos Posesivos para expresar posesión y decir de quién es algo.">We use possessive adjectives to express possession and to say who the owner of something is.</span></p>
+
+        <div class="theory-grid">
+          <div class="theory-card">
+            <h4 style="margin: 0 0 1rem 0; color: #8b5cf6; text-align: center;">Pronouns ➡️ Possessives</h4>
+            <div class="pronoun-row"><span class="chip">I</span> <span>➡️</span> <span class="chip" style="color: #ec4899;">my</span></div>
+            <div class="pronoun-row"><span class="chip">You</span> <span>➡️</span> <span class="chip" style="color: #ec4899;">your</span></div>
+            <div class="pronoun-row"><span class="chip">He</span> <span>➡️</span> <span class="chip" style="color: #ec4899;">his</span></div>
+            <div class="pronoun-row"><span class="chip">She</span> <span>➡️</span> <span class="chip" style="color: #ec4899;">her</span></div>
+            <div class="pronoun-row"><span class="chip">It</span> <span>➡️</span> <span class="chip" style="color: #ec4899;">its</span></div>
+            <div class="pronoun-row"><span class="chip">We</span> <span>➡️</span> <span class="chip" style="color: #ec4899;">our</span></div>
+            <div class="pronoun-row"><span class="chip">They</span> <span>➡️</span> <span class="chip" style="color: #ec4899;">their</span></div>
+          </div>
+
+          <div class="theory-card" style="border-top-color: #f59e0b;">
+            <h4 style="margin: 0 0 1rem 0; color: #f59e0b; text-align: center;">Examples</h4>
+            <ul style="line-height: 2.2; padding-left: 1.2rem;">
+              <li><strong style="color: #ef4444;">My</strong> name is Gabriela.</li>
+              <li><strong style="color: #ef4444;">Your</strong> name is Nelson.</li>
+              <li><strong style="color: #ef4444;">His</strong> name is Pablo. <span class="hover-translate" data-es="(Para hombre)">(Boy/Man)</span></li>
+              <li><strong style="color: #ef4444;">Her</strong> name is Rosa. <span class="hover-translate" data-es="(Para mujer)">(Girl/Woman)</span></li>
+              <li><strong style="color: #ef4444;">Its</strong> name is Firulais. <span class="hover-translate" data-es="(Para animal o cosa)">(Pet/Thing)</span></li>
+            </ul>
+          </div>
+        </div>
+
+        <div style="text-align: right;">
+          <button class="btn-unlock" id="btn-during" onclick="passDuring()"><span class="hover-translate" data-es="He copiado y comprendido la teoría">I have copied and understood</span></button>
+        </div>
+        <p id="res-during" class="result-summary" style="display:none;"></p>
+      </div>
+    </section>
+
+    <!-- III. POST ACTIVITY -->
+    <section class="section unlocked" id="sec-post">
+      <h2 class="section-title section-post">🗣️ <span class="hover-translate" data-es="Post: Práctica de Adjetivos Posesivos">Post: Possessive Adjectives Practice</span></h2>
+      <div class="content-box">
+        <p><span class="hover-translate" data-es="Completa las oraciones seleccionando el Adjetivo Posesivo correcto basado en el sujeto.">Complete the sentences by selecting the correct Possessive Adjective based on the subject.</span></p>
+
+        <div style="background: #f8fafc; padding: 2rem; border-radius: 1rem; border: 1px solid #cbd5e1; font-size: 1.1rem; line-height: 2.5;">
+          
+          <div>
+            1. I am a student. <select id="post-1" class="gap-select"><option value="">Select...</option><option value="my">My</option><option value="your">Your</option><option value="his">His</option></select> name is Carlos.
+          </div>
+          
+          <div>
+            2. She is my sister. <select id="post-2" class="gap-select"><option value="">Select...</option><option value="her">Her</option><option value="his">His</option><option value="their">Their</option></select> name is Ana.
+          </div>
+
+          <div>
+            3. He is my uncle. <select id="post-3" class="gap-select"><option value="">Select...</option><option value="her">Her</option><option value="his">His</option><option value="its">Its</option></select> name is Roberto.
+          </div>
+
+          <div>
+            4. We have a dog. <select id="post-4" class="gap-select"><option value="">Select...</option><option value="our">Our</option><option value="their">Their</option><option value="your">Your</option></select> dog is very big.
+          </div>
+
+          <div>
+            5. They are my cousins. <select id="post-5" class="gap-select"><option value="">Select...</option><option value="our">Our</option><option value="their">Their</option><option value="his">His</option></select> names are Luis and Marta.
+          </div>
+
+        </div>
+
+        <div style="text-align: right;">
+          <button class="btn-unlock" id="btn-post" onclick="validatePost()">Check Practice Activity</button>
+        </div>
+        <p id="res-post" class="result-summary" style="display:none;"></p>
+      </div>
+    </section>
+
+    <!-- IV. EVALUATION (QUIZ) - DESBLOQUEADO POR DEFECTO -->
+    <section class="section section-eval unlocked" id="sec-eval">
+      <h2 class="section-title">📝 <span class="hover-translate" data-es="Evaluación Final (Cuestionario)">Final Evaluation (Quiz)</span></h2>
+      <div class="content-box" style="text-align: center;">
+        <p style="margin-bottom: 1rem; color: var(--text-muted);"><span class="hover-translate" data-es="Demuestra lo que has aprendido completando este Cuestionario. (Desbloqueado por defecto)">Show what you have learned completing this Quiz. (Unlocked by default)</span></p>
+        
+        <button class="btn-unlock" id="btn-start-quiz" onclick="openQuizModal()" style="background: linear-gradient(135deg, #f59e0b, #d97706);"><span class="hover-translate" data-es="Comenzar Cuestionario Final">Start Final Quiz</span></button>
+        
+        <p style="font-size: 0.85rem; color: #ef4444; font-weight: bold; margin-top: 1rem;">
+          <span class="hover-translate" data-es="ADVERTENCIA ANTI-TRAMPAS: Al iniciar, no debes cambiar de pestaña ni minimizar tu navegador. Si lo haces, tu intento será anulado.">⚠️ ANTI-CHEAT WARNING: When starting, you must not change tabs or minimize your browser. If you do, your attempt will be penalized.</span>
+        </p>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- QUIZ MODAL -->
+  <div class="modal-overlay" id="quiz-modal">
+    <div class="modal-content">
+      <button class="btn-close" onclick="closeQuizModal()">×</button>
+      
+      <div class="modal-header" style="display: flex; flex-direction: column;">
+        <h2 class="modal-title" style="color: var(--primary); margin:0;"><span class="hover-translate" data-es="Cuestionario Final">Final Quiz</span></h2>
+        <p style="color: #ef4444; font-weight: bold; margin: 0.5rem 0 1rem 0; font-size: 0.9rem;"><span class="hover-translate" data-es="Si cambias de pestaña o minimizas la ventana, tu progreso se perderá.">If you change tabs or minimize the window, your progress will be lost.</span></p>
+        
+        <!-- EL BOTON DE ENVIAR ESTÁ AHORA EN EL HEADER, ARRIBA DE LAS PREGUNTAS -->
+        <button class="btn-unlock" style="width: 100%; margin: 0; background: linear-gradient(135deg, #8b5cf6, #6d28d9);" onclick="openConfirmModal()"><span class="hover-translate" data-es="Enviar Respuestas">Submit Answers</span></button>
+      </div>
+
+      <div class="modal-body" id="quiz-container">
+        <!-- Preguntas inyectadas por JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- CONFIRM MODAL (QUIZ) - UBICADO DESPUÉS PARA EVITAR PROBLEMAS DE Z-INDEX -->
+  <div class="modal-overlay" id="confirm-modal">
+    <div class="modal-content" style="max-width: 400px; text-align: center; padding: 2.5rem;">
+      <h2 style="color: var(--primary); margin-top: 0;"><span class="hover-translate" data-es="¿Terminaste el Quiz?">Finish Quiz?</span></h2>
+      <p style="font-size: 1.05rem; margin-bottom: 1.5rem;"><span class="hover-translate" data-es="Una vez enviado, se guardará permanentemente en la base de datos. Asegúrate de responder todas.">Once submitted, it will be permanently saved. Make sure you answered all questions.</span></p>
+      <div style="display: flex; gap: 1rem; justify-content: center;">
+        <button class="btn-unlock" onclick="closeConfirmModal()" style="background: var(--surface-hover); color: var(--text); border: 1px solid var(--border); margin-top:0;"><span class="hover-translate" data-es="Cancelar">Cancel</span></button>
+        <button class="btn-unlock" onclick="submitQuiz()" style="margin-top:0;"><span class="hover-translate" data-es="Sí, Enviar">Yes, Submit</span></button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initUserBar } from '../../js/userbar.js';
+    import { initFirebase } from '../../js/initFirebase.js';
+    import { doc, getDoc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js";
+    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-auth.js";
+    
+    initUserBar('#userbar');
+    const { db, auth } = initFirebase();
+
+    const CLASS_ID = '7ing-u3-l7-c7';
+    const MATERIA_ID = 'ingles'; 
+    let currentUser = null, isClassClosed = false, isQuizActive = false;
+    let selectedQuestions = [];
+
+    // LOCAL STORAGE STATE
+    let localState = { pre: false, during: false, post: false };
+
+    function saveLocalState() {
+      localStorage.setItem('7ing_u3_l7_c7_state', JSON.stringify(localState));
+    }
+
+    function loadLocalState() {
+      let saved = localStorage.getItem('7ing_u3_l7_c7_state');
+      if(saved) {
+        localState = JSON.parse(saved);
+        if(localState.pre) forcePassPre();
+        if(localState.during) forcePassDuring();
+        if(localState.post) forcePassPost();
+      } else {
+        initHangman(); // Start game if not passed
+      }
+    }
+
+    // --- FIREBASE SAVE ---
+    async function saveToFirebase(updates) {
+      if (!currentUser || isClassClosed) return;
+      const docRef = doc(db, 'clases', MATERIA_ID, 'entregas', CLASS_ID);
+      const snap = await getDoc(docRef);
+      const fechaLocal = new Date().toLocaleString('en-GB', { timeZone: 'America/El_Salvador' }).replace(',', '');
+      let existingObj = (snap.exists() && snap.data().respuestas) ? snap.data().respuestas[currentUser.uid] || {} : {};
+
+      existingObj = { ...existingObj, nombre: currentUser.displayName || currentUser.email, email: currentUser.email, fechaLocal, ...updates };
+      existingObj.nota = existingObj.notaAdicional || 0; 
+
+      await setDoc(docRef, { grado: 7, año: new Date().getFullYear(), materia: MATERIA_ID, updatedAt: serverTimestamp(), respuestas: { [currentUser.uid]: existingObj } }, { merge: true });
+    }
+
+    // --- HANGMAN LOGIC (PRE) CON SEMILLA (SEED) ---
+    // Palabras basadas en Extended Family Members
+    let hmWords = [
+      { w: 'UNCLE', c: 'The brother of your father or mother.' },
+      { w: 'AUNT', c: 'The sister of your father or mother.' },
+      { w: 'COUSIN', c: 'The child of your aunt or uncle.' },
+      { w: 'GRANDFATHER', c: 'The father of your father or mother.' },
+      { w: 'GRANDMOTHER', c: 'The mother of your father or mother.' },
+      { w: 'NEPHEW', c: 'The son of your brother or sister.' },
+      { w: 'NIECE', c: 'The daughter of your brother or sister.' }
+    ];
+
+    // SEMILLA PARA SHUFFLE
+    let currentSeed = 100; // Puedes cambiar este número para cambiar el orden
+    function seededRandom() {
+        let x = Math.sin(currentSeed++) * 10000;
+        return x - Math.floor(x);
+    }
+    
+    // Mezclar el array de palabras con la semilla
+    for (let i = hmWords.length - 1; i > 0; i--) {
+        const j = Math.floor(seededRandom() * (i + 1));
+        [hmWords[i], hmWords[j]] = [hmWords[j], hmWords[i]];
+    }
+    hmWords = hmWords.slice(0, 5); // Tomamos solo 5 para el juego
+
+    let hmIndex = 0;
+    let hmGuessed = [];
+    let hmMistakes = 0;
+    const MAX_MISTAKES = 6;
+
+    function initHangman() {
+        if(localState.pre) return;
+        hmGuessed = [];
+        hmMistakes = 0;
+        updateHangmanUI();
+    }
+
+    function updateHangmanUI() {
+        const word = hmWords[hmIndex].w;
+        let displayStr = '';
+        let isComplete = true;
+        
+        for(let char of word) {
+            if(hmGuessed.includes(char)) {
+                displayStr += char + ' ';
+            } else {
+                displayStr += '_ ';
+                isComplete = false;
+            }
+        }
+        document.getElementById('hm-word').innerText = displayStr;
+        document.getElementById('hm-clue').innerText = "Clue: " + hmWords[hmIndex].c;
+        
+        let starsStr = '';
+        for(let i=0; i<MAX_MISTAKES - hmMistakes; i++) starsStr += '⭐';
+        for(let i=0; i<hmMistakes; i++) starsStr += '❌'; 
+        document.getElementById('hm-stars').innerText = starsStr;
+
+        let kbHtml = '';
+        for(let i=65; i<=90; i++) {
+            let char = String.fromCharCode(i);
+            let disabled = hmGuessed.includes(char) ? 'disabled' : '';
+            kbHtml += `<button class="hm-key" ${disabled} onclick="guessLetter('${char}')">${char}</button>`;
+        }
+        document.getElementById('hm-keyboard').innerHTML = kbHtml;
+
+        if(isComplete) {
+            document.getElementById('hm-keyboard').innerHTML = `<p style="color:#10b981; font-weight:bold; font-size:1.5rem;">Great! Loading next word...</p>`;
+            setTimeout(() => {
+                hmIndex++;
+                if(hmIndex >= hmWords.length) {
+                    forcePassPre();
+                    localState.pre = true; saveLocalState();
+                } else {
+                    initHangman();
+                }
+            }, 1500);
+        } else if (hmMistakes >= MAX_MISTAKES) {
+            document.getElementById('hm-keyboard').innerHTML = `<p style="color:#ef4444; font-weight:bold; font-size:1.5rem;">You lost your stars! Try again.</p>`;
+            setTimeout(() => {
+                initHangman();
+            }, 1500);
+        }
+    }
+
+    window.guessLetter = (char) => {
+        if(hmGuessed.includes(char)) return;
+        hmGuessed.push(char);
+        if(!hmWords[hmIndex].w.includes(char)) {
+            hmMistakes++;
+        }
+        updateHangmanUI();
+    };
+
+    function forcePassPre() {
+      document.getElementById('hm-stars').style.display = 'none';
+      document.getElementById('hm-clue').style.display = 'none';
+      document.getElementById('hm-word').style.display = 'none';
+      document.getElementById('hm-keyboard').style.display = 'none';
+      document.getElementById('hm-success').style.display = 'block';
+    }
+
+    // --- DURING LOGIC ---
+    window.passDuring = () => {
+      forcePassDuring();
+      localState.during = true; saveLocalState();
+    };
+
+    function forcePassDuring() {
+      document.getElementById('btn-during').style.display = 'none';
+      const res = document.getElementById('res-during');
+      res.style.display = 'block'; res.style.background = "#ecfdf5"; res.style.color = "#059669";
+      res.innerHTML = `Theory Mastered!`;
+    }
+
+    // --- POST LOGIC ---
+    window.validatePost = () => {
+      const ansPost = ['my', 'her', 'his', 'our', 'their'];
+      let correct = 0;
+      for(let i=1; i<=5; i++) {
+        let el = document.getElementById(`post-${i}`);
+        if(el.value === ansPost[i-1]) {
+          correct++; el.classList.add('correct'); el.classList.remove('incorrect');
+        } else {
+          el.classList.add('incorrect'); el.classList.remove('correct');
+        }
+      }
+      if (correct === 5) {
+        forcePassPost();
+        localState.post = true; saveLocalState();
+        window.scrollTo({ top: document.getElementById('sec-eval').offsetTop - 20, behavior: 'smooth' });
+      } else {
+        const res = document.getElementById('res-post');
+        res.style.display = 'block';
+        res.innerHTML = `<span style="color: #ef4444;">You have ${correct}/5 correct. Fix and try again.</span>`;
+      }
+    };
+    function forcePassPost() {
+      const ansPost = ['my', 'her', 'his', 'our', 'their'];
+      for(let i=1; i<=5; i++) {
+        let el = document.getElementById(`post-${i}`);
+        el.value = ansPost[i-1];
+        el.classList.add('correct'); el.classList.remove('incorrect'); el.disabled = true;
+      }
+      document.getElementById('btn-post').style.display = 'none';
+      const res = document.getElementById('res-post');
+      res.style.display = 'block'; res.style.background = "#ecfdf5"; res.style.color = "#059669";
+      res.innerHTML = `Practice Completed!`;
+    }
+
+    // --- MODAL CONFIRMATION LOGIC ---
+    window.openConfirmModal = () => {
+      if(isClassClosed) return;
+      document.getElementById('confirm-modal').classList.add('active');
+    };
+    window.closeConfirmModal = () => {
+      document.getElementById('confirm-modal').classList.remove('active');
+    };
+
+    // --- QUIZ LOGIC ---
+    const quizBank = [
+      { q: "\"She\" is a pronoun. What is its Possessive Adjective?", options: ["His", "Her", "Its"], ans: 1 },
+      { q: "What is the correct possessive for \"He\"?", options: ["Her", "His", "Your"], ans: 1 },
+      { q: "Complete: \"I have a car. ___ car is red.\"", options: ["My", "Our", "Their"], ans: 0 },
+      { q: "Complete: \"They are my grandparents. ___ house is beautiful.\"", options: ["Our", "Their", "His"], ans: 1 },
+      { q: "Complete: \"We are students. ___ school is big.\"", options: ["Our", "Their", "Your"], ans: 0 },
+      { q: "The sister of your father is your...", options: ["Aunt", "Niece", "Cousin"], ans: 0 },
+      { q: "The son of your brother is your...", options: ["Nephew", "Cousin", "Uncle"], ans: 0 },
+      { q: "The child of your aunt or uncle is your...", options: ["Niece", "Cousin", "Nephew"], ans: 1 },
+      { q: "Possessive adjectives are used to...", options: ["Describe actions", "Show who is the owner of something", "Replace nouns"], ans: 1 },
+      { q: "Which of these is a possessive adjective?", options: ["I", "We", "Your"], ans: 2 }
+    ];
+
+    function applyCheatPenalty() {
+      if (isQuizActive) {
+        isQuizActive = false;
+        document.getElementById('quiz-modal').classList.remove('active');
+        sessionStorage.setItem('cheat_penalty', 'true'); 
+        window.location.reload(); 
+      }
+    }
+
+    document.addEventListener("visibilitychange", () => { if (document.hidden) applyCheatPenalty(); });
+    window.addEventListener("blur", applyCheatPenalty);
+    
+    window.addEventListener('load', () => {
+      if (sessionStorage.getItem('cheat_penalty') === 'true') {
+        sessionStorage.removeItem('cheat_penalty');
+        setTimeout(() => { alert("⚠️ ANTI-CHEAT PENALTY ⚠️\n\nThe system detected a window change or focus loss. Your quiz was restarted."); }, 500);
+      }
+      loadLocalState(); 
+    });
+
+    window.openQuizModal = () => {
+      if (isClassClosed) return;
+      
+      selectedQuestions = quizBank.sort(() => 0.5 - Math.random()).slice(0, 5); // Select 5
+      
+      let html = '';
+      selectedQuestions.forEach((qObj, index) => {
+        let optionsHtml = '';
+        qObj.options.forEach((opt, optIndex) => {
+          optionsHtml += `
+            <label class="quiz-option">
+              <input type="radio" name="q${index}" value="${optIndex}">
+              ${opt}
+            </label>
+          `;
+        });
+        
+        html += `
+          <div class="quiz-question" style="background: var(--surface-hover); padding: 1.5rem; border-radius: 0.75rem; border: 1px solid var(--border); margin-bottom: 1.5rem;">
+            <p style="font-weight: bold; font-size: 1.1rem; margin-top: 0;">${index + 1}. ${qObj.q}</p>
+            <div class="quiz-options" style="display: flex; flex-direction: column; gap: 0.8rem;">
+              ${optionsHtml}
+            </div>
+          </div>
+        `;
+      });
+      
+      document.getElementById('quiz-container').innerHTML = html;
+      document.getElementById('quiz-modal').classList.add('active');
+      isQuizActive = true;
+    };
+
+    window.closeQuizModal = () => {
+      if (confirm("If you close this, your answers will be lost. Continue?")) {
+        document.getElementById('quiz-modal').classList.remove('active');
+        isQuizActive = false;
+      }
+    };
+
+    window.submitQuiz = async () => {
+      isQuizActive = false; // Disable anti-cheat while saving
+      
+      let correctAnswers = 0;
+      let allAnswered = true;
+
+      selectedQuestions.forEach((qObj, index) => {
+        const radios = document.getElementsByName(`q${index}`);
+        let answered = false;
+        for (let radio of radios) {
+          if (radio.checked) {
+            answered = true;
+            if (parseInt(radio.value) === qObj.ans) correctAnswers++;
+            break;
+          }
+        }
+        if (!answered) allAnswered = false;
+      });
+
+      if (!allAnswered) {
+        alert("Please answer all questions before submitting.");
+        isQuizActive = true; 
+        document.getElementById('confirm-modal').classList.remove('active');
+        return;
+      }
+
+      // 5 questions, 2 pts each = 10 pts
+      let qScore = correctAnswers * 2; 
+      
+      document.getElementById('confirm-modal').classList.remove('active');
+      document.getElementById('quiz-modal').classList.remove('active');
+      
+      await saveToFirebase({ notaAdicional: qScore });
+
+      // Clean local storage since it's fully done
+      localStorage.removeItem('7ing_u3_l7_c7_state');
+      
+      showQuizResult(qScore);
+    };
+
+    function showQuizResult(score) {
+      document.getElementById('sec-eval').innerHTML = `
+        <h2 class="section-title">📝 <span class="hover-translate" data-es="Evaluación Final">Final Evaluation</span></h2>
+        <div class="result-summary" style="margin-top: 0; padding: 2rem; background: var(--surface); border: 1px solid var(--border);">
+          <p style="margin:0; font-weight: bold; color: var(--text-muted);"><span class="hover-translate" data-es="Puntaje Final:">Final Score:</span></p>
+          <h2 style="font-size: 3.5rem; color: var(--primary); margin: 0.5rem 0;">${score}/10</h2>
+          <p style="margin-top: 1rem; font-weight: 600; color: var(--text-muted);"><span class="hover-translate" data-es="¡Evaluación guardada con éxito!">Evaluation saved successfully!</span></p>
+        </div>
+      `;
+    }
+
+    function lockClassAsExpired() {
+      isClassClosed = true;
+      // Ya no bloqueamos el botón, el usuario puede ver que el tiempo expiró pero no evaluarse de nuevo.
+      const btn = document.getElementById('btn-start-quiz');
+      if(btn) btn.disabled = true;
+      document.getElementById('sec-eval').insertAdjacentHTML('beforeend', `
+        <div class="result-summary" style="border-color: #ef4444; background: #fef2f2; padding: 1.5rem; margin-top: 1.5rem;">
+          <h3 style="color: #ef4444; margin: 0;"><span class="hover-translate" data-es="Tiempo Agotado para Evaluar">Time Expired</span></h3>
+        </div>
+      `);
+    }
+
+    // INIT
+    onAuthStateChanged(auth, async (user) => {
+      const loadingEl = document.getElementById('loading');
+      if (user) {
+        currentUser = user;
+        const snap = await getDoc(doc(db, 'clases', MATERIA_ID, 'entregas', CLASS_ID));
+        
+        if (!snap.exists()) {
+          alert("The class has not been configured in the database.");
+          window.location.href = "../../pages/clases.html";
+          return;
+        }
+
+        const docData = snap.data();
+        const now = new Date();
+        const startDate = new Date(docData.inicio);
+        const endDate = new Date(docData.fin);
+
+        if (now < startDate) {
+          alert("This class is not available yet.");
+          window.location.href = "../../pages/clases.html";
+          return;
+        }
+
+        let hasEval = false;
+        if (docData.respuestas && docData.respuestas[user.uid]) {
+          const userData = docData.respuestas[user.uid];
+          
+          if (userData.notaAdicional !== undefined) {
+             showQuizResult(userData.notaAdicional);
+             forcePassPre(); forcePassDuring(); forcePassPost();
+             document.getElementById('sec-eval').classList.add('unlocked');
+             hasEval = true;
+          }
+        } 
+        
+        if (now > endDate && !hasEval) {
+           lockClassAsExpired();
+        }
+
+      } else {
+        document.getElementById('sec-eval').innerHTML = `
+          <div class="result-summary">
+            <h2><span class="hover-translate" data-es="Sesión Requerida">Login Required</span></h2>
+            <p><span class="hover-translate" data-es="Debes iniciar sesión para guardar tu avance.">You must log in to save your progress.</span></p>
+            <a href="../../index.html" class="btn-unlock" style="text-decoration:none; display:inline-flex; width:auto;"><span class="hover-translate" data-es="Ir al Inicio">Go to Home</span></a>
+          </div>`;
+      }
+      loadingEl.style.display = 'none';
+    });
+  </script>
+</body>
+</html>

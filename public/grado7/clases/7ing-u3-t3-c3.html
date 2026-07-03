@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+  <title>Family Connections | English 7°</title>
+  <link rel="stylesheet" href="../../css/styles.css">
+
+  <style>
+    .back-btn { display: inline-flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem; color: var(--text-muted); font-weight: 500; transition: color 0.2s; }
+    .back-btn:hover { color: var(--primary); text-decoration: none; }
+    .class-header { margin-bottom: 2rem; border-bottom: 2px solid var(--border); padding-bottom: 1rem; }
+    .class-title { font-size: 1.8rem; color: var(--primary); font-weight: 800; }
+    
+    .section { margin-bottom: 3rem; opacity: 0.4; pointer-events: none; transition: all 0.5s ease; }
+    .section.unlocked { opacity: 1; pointer-events: auto; }
+    
+    .section-title { font-size: 1.5rem; font-weight: 800; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.7rem; }
+    .section-pre { border-left: 5px solid #ec4899; padding-left: 1rem; }
+    .section-during { border-left: 5px solid #8b5cf6; padding-left: 1rem; }
+    .section-post { border-left: 5px solid #0ea5e9; padding-left: 1rem; }
+    .section-eval { border-left: 5px solid #f59e0b; padding-left: 1rem; }
+
+    .content-box { background: var(--surface); border: 1px solid var(--border); border-radius: 1rem; padding: 1.5rem; margin-bottom: 1.5rem; line-height: 1.8; }
+    
+    /* TRADUCCIÓN HOVER */
+    .hover-translate { border-bottom: 2px dotted #10b981; cursor: help; position: relative; display: inline; }
+    .hover-translate:hover::after {
+      content: attr(data-es); position: absolute; bottom: 125%; left: 50%; transform: translateX(-50%);
+      background: #1e293b; color: white; padding: 0.5rem 1rem; border-radius: 0.5rem; font-size: 0.9rem;
+      white-space: normal; width: max-content; max-width: 250px; z-index: 100; box-shadow: 0 10px 15px rgba(0,0,0,0.2);
+    }
+
+    /* ÁRBOL GENEALÓGICO */
+    .family-tree-viz { background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 1rem; padding: 1rem; text-align: center; margin-bottom: 1.5rem; }
+    .tree-row { display: flex; justify-content: center; gap: 2rem; margin-bottom: 1.5rem; position: relative; }
+    .person-card { background: white; border: 1px solid #cbd5e1; padding: 0.5rem; border-radius: 0.5rem; width: 100px; font-size: 0.8rem; font-weight: bold; }
+    .person-card img { width: 50px; height: 50px; display: block; margin: 0 auto 0.3rem; border-radius: 50%; background: #e2e8f0; }
+
+    /* INPUTS */
+    .gap-input { border: 2px solid var(--border); border-radius: 0.4rem; padding: 0.3rem 0.6rem; font-weight: bold; color: var(--primary); width: 140px; outline: none; }
+    .gap-select { padding: 0.5rem; border-radius: 0.5rem; border: 2px solid var(--border); font-weight: bold; cursor: pointer; }
+    .correct { border-color: #10b981 !important; background: #ecfdf5; }
+    .incorrect { border-color: #ef4444 !important; background: #fef2f2; }
+
+    .btn-unlock { background: var(--primary); color: white; border: none; padding: 0.8rem 2rem; border-radius: 0.75rem; font-weight: 800; cursor: pointer; margin-top: 1rem; transition: transform 0.2s; }
+    .btn-unlock:hover { transform: scale(1.05); }
+
+    /* READING */
+    .reading-text { background: #fffbeb; border: 2px dashed #f59e0b; padding: 2rem; border-radius: 1rem; font-style: italic; font-size: 1.1rem; margin-bottom: 2rem; }
+
+    /* QUIZ */
+    .quiz-option { display: flex; align-items: center; gap: 0.8rem; padding: 0.8rem; border: 1px solid var(--border); border-radius: 0.5rem; cursor: pointer; margin-bottom: 0.5rem; }
+    .quiz-option:hover { background: var(--surface-hover); }
+    .quiz-option input { accent-color: var(--primary); }
+  </style>
+</head>
+<body>
+  <div id="userbar"></div>
+  <div id="loading" class="loading">Loading Lesson...</div>
+
+  <header class="app-container mt-4">
+    <a href="../../pages/clases.html" class="btn btn-ghost back-btn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><path d="M19 12H5"/><polyline points="12 19 5 12 12 5"/></svg>
+      Back to Classes
+    </a>
+    <div class="class-header">
+      <h1 class="class-title">Unit 3: Family Connections</h1>
+      <p class="class-meta">Lesson 6 • English 7° • Karla's Family</p>
+    </div>
+  </header>
+
+  <main class="app-container">
+
+    <section class="section unlocked" id="sec-pre">
+      <h2 class="section-title" style="color: #ec4899;">Pre-Activity: Family Vocabulary Theory</h2>
+      <div class="content-box">
+        <p><span class="hover-translate" data-es="Para describir a nuestra familia, usamos sustantivos específicos para cada relación.">To describe our family, we use specific nouns for each relationship.</span> <span class="hover-translate" data-es="La familia se divide generalmente en nuclear (padres e hijos) y extendida (abuelos, tíos, primos).">Family is generally divided into nuclear (parents and children) and extended (grandparents, uncles, cousins).</span></p>
+        
+        <div style="background: #fdf2f8; padding: 1.5rem; border-radius: 1rem; border-left: 5px solid #ec4899; margin: 1.5rem 0;">
+          <h4 style="margin:0; color: #be185d;">Grammar Focus: Possessive 's</h4>
+          <p style="margin: 0.5rem 0 0 0;">We use <strong>'s</strong> to show possession. <br> 
+          <em>Example:</em> <span class="hover-translate" data-es="El abuelo de Karla">Karla's grandfather</span>. <br>
+          <em>Example:</em> <span class="hover-translate" data-es="La esposa de Moises">Moises's wife</span>.</p>
+        </div>
+
+        <h3 style="color: var(--primary);">Worksheet 2: Karla's Family Tree</h3>
+        <p><span class="hover-translate" data-es="Mira el árbol genealógico y completa el párrafo con el vocabulario correcto.">Look at the family tree and complete the paragraph with the correct vocabulary.</span></p>
+
+        <div class="family-tree-viz">
+          <div class="tree-row">
+            <div class="person-card"><img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Moises" alt="">Moises (75)</div>
+            <div class="person-card"><img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Cristina" alt="">Cristina (75)</div>
+          </div>
+          <div class="tree-row">
+            <div class="person-card"><img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Edith" alt="">Edith (40)</div>
+            <div class="person-card"><img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Carlos" alt="">Carlos (45)</div>
+            <div style="width: 50px;"></div>
+            <div class="person-card"><img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Lucia" alt="">Lucia (38)</div>
+          </div>
+          <div class="tree-row">
+            <div class="person-card"><img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Mario" alt="">Mario (7)</div>
+            <div class="person-card" style="border-color: #ec4899; border-width: 2px;"><img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Karla" alt="">Karla (9)</div>
+            <div class="person-card"><img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Jose" alt="">Jose (8)</div>
+            <div class="person-card"><img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Leo" alt="">Leo (5)</div>
+          </div>
+        </div>
+
+        <div style="background: #f1f5f9; padding: 2rem; border-radius: 1rem;">
+          <p>Hi! My name is Karla and this is my family.</p>
+          <p>Moises is my <input type="text" class="gap-input" id="pre-1" placeholder="relation...">.</p>
+          <p>Cristina is my <input type="text" class="gap-input" id="pre-2" placeholder="relation...">.</p>
+          <p>Moises and Cristina are my <input type="text" class="gap-input" id="pre-3" placeholder="relation...">. They are 75 years old.</p>
+          <p>Carlos is my <input type="text" class="gap-input" id="pre-4" placeholder="relation...">. He is 45 years old.</p>
+          <p>Edith is my <input type="text" class="gap-input" id="pre-5" placeholder="relation...">. She is a teacher.</p>
+          <p>Carlos and Edith are my <input type="text" class="gap-input" id="pre-6" placeholder="relation...">.</p>
+          <p>Mario is my <input type="text" class="gap-input" id="pre-7" placeholder="relation...">. He is 7 years old.</p>
+          <p>Jose and Leo are my <input type="text" class="gap-input" id="pre-8" placeholder="relation...">. Jose is 8 and Leo is 5.</p>
+        </div>
+
+        <button class="btn-unlock" onclick="validatePre()">Check Pre-Activity</button>
+      </div>
+    </section>
+
+    <section class="section" id="sec-during">
+      <h2 class="section-title" style="color: #8b5cf6;">During-Activity: Reading Comprehension Theory</h2>
+      <div class="content-box">
+        <p><span class="hover-translate" data-es="Cuando leemos para entender, buscamos palabras clave.">When we read for understanding, we look for keywords.</span> <span class="hover-translate" data-es="Este texto describe el origen y los parientes de un personaje.">This text describes the origin and relatives of a character.</span></p>
+        
+        <div class="reading-text">
+          "My grandparents live in a small village in <strong>Chalatenango</strong>. My grandfather's name is Antonio and my grandmother's name is Amelia. They have <strong>six children</strong>. Their children's names are Juan, Vanesa, Gerber, Igor, Maria, and Ana. Gerber is married. His wife is <strong>Nora</strong>. They are my parents and we live in San Salvador. My grandparents have some farm animals such as cows, hens, roosters, and chickens. When we visit them, my sister and I play with the animals."
+        </div>
+
+        <p><span class="hover-translate" data-es="Lee el párrafo y marca T (Verdadero) o F (Falso).">Read the paragraph and mark T (True) or F (False).</span></p>
+
+        <div style="background: #f1f5f9; padding: 1.5rem; border-radius: 1rem;">
+          <div style="margin-bottom: 1rem;">1. My grandfather lives in Chalatenango. <select id="dur-1" class="gap-select"><option value="">?</option><option value="T">T</option><option value="F">F</option></select></div>
+          <div style="margin-bottom: 1rem;">2. Amelia has four children. <select id="dur-2" class="gap-select"><option value="">?</option><option value="T">T</option><option value="F">F</option></select></div>
+          <div style="margin-bottom: 1rem;">3. My grandparents have six sons. <select id="dur-3" class="gap-select"><option value="">?</option><option value="T">T</option><option value="F">F</option></select></div>
+          <div style="margin-bottom: 1rem;">4. My mother is Nora. <select id="dur-4" class="gap-select"><option value="">?</option><option value="T">T</option><option value="F">F</option></select></div>
+          <div style="margin-bottom: 1rem;">5. I live in Chalatenango. <select id="dur-5" class="gap-select"><option value="">?</option><option value="T">T</option><option value="F">F</option></select></div>
+        </div>
+
+        <button class="btn-unlock" onclick="validateDuring()">Check Reading Activity</button>
+      </div>
+    </section>
+
+    <section class="section" id="sec-post">
+      <h2 class="section-title" style="color: #0ea5e9;">Post-Activity: Let's Guess! Who are they?</h2>
+      <div class="content-box">
+        <p><span class="hover-translate" data-es="En esta etapa, usamos lo aprendido para identificar relaciones basadas en pistas.">In this stage, we use what we learned to identify relationships based on clues.</span></p>
+        
+        <div style="background: #e0f2fe; padding: 2rem; border-radius: 1rem; border-left: 5px solid #0ea5e9;">
+          <p><strong>Game Instructions:</strong> <span class="hover-translate" data-es="Lee la descripción y deduce quién es la persona.">Read the description and deduce who the person is.</span></p>
+          
+          <div style="margin-top: 1rem;">
+            1. "She is Karla's mother. She is a teacher. Her name is..." 
+            <input type="text" class="gap-input" id="post-1" placeholder="name...">
+          </div>
+          <div style="margin-top: 1rem;">
+            2. "He is Jose's father. He is the brother of Edith. His name is..." 
+            <input type="text" class="gap-input" id="post-2" placeholder="name...">
+          </div>
+          <div style="margin-top: 1rem;">
+            3. "They are the children of Lucia. Their names are..." 
+            <input type="text" class="gap-input" id="post-3" placeholder="names (and)...">
+          </div>
+        </div>
+
+        <button class="btn-unlock" onclick="validatePost()">Check Post-Activity & Unlock Quiz</button>
+      </div>
+    </section>
+
+    <section class="section" id="sec-eval">
+      <h2 class="section-title" style="color: #f59e0b;">Final Evaluation: Relationships Quiz</h2>
+      <div class="content-box" style="text-align: center;" id="quiz-container">
+        <p>Complete all previous activities to take the exam.</p>
+        <button class="btn-unlock" id="btn-start-quiz" disabled onclick="startQuiz()">Start Quiz (Base 10)</button>
+        <p style="color: #ef4444; font-weight: bold; margin-top: 1rem; font-size: 0.8rem;">⚠️ WARNING: If you change tabs or minimize the window, the quiz will be cancelled.</p>
+      </div>
+    </section>
+
+  </main>
+
+  <script type="module">
+    import { initUserBar } from '../../js/userbar.js';
+    import { initFirebase } from '../../js/initFirebase.js';
+    import { doc, getDoc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js";
+    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-auth.js";
+    
+    initUserBar('#userbar');
+    const { db, auth } = initFirebase();
+
+    const CLASS_ID = '7ing-u3-l6-c6';
+    const MATERIA_ID = 'ingles'; 
+    let currentUser = null, isQuizActive = false;
+
+    // VALIDACIÓN PRE
+    window.validatePre = () => {
+      const answers = {
+        'pre-1': 'grandfather', 'pre-2': 'grandmother', 'pre-3': 'grandparents',
+        'pre-4': 'father', 'pre-5': 'mother', 'pre-6': 'parents',
+        'pre-7': 'brother', 'pre-8': 'cousins'
+      };
+      let correct = true;
+      for (let id in answers) {
+        const input = document.getElementById(id);
+        if (input.value.toLowerCase().trim() === answers[id]) {
+          input.classList.add('correct'); input.classList.remove('incorrect');
+        } else {
+          input.classList.add('incorrect'); input.classList.remove('correct');
+          correct = false;
+        }
+      }
+      if (correct) {
+        document.getElementById('sec-during').classList.add('unlocked');
+        window.scrollTo({ top: document.getElementById('sec-during').offsetTop - 50, behavior: 'smooth' });
+      }
+    };
+
+    // VALIDACIÓN DURING
+    window.validateDuring = () => {
+      const answers = { 'dur-1': 'T', 'dur-2': 'F', 'dur-3': 'F', 'dur-4': 'T', 'dur-5': 'F' };
+      let correct = true;
+      for (let id in answers) {
+        const select = document.getElementById(id);
+        if (select.value === answers[id]) {
+          select.classList.add('correct'); select.classList.remove('incorrect');
+        } else {
+          select.classList.add('incorrect'); select.classList.remove('correct');
+          correct = false;
+        }
+      }
+      if (correct) {
+        document.getElementById('sec-post').classList.add('unlocked');
+        window.scrollTo({ top: document.getElementById('sec-post').offsetTop - 50, behavior: 'smooth' });
+      }
+    };
+
+    // VALIDACIÓN POST
+    window.validatePost = () => {
+      const answers = { 'post-1': 'edith', 'post-2': 'carlos', 'post-3': 'jose and leo' };
+      let correct = true;
+      for (let id in answers) {
+        const input = document.getElementById(id);
+        if (input.value.toLowerCase().trim() === answers[id]) {
+          input.classList.add('correct'); input.classList.remove('incorrect');
+        } else {
+          input.classList.add('incorrect'); input.classList.remove('correct');
+          correct = false;
+        }
+      }
+      if (correct) {
+        document.getElementById('sec-eval').classList.add('unlocked');
+        document.getElementById('btn-start-quiz').disabled = false;
+        window.scrollTo({ top: document.getElementById('sec-eval').offsetTop - 50, behavior: 'smooth' });
+      }
+    };
+
+    // QUIZ LOGIC
+    const quizData = [
+      { q: "What is Moises to Jose?", o: ["Grandfather", "Father", "Uncle"], a: 0 },
+      { q: "Karla and Jose are...", o: ["Siblings", "Cousins", "Parents"], a: 1 },
+      { q: "How many children do Moises and Cristina have?", o: ["Two", "Three", "Four"], a: 1 },
+      { q: "Where do Antonio and Amelia live?", o: ["San Salvador", "Juayúa", "Chalatenango"], a: 2 },
+      { q: "Who is Carlos's wife?", o: ["Karla", "Lucia", "Edith"], a: 2 }
+    ];
+
+    let currentQ = 0, score = 0;
+
+    window.startQuiz = () => {
+      isQuizActive = true;
+      renderQuestion();
+    };
+
+    function renderQuestion() {
+      const q = quizData[currentQ];
+      let html = `<h3>Question ${currentQ + 1} of 5</h3><p>${q.q}</p>`;
+      q.o.forEach((opt, i) => {
+        html += `<label class="quiz-option"><input type="radio" name="q" value="${i}"> ${opt}</label>`;
+      });
+      html += `<button class="btn-unlock" onclick="nextQuestion()">Next Question</button>`;
+      document.getElementById('quiz-container').innerHTML = html;
+    }
+
+    window.nextQuestion = async () => {
+      const selected = document.querySelector('input[name="q"]:checked');
+      if (!selected) return alert("Select an answer!");
+      
+      if (parseInt(selected.value) === quizData[currentQ].a) score += 2; // 2 points each = 10 total
+
+      if (currentQ < quizData.length - 1) {
+        currentQ++;
+        renderQuestion();
+      } else {
+        finishQuiz();
+      }
+    };
+
+    async function finishQuiz() {
+      isQuizActive = false;
+      document.getElementById('quiz-container').innerHTML = `<h2>Result: ${score}/10</h2><p>Saving progress...</p>`;
+      
+      if (currentUser) {
+        const docRef = doc(db, 'clases', MATERIA_ID, 'entregas', CLASS_ID);
+        await setDoc(docRef, {
+          respuestas: { [currentUser.uid]: { nombre: currentUser.displayName, nota: score, fecha: serverTimestamp() } }
+        }, { merge: true });
+        document.getElementById('quiz-container').innerHTML += `<p>Grade saved successfully!</p>`;
+      }
+    }
+
+    // ANTI-CHEAT
+    function penalty() { if (isQuizActive) window.location.reload(); }
+    window.addEventListener('blur', penalty);
+    document.addEventListener('visibilitychange', () => { if (document.hidden) penalty(); });
+
+    onAuthStateChanged(auth, (user) => {
+      currentUser = user;
+      document.getElementById('loading').style.display = 'none';
+    });
+  </script>
+</body>
+</html>

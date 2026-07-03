@@ -6,75 +6,50 @@
   <title>Acceso | CENTRO ESCOLAR CANTÓN LOS PRADOS</title>
   <link rel="stylesheet" href="css/styles.css">
   <style>
-    body {
-      margin: 0; min-height: 100vh; overflow-x: hidden;
-      background: radial-gradient(ellipse at 20% 10%, rgba(124,58,237,0.15) 0%, transparent 50%),
-                  radial-gradient(ellipse at 80% 90%, rgba(79,70,229,0.12) 0%, transparent 50%),
-                  linear-gradient(135deg, #4f46e5 0%, #6366f1 35%, #7c3aed 70%, #8b5cf8 100%);
-      font-family: system-ui, -apple-system, 'Segoe UI', sans-serif; color: #1e1b4b;
-    }
-    body::before {
-      content: ''; position: fixed; inset: 0; z-index: 0; opacity: 0.04;
-      background-image: radial-gradient(circle at 25% 25%, #fff 2px, transparent 3px),
-                        radial-gradient(circle at 75% 75%, #fff 2px, transparent 3px);
-      background-size: 60px 60px; pointer-events: none;
-    }
+    body { margin: 0; min-height: 100vh; overflow-x: hidden; background: radial-gradient(ellipse at 20% 10%, rgba(124,58,237,0.15) 0%, transparent 50%), radial-gradient(ellipse at 80% 90%, rgba(79,70,229,0.12) 0%, transparent 50%), linear-gradient(135deg, #4f46e5 0%, #6366f1 35%, #7c3aed 70%, #8b5cf8 100%); font-family: system-ui, -apple-system, 'Segoe UI', sans-serif; color: #1e1b4b; }
+    body::before { content: ''; position: fixed; inset: 0; z-index: 0; opacity: 0.04; background-image: radial-gradient(circle at 25% 25%, #fff 2px, transparent 3px), radial-gradient(circle at 75% 75%, #fff 2px, transparent 3px); background-size: 60px 60px; pointer-events: none; }
     .deco { position: fixed; z-index: 1; opacity: 0.5; pointer-events: none; }
     .deco-1 { width: 200px; height: 200px; border-radius: 30% 70% 70% 30%/30% 30% 70% 70%; background: linear-gradient(135deg, rgba(255,255,255,0.3), rgba(255,255,255,0.1)); top: -50px; right: -30px; animation: morph 18s ease-in-out infinite; }
     .deco-2 { width: 140px; height: 140px; border-radius: 60% 40% 30% 70%/60% 30% 70% 40%; background: linear-gradient(135deg, rgba(251,191,36,0.4), rgba(245,158,11,0.2)); bottom: 8%; left: -40px; animation: morph 22s ease-in-out infinite reverse; }
-    .deco-3 { width: 100px; height: 100px; border-radius: 50%; background: radial-gradient(circle, rgba(56,189,248,0.5), transparent 70%); top: 55%; right: 12%; animation: pulse 4s ease-in-out infinite; }
-    .deco-4 { width: 160px; height: 160px; border-radius: 40% 60% 60% 40%/40% 40% 60% 60%; background: linear-gradient(135deg, rgba(16,185,129,0.3), transparent); bottom: -60px; left: 35%; animation: morph 20s ease-in-out infinite; }
     @keyframes morph { 0%,100% { border-radius: 30% 70% 70% 30%/30% 30% 70% 70%; } 33% { border-radius: 60% 40% 30% 70%/60% 30% 70% 40%; } 66% { border-radius: 40% 60% 60% 40%/40% 40% 60% 60%; } }
-    @keyframes pulse { 0%,100% { transform: scale(1); opacity: 0.5; } 50% { transform: scale(1.15); opacity: 0.7; } }
     .login-wrapper { position: relative; z-index: 10; min-height: 100vh; display: grid; place-items: center; padding: 1rem 1rem 2rem; }
     .login-card { background: rgba(255,255,255,0.96); border: 1px solid rgba(255,255,255,0.6); border-radius: 24px; padding: 2.25rem 2rem; max-width: 480px; width: 100%; box-shadow: 0 20px 60px rgba(0,0,0,0.18), 0 8px 24px rgba(79,70,229,0.12); backdrop-filter: blur(12px); animation: cardEntrance 0.5s cubic-bezier(0.2,0.8,0.2,1); }
     @keyframes cardEntrance { from { opacity: 0; transform: translateY(24px) scale(0.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
     .school-header { text-align: center; margin-bottom: 1.75rem; position: relative; }
     .school-header::after { content: ''; display: block; width: 60px; height: 4px; background: linear-gradient(90deg, #4f46e5, #7c3aed); margin: 0.8rem auto 0; border-radius: 2px; }
-    .school-logo { font-size: 1.65rem; font-weight: 800; line-height: 1.2; background: linear-gradient(135deg, #4f46e5, #7c3aed, #a78bfa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-shadow: 0 2px 4px rgba(0,0,0,0.08); }
+    .school-logo { font-size: 1.65rem; font-weight: 800; line-height: 1.2; background: linear-gradient(135deg, #4f46e5, #7c3aed, #a78bfa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
     .school-subtitle { color: #475569; font-size: 1.05rem; font-weight: 500; margin-top: 0.3rem; }
-    .badge-exclusivo { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.35rem 0.85rem; background: linear-gradient(135deg, #f0f9ff, #e0f2fe); color: #0369a1; border-radius: 999px; font-size: 0.8rem; font-weight: 600; margin-top: 0.75rem; border: 1px solid #bae6fd; box-shadow: 0 2px 8px rgba(3,105,161,0.08); }
-    .btn-google { width: 100%; padding: 1rem; border: 1px solid #cbd5e1; border-radius: 16px; background: linear-gradient(135deg, #fff, #f8fafc); color: #0f172a; font-weight: 600; font-size: 1.05rem; display: flex; align-items: center; justify-content: center; gap: 0.9rem; cursor: pointer; transition: all 0.25s; min-height: 52px; position: relative; overflow: hidden; }
-    .btn-google::before { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(79,70,229,0.06), rgba(124,58,237,0.06)); opacity: 0; transition: opacity 0.25s; }
-    .btn-google:hover::before { opacity: 1; }
+    .badge-exclusivo { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.35rem 0.85rem; background: linear-gradient(135deg, #f0f9ff, #e0f2fe); color: #0369a1; border-radius: 999px; font-size: 0.8rem; font-weight: 600; margin-top: 0.75rem; border: 1px solid #bae6fd; }
+    .btn-google { width: 100%; padding: 1rem; border: 1px solid #cbd5e1; border-radius: 16px; background: linear-gradient(135deg, #fff, #f8fafc); color: #0f172a; font-weight: 600; font-size: 1.05rem; display: flex; align-items: center; justify-content: center; gap: 0.9rem; cursor: pointer; transition: all 0.25s; min-height: 52px; }
     .btn-google:hover { border-color: #94a3b8; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.12); }
-    .btn-google:active { transform: translateY(0); }
-    .btn-google img { width: 24px; height: 24px; flex-shrink: 0; }
+    .btn-google img { width: 24px; height: 24px; }
     .step { display: none; animation: fadeSlide 0.35s ease; }
     .step.active { display: block; }
     @keyframes fadeSlide { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
-    .grade-select { width: 100%; padding: 0.95rem; border: 2px solid #cbd5e1; border-radius: 14px; font-size: 1.05rem; background: #fff; margin: 1.1rem 0; cursor: pointer; transition: all 0.2s; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 1rem center; }
+    .grade-select { width: 100%; padding: 0.95rem; border: 2px solid #cbd5e1; border-radius: 14px; font-size: 1.05rem; background: #fff; margin: 1.1rem 0; cursor: pointer; }
     .grade-select:focus { outline: none; border-color: #4f46e5; box-shadow: 0 0 0 4px rgba(79,70,229,0.15); }
-    .btn-primary { width: 100%; padding: 1rem; border: none; border-radius: 16px; background: linear-gradient(135deg, #4f46e5, #7c3aed); color: #fff; font-weight: 700; font-size: 1.05rem; cursor: pointer; transition: all 0.25s; min-height: 52px; margin-top: 0.4rem; box-shadow: 0 6px 20px rgba(79,70,229,0.35); position: relative; overflow: hidden; }
-    .btn-primary::after { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(255,255,255,0.2), transparent); opacity: 0; transition: opacity 0.25s; }
-    .btn-primary:hover::after { opacity: 1; }
-    .btn-primary:hover { filter: brightness(1.05); transform: translateY(-2px); box-shadow: 0 10px 28px rgba(79,70,229,0.5); }
-    .btn-primary:active { transform: translateY(0); }
-    .error { color: #dc2626; font-size: 0.9rem; margin-top: 0.7rem; padding: 0.65rem 1rem; background: linear-gradient(135deg, #fef2f2, #fee2e2); border-radius: 12px; border-left: 3px solid #dc2626; display: none; animation: shake 0.4s ease; }
-    .error.show { display: block; }
-    @keyframes shake { 25%, 75% { transform: translateX(4px); } 0%, 100% { transform: translateX(0); } }
-    .success-msg { color: #047857; font-size: 0.9rem; margin-top: 0.7rem; padding: 0.65rem 1rem; background: linear-gradient(135deg, #ecfdf5, #d1fae5); border-radius: 12px; border-left: 3px solid #10b981; display: none; }
-    .success-msg.show { display: block; animation: fadeSlide 0.3s; }
+    .btn-primary { width: 100%; padding: 1rem; border: none; border-radius: 16px; background: linear-gradient(135deg, #4f46e5, #7c3aed); color: #fff; font-weight: 700; font-size: 1.05rem; cursor: pointer; transition: all 0.25s; min-height: 52px; margin-top: 0.4rem; box-shadow: 0 6px 20px rgba(79,70,229,0.35); }
+    .btn-primary:hover { filter: brightness(1.05); transform: translateY(-2px); }
+    .error { color: #dc2626; font-size: 0.9rem; margin-top: 0.7rem; padding: 0.65rem 1rem; background: linear-gradient(135deg, #fef2f2, #fee2e2); border-radius: 12px; border-left: 3px solid #dc2626; display: none; }
+    .error.show { display: block; animation: shake 0.4s ease; }
+    @keyframes shake { 25%, 75% { transform: translateX(4px); } }
     .loading-wrap { text-align: center; padding: 1.5rem 0; }
     .loading-spinner { width: 52px; height: 52px; border: 4px solid rgba(79,70,229,0.15); border-top-color: #4f46e5; border-radius: 50%; animation: spin 0.9s linear infinite; margin: 0 auto 1rem; }
     @keyframes spin { to { transform: rotate(360deg); } }
-    .loading-text { font-weight: 600; color: #1e293b; margin-bottom: 0.3rem; }
-    .loading-sub { color: #64748b; font-size: 0.92rem; }
-    .login-footer { text-align: center; margin-top: 1.75rem; color: rgba(255,255,255,0.9); font-size: 0.9rem; font-weight: 500; }
-    .demo-banner { position: fixed; top: 0; left: 0; right: 0; z-index: 9999; background: linear-gradient(135deg, #f59e0b, #f97316); color: #fff; padding: 0.6rem 1rem; font-size: 0.85rem; font-weight: 600; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.15); display: none; animation: slideDown 0.3s ease; }
-    .demo-banner.show { display: block; }
+    .login-footer { text-align: center; margin-top: 1.75rem; color: rgba(255,255,255,0.9); font-size: 0.9rem; }
+    .demo-banner { position: fixed; top: 0; left: 0; right: 0; z-index: 9999; background: linear-gradient(135deg, #f59e0b, #f97316); color: #fff; padding: 0.6rem 1rem; font-size: 0.85rem; font-weight: 600; text-align: center; display: none; }
+    .demo-banner.show { display: block; animation: slideDown 0.3s ease; }
     @keyframes slideDown { from { transform: translateY(-100%); } to { transform: translateY(0); } }
     .demo-stats { display: flex; justify-content: center; gap: 1rem; margin-top: 0.4rem; font-size: 0.85rem; color: #475569; }
     .demo-stat { display: flex; align-items: center; gap: 0.3rem; }
-    @media (max-width: 480px) { .login-card { padding: 1.75rem 1.25rem; border-radius: 20px; } .school-logo { font-size: 1.45rem; } .school-subtitle { font-size: 0.98rem; } .btn-google, .btn-primary { padding: 0.9rem; font-size: 1rem; } .deco { display: none; } }
-    @media (max-width: 375px) { .login-card { padding: 1.4rem 1rem; } .school-logo { font-size: 1.3rem; } .badge-exclusivo { font-size: 0.75rem; padding: 0.3rem 0.7rem; } .grade-select { padding: 0.85rem; font-size: 1rem; } }
+    @media (max-width: 480px) { .login-card { padding: 1.75rem 1.25rem; } .school-logo { font-size: 1.45rem; } .btn-google, .btn-primary { padding: 0.9rem; font-size: 1rem; } .deco { display: none; } }
+    @media (max-width: 375px) { .login-card { padding: 1.4rem 1rem; } .school-logo { font-size: 1.3rem; } }
   </style>
 </head>
 <body>
   <div class="deco deco-1"></div><div class="deco deco-2"></div>
-  <div class="deco deco-3"></div><div class="deco deco-4"></div>
   <div id="demo-banner" class="demo-banner">
-    🎮 Modo demostración activo • <span id="demo-stats" class="demo-stats"></span> • <button id="demo-exit" style="background:none;border:none;color:#fff;font-weight:700;cursor:pointer;margin-left:0.5rem;text-decoration:underline">Salir</button>
+    🎮 Demo activa • <span id="demo-stats" class="demo-stats"></span> • <button id="demo-exit" style="background:none;border:none;color:#fff;font-weight:700;cursor:pointer;margin-left:0.5rem;text-decoration:underline">Salir</button>
   </div>
 
   <main class="login-wrapper">
@@ -82,30 +57,44 @@
       <div class="school-header">
         <h1 class="school-logo">CENTRO ESCOLAR<br>CANTÓN LOS PRADOS</h1>
         <p class="school-subtitle">Plataforma de Aprendizaje Digital</p>
-        <span class="badge-exclusivo">🔒 Acceso institucional</span>
+        <span class="badge-exclusivo">🔒 @clases.edu.sv</span>
       </div>
+
       <div id="step-login" class="step active">
-        <button id="btn-google" class="btn-google" aria-label="Iniciar con Google">
+        <button id="btn-google" class="btn-google">
           <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="G">
           Continuar con Google
         </button>
         <p id="login-error" class="error"></p>
       </div>
+
       <div id="step-grade" class="step">
         <h2 style="text-align:center;font-weight:800;font-size:1.5rem;margin-bottom:0.3rem">¡Bienvenido! 🎓</h2>
-        <p style="text-align:center;color:#475569;margin-bottom:0.9rem">Selecciona tu grado actual:</p>
-        <select id="select-grado" class="grade-select"><option value="">-- Elige tu grado --</option><option value="7">✨ Séptimo Grado</option><option value="8">🚀 Octavo Grado</option><option value="9">🏆 Noveno Grado</option></select>
-        <p id="grade-error" class="error">Debes seleccionar un grado para continuar</p>
+        <p style="text-align:center;color:#475569;margin-bottom:0.9rem">Selecciona tu grado:</p>
+        <select id="select-grado" class="grade-select">
+          <option value="">-- Elige tu grado --</option>
+          <option value="7">✨ Séptimo Grado</option>
+          <option value="8">🚀 Octavo Grado</option>
+          <option value="9">🏆 Noveno Grado</option>
+        </select>
+        <p id="grade-error" class="error">Selecciona un grado para continuar</p>
         <button id="btn-save-grade" class="btn-primary">Continuar</button>
       </div>
-      <div id="step-loading" class="step"><div class="loading-wrap"><div class="loading-spinner"></div><p class="loading-text">Preparando tu espacio...</p><p class="loading-sub">Un momento, por favor ✨</p></div></div>
+
+      <div id="step-loading" class="step">
+        <div class="loading-wrap">
+          <div class="loading-spinner"></div>
+          <p class="loading-text">Preparando tu espacio...</p>
+          <p class="loading-sub">Un momento, por favor ✨</p>
+        </div>
+      </div>
     </div>
     <footer class="login-footer">© <span id="year"></span> Centro Escolar Cantón Los Prados</footer>
   </main>
 
   <script type="module">
     import { initFirebase, getAuthInstance, getDbInstance } from './js/initFirebase.js';
-    import { GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-auth.js";
+    import { GoogleAuthProvider, signInWithPopup, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-auth.js";
     import { doc, getDoc, setDoc, updateDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js";
 
     const { auth, db } = initFirebase();
@@ -113,86 +102,194 @@
     const $ = (id) => document.getElementById(id);
     $('year').textContent = new Date().getFullYear();
 
-    const GAME_CONFIG = { puntosInicio: 0, energiaInicio: 5, energiaMax: 5 };
+    // ===== CONFIG =====
+    const DEMO_EMAIL = '123456@clases.edu.sv';
+    const DEMO_PASS = 'Demo123456!';
+    const DEMO_NAME = 'juan perez';
+    const DEMO_DOC_ID = 'est_123456_JP';
 
-    function validateEmail(email) {
-      if (!email?.endsWith('@clases.edu.sv')) return { valid: false, error: 'Solo correos @clases.edu.sv' };
-      return { valid: true, isStudent: /^\d+$/.test(email.split('@')[0]), local: email.split('@')[0] };
+    // ===== VALIDACIONES =====
+    function validateDomain(email) {
+      if (!email?.endsWith('@clases.edu.sv')) return false;
+      return true;
     }
-    function getInitials(name) { return (name || 'USR').split(' ').map(n => n[0]).join('').slice(0, 3).toUpperCase(); }
-    function showStep(id) { document.querySelectorAll('.step').forEach(e => e.classList.remove('active')); $(id)?.classList.add('active'); }
-    function showError(id, msg) { const e=$(id); if(!e)return; e.textContent=msg; e.classList.add('show'); setTimeout(()=>e.classList.remove('show'), 4000); }
+    function isStudentEmail(email) {
+      const local = email.split('@')[0];
+      return /^\d+$/.test(local);
+    }
+    function getInitials(name) {
+      return (name || 'USR').split(' ').map(n => n[0]).join('').slice(0, 3).toUpperCase();
+    }
+    function showStep(id) {
+      document.querySelectorAll('.step').forEach(e => e.classList.remove('active'));
+      $(id)?.classList.add('active');
+    }
+    function showError(id, msg) {
+      const el = $(id);
+      if (!el) return;
+      el.textContent = msg;
+      el.classList.add('show');
+      setTimeout(() => el.classList.remove('show'), 4000);
+    }
 
-    // ===== FLUJO LOGIN NORMAL =====
+    // ===== LOGIN GOOGLE =====
     $('btn-google')?.addEventListener('click', async () => {
       try {
         const r = await signInWithPopup(auth, provider);
-        const u = r.user, email = u.email;
-        const v = validateEmail(email);
-        if (!v.valid) { await auth.signOut(); showError('login-error', v.error); return; }
-        const initials = getInitials(u.displayName);
-        const docId = v.isStudent ? `est_${v.local}_${initials}` : `doc_${initials}_0`;
-        const snap = await getDoc(doc(db, 'users', docId));
-        if (snap.exists()) {
-          if (v.isStudent) await updateDoc(doc(db, 'users', docId), { lastLogin: serverTimestamp() });
-          window.location.href = v.isStudent ? `pages/home.html?grado=${snap.data().grado}` : 'public/admin/admin.html';
-        } else {
-          if (v.isStudent) { window._tempUser = { uid: u.uid, email, name: u.displayName, initials, docId }; showStep('step-grade'); }
-          else { await setDoc(doc(db, 'users', docId), { uid: u.uid, name: u.displayName, email, rol: 'docente', grado: 0, initials, createdAt: serverTimestamp(), lastLogin: serverTimestamp() }); showStep('step-loading'); setTimeout(() => window.location.href = 'public/admin/admin.html', 700); }
+        const u = r.user;
+        if (!validateDomain(u.email)) {
+          await signOut(auth);
+          showError('login-error', 'Solo correos @clases.edu.sv');
+          return;
         }
-      } catch (err) { showError('login-error', err.code === 'auth/popup-closed-by-user' ? 'Inicio cancelado' : 'Error. Intenta de nuevo'); }
+        await handleAuthSuccess(u);
+      } catch (err) {
+        showError('login-error', err.code === 'auth/popup-closed-by-user' ? 'Inicio cancelado' : 'Error. Intenta de nuevo');
+      }
     });
 
+    // ===== PROCESAR USUARIO AUTENTICADO =====
+    async function handleAuthSuccess(user) {
+      const email = user.email;
+      const isStudent = isStudentEmail(email);
+      const initials = getInitials(user.displayName);
+      const docId = isStudent ? `est_${email.split('@')[0]}_${initials}` : `doc_${initials}_0`;
+      const userRef = doc(db, 'users', docId);
+      const snap = await getDoc(userRef);
+
+      if (snap.exists()) {
+        // Usuario existente → redirigir
+        const data = snap.data();
+        if (isStudent) {
+          await updateDoc(userRef, { lastLogin: serverTimestamp() });
+          window.location.href = `pages/home.html?grado=${data.grado}`;
+        } else {
+          window.location.href = 'admin/admin.html';
+        }
+      } else {
+        // Nuevo usuario
+        if (isStudent) {
+          window._tempUser = { uid: user.uid, email, name: user.displayName, initials, docId };
+          showStep('step-grade');
+        } else {
+          // Docente: esquema mínimo
+          await setDoc(userRef, {
+            nombre: user.displayName,
+            correo: email
+          });
+          showStep('step-loading');
+          setTimeout(() => window.location.href = 'admin/admin.html', 700);
+        }
+      }
+    }
+
+    // ===== GUARDAR GRADO ESTUDIANTE NUEVO =====
     $('btn-save-grade')?.addEventListener('click', async () => {
-      const g = $('select-grado')?.value;
-      if (!g) { showError('grade-error', 'Selecciona tu grado'); return; }
+      const grado = $('select-grado')?.value;
+      if (!grado) { showError('grade-error', 'Selecciona tu grado'); return; }
       const { uid, email, name, initials, docId } = window._tempUser || {};
       if (!uid) return showError('grade-error', 'Sesión inválida');
+      
       showStep('step-loading');
       try {
-        await setDoc(doc(db, 'users', docId), { uid, name, email, rol: 'estudiante', grado: parseInt(g), initials, createdAt: serverTimestamp(), lastLogin: serverTimestamp(), puntos: GAME_CONFIG.puntosInicio, energia: GAME_CONFIG.energiaInicio, nivel: 1 });
-        window.location.href = `pages/home.html?grado=${g}`;
-      } catch (e) { showError('grade-error', 'Error guardando. Reintentando...'); setTimeout(() => showStep('step-grade'), 1500); }
+        // Estudiante: esquema mínimo + gamificación base
+        await setDoc(doc(db, 'users', docId), {
+          nombre: name,
+          correo: email,
+          grado: parseInt(grado),
+          puntos: 0,
+          energia: 5,
+          nivel: 1
+        });
+        window.location.href = `pages/home.html?grado=${grado}`;
+      } catch (e) {
+        showError('grade-error', 'Error guardando. Reintentando...');
+        setTimeout(() => showStep('step-grade'), 1500);
+      }
     });
 
-    // ===== COMANDO CONSOLA: INICIAR SESIÓN DEMO =====
+    // ===== COMANDO CONSOLA: DEMO CON EMAIL/PASSWORD =====
     window.iniciarSesionDemo = async function(grado) {
       if (![7,8,9].includes(grado)) { console.warn('⚠️ Grado debe ser 7, 8 o 9'); return; }
       console.log('🎮 Iniciando sesión demo...');
-      const email = '123456@clases.edu.sv', name = 'juan perez', initials = 'JP', docId = `est_123456_${initials}`;
+
       try {
-        const snap = await getDoc(doc(db, 'users', docId));
-        let userData;
-        if (!snap.exists()) {
-          console.log('📝 Usuario demo no existe. Creando por primera vez...');
-          userData = { uid: 'demo_123456', name, email, rol: 'estudiante', grado, initials, createdAt: serverTimestamp(), lastLogin: serverTimestamp(), puntos: GAME_CONFIG.puntosInicio, energia: GAME_CONFIG.energiaInicio, nivel: 1, rachas: { tareas: 0, examenes: 0 }, logros: [], isDemo: true };
-          await setDoc(doc(db, 'users', docId), userData);
-        } else {
-          console.log('📂 Usuario demo encontrado. Actualizando grado...');
-          userData = snap.data();
-          await updateDoc(doc(db, 'users', docId), { grado, lastLogin: serverTimestamp() });
-          userData.grado = grado;
+        // 1. Intentar login con email/password
+        let userCredential;
+        try {
+          userCredential = await signInWithEmailAndPassword(auth, DEMO_EMAIL, DEMO_PASS);
+          console.log('🔐 Login demo exitoso');
+        } catch (err) {
+          if (err.code === 'auth/user-not-found' || err.code === 'auth/wrong-password') {
+            // 2. Crear usuario demo si no existe en Auth
+            console.log('📝 Creando cuenta demo en Firebase Auth...');
+            userCredential = await createUserWithEmailAndPassword(auth, DEMO_EMAIL, DEMO_PASS);
+            await userCredential.user.updateProfile({ displayName: DEMO_NAME });
+          } else {
+            throw err;
+          }
         }
+
+        const user = userCredential.user;
+        const userRef = doc(db, 'users', DEMO_DOC_ID);
+        const snap = await getDoc(userRef);
+
+        if (!snap.exists()) {
+          // 3. Crear documento Firestore por primera vez
+          console.log('📂 Creando perfil en Firestore...');
+          await setDoc(userRef, {
+            nombre: DEMO_NAME,
+            correo: DEMO_EMAIL,
+            grado: grado,
+            puntos: 0,
+            energia: 5,
+            nivel: 1
+          });
+        } else {
+          // 4. Solo actualizar grado si ya existe
+          console.log('📂 Perfil existe. Actualizando grado...');
+          await updateDoc(userRef, { grado: grado, lastLogin: serverTimestamp() });
+        }
+
+        // 5. Guardar en sessionStorage para userbar/home
+        const userData = { nombre: DEMO_NAME, correo: DEMO_EMAIL, grado, puntos: 0, energia: 5, nivel: 1, isDemo: true };
         sessionStorage.setItem('demoUser', JSON.stringify(userData));
-        console.log(`✅ Sesión iniciada en grado ${grado}`);
-        console.log(`📊 Stats: ⭐ ${userData.puntos} pts | ❤️ ${userData.energia} vidas | 🔷 Nv.${userData.nivel}`);
+        
+        console.log(`✅ Demo lista • Grado ${grado}`);
+        console.log(`📊 Stats: ⭐ 0 pts | ❤️ 5 vidas | 🔷 Nv.1`);
         console.log('🔗 Redirigiendo...');
+        
         updateDemoBannerUI(userData);
         setTimeout(() => window.location.href = `pages/home.html?grado=${grado}&demo=true`, 600);
-      } catch (err) { console.error('❌ Error demo:', err); }
+
+      } catch (err) {
+        console.error('❌ Error demo:', err.message);
+      }
     };
 
-    // ===== BANNER & UTILS =====
+    // ===== BANNER DEMO =====
     function updateDemoBannerUI(data) {
       const el = $('demo-stats');
-      if (el) el.innerHTML = `<span class="demo-stat">⭐ <strong>${data.puntos ?? 0}</strong> pts</span><span class="demo-stat">❤️ <strong>${data.energia ?? 5}</strong> vidas</span><span class="demo-stat">🔷 Nv.${data.nivel ?? 1}</span>`;
+      if (el) {
+        el.innerHTML = `<span class="demo-stat">⭐ <strong>${data.puntos ?? 0}</strong></span><span class="demo-stat">❤️ <strong>${data.energia ?? 5}</strong></span><span class="demo-stat">🔷 Nv.${data.nivel ?? 1}</span>`;
+      }
     }
-    $('demo-exit')?.addEventListener('click', () => { sessionStorage.removeItem('demoUser'); $('demo-banner')?.classList.remove('show'); window.location.href = '/'; });
-    if (sessionStorage.getItem('demoUser')) { updateDemoBannerUI(JSON.parse(sessionStorage.getItem('demoUser'))); $('demo-banner')?.classList.add('show'); }
+    $('demo-exit')?.addEventListener('click', () => {
+      sessionStorage.removeItem('demoUser');
+      $('demo-banner')?.classList.remove('show');
+      window.location.href = '/';
+    });
+    // Mostrar banner si ya hay demo activa
+    if (sessionStorage.getItem('demoUser')) {
+      updateDemoBannerUI(JSON.parse(sessionStorage.getItem('demoUser')));
+      $('demo-banner')?.classList.add('show');
+    }
 
-    console.log('🎓 Comandos útiles:');
+    // ===== HELP CONSOLA =====
+    console.log('🎓 Comandos disponibles:');
     console.log('• iniciarSesionDemo(7) | iniciarSesionDemo(8) | iniciarSesionDemo(9)');
-    console.log('  → Crea usuario "juan perez" una sola vez. Luego solo cambia grado y login.');
+    console.log('  → Login con email/password: 123456@clases.edu.sv / Demo123456!');
+    console.log('  → Crea usuario "juan perez" una vez. Luego solo cambia grado.');
   </script>
 </body>
 </html>

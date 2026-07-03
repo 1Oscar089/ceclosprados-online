@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+  <title>Calculando la potencia al levantar un objeto | Ciencias 8°</title>
+  <link rel="stylesheet" href="../../css/styles.css">
+
+  <script>
+    MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] } };
+  </script>
+  <script id="MathJax-script" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js"></script>
+
+  <style>
+    .back-btn { display: inline-flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem; color: var(--text-muted); font-weight: 500; transition: color 0.2s; }
+    .back-btn:hover { color: var(--primary); text-decoration: none; }
+    .class-header { margin-bottom: 2rem; }
+    .class-title { font-size: 1.5rem; margin-bottom: 0.5rem; color: var(--primary); font-weight: 800; line-height: 1.3;}
+    .class-meta { font-size: 0.95rem; color: var(--text-muted); font-weight: 500;}
+    
+    .section { margin-bottom: 2.5rem; }
+    .section-title { font-size: 1.25rem; font-weight: 800; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; border-bottom: 2px solid var(--border); padding-bottom: 0.5rem; }
+    
+    .section-theory { border-left: 5px solid #0ea5e9; padding-left: 1rem; }
+    .section-sim { border-left: 5px solid #8b5cf6; padding-left: 1rem; }
+    .section-wb { border-left: 5px solid #10b981; padding-left: 1rem; }
+    .section-eval { border-left: 5px solid #f59e0b; padding-left: 1rem; }
+
+    .content-box { background: var(--surface); border: 1px solid var(--border); border-radius: 1rem; padding: 1.5rem; margin-bottom: 1.5rem; line-height: 1.8; box-shadow: 0 4px 6px rgba(0,0,0,0.02); }
+    [data-theme="dark"] .content-box { background: #1e293b; border-color: #334155; }
+
+    /* SIMULADOR DE POLEA */
+    .sim-container { background: #f8fafc; border: 2px solid #cbd5e1; border-radius: 1rem; padding: 2rem; display: flex; flex-direction: column; align-items: center; gap: 2rem; margin-bottom: 2rem; position: relative; overflow: hidden; }
+    [data-theme="dark"] .sim-container { background: #0f172a; border-color: #334155; }
+    
+    .pulley-system { position: relative; width: 150px; height: 250px; border-left: 4px dashed #10b981; margin-left: -100px; display: flex; flex-direction: column; align-items: center; }
+    .pulley-wheel { width: 40px; height: 40px; border: 4px solid #64748b; border-radius: 50%; position: absolute; top: 0; left: 55px; background: #e2e8f0; z-index: 2; }
+    .pulley-wheel::after { content: ''; position: absolute; top: 16px; left: 16px; width: 8px; height: 8px; background: #334155; border-radius: 50%; }
+    .rope-left { position: absolute; top: 20px; left: 55px; width: 2px; height: 200px; background: #b45309; z-index: 1; transition: height 1.5s linear; }
+    .rope-right { position: absolute; top: 20px; left: 93px; width: 2px; height: 100px; background: #b45309; z-index: 1; transition: height 1.5s linear; }
+    
+    .bag { position: absolute; bottom: 0; left: 35px; width: 40px; height: 50px; background: #d97706; border-radius: 10px 10px 5px 5px; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 0.8rem; transition: bottom 1.5s linear; z-index: 3; }
+    .bag::before { content: ''; position: absolute; top: -10px; left: 15px; width: 10px; height: 10px; border: 2px solid #b45309; border-radius: 50%; border-bottom: none; }
+    
+    .hand { position: absolute; bottom: 100px; left: 80px; font-size: 2rem; transition: bottom 1.5s linear; z-index: 3; }
+
+    .sim-controls { display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; }
+    .btn-bag { padding: 0.5rem 1rem; border-radius: 0.5rem; border: 2px solid var(--primary); background: transparent; color: var(--text); font-weight: bold; cursor: pointer; transition: all 0.2s; }
+    .btn-bag.active { background: var(--primary); color: white; }
+    
+    .data-display { display: flex; gap: 2rem; background: var(--surface-hover); padding: 1rem 2rem; border-radius: 0.5rem; border: 1px solid var(--border); }
+    .data-card { text-align: center; }
+    .data-value { font-size: 1.5rem; font-weight: 900; color: var(--primary); font-family: monospace; }
+    .data-label { font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
+
+    /* TABLA WB */
+    .wb-table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.95rem; text-align: center; }
+    .wb-table th { background: #4c1d95; color: white; padding: 0.8rem; border: 1px solid #5b21b6; }
+    .wb-table td { padding: 0.5rem; border: 1px solid var(--border); background: var(--surface); }
+    [data-theme="dark"] .wb-table th { background: #312e81; border-color: #1e1b4b; }
+    [data-theme="dark"] .wb-table td { background: #0f172a; }
+    .gap-input { width: 100%; padding: 0.4rem; border-radius: 0.4rem; border: 2px solid var(--border); background: var(--bg); color: var(--text); text-align: center; outline: none; font-family: monospace; font-size: 1rem; box-sizing: border-box; }
+    .gap-input:focus { border-color: var(--primary); }
+    .correct { border-color: #10b981 !important; background: #ecfdf5 !important; color: #064e3b !important; }
+    .incorrect { border-color: #ef4444 !important; background: #fef2f2 !important; color: #7f1d1d !important; }
+    [data-theme="dark"] .correct { background: #064e3b !important; color: #a7f3d0 !important; }
+    [data-theme="dark"] .incorrect { background: #450a0a !important; color: #fecaca !important; }
+
+    /* TEXTAREAS WB */
+    .momentum-box { background: var(--surface-hover); border: 1px solid var(--border); border-radius: 0.5rem; padding: 1rem; margin-bottom: 1rem; }
+    .momentum-box h4 { margin: 0 0 0.5rem 0; color: var(--text); font-size: 1rem; }
+    
+    /* FORMULA BOX */
+    .formula-box { background: #f0fdf4; border-left: 4px solid #10b981; padding: 1rem; border-radius: 0 0.5rem 0.5rem 0; margin-bottom: 1.5rem; }
+    [data-theme="dark"] .formula-box { background: rgba(16, 185, 129, 0.1); }
+
+    /* BOTONES */
+    .btn-submit { display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 0.8rem 2rem; background: linear-gradient(135deg, #10b981, #059669); color: white; border: none; border-radius: 0.75rem; font-weight: 800; font-size: 1rem; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; margin-top: 1rem; }
+    .btn-submit:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(16, 185, 129, 0.4); }
+    .btn-submit:disabled { opacity: 0.5; cursor: not-allowed; filter: grayscale(1); transform: none; box-shadow: none; }
+
+    /* QUIZ MODAL */
+    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(4px); z-index: 10000; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.3s; padding: 1rem; }
+    .modal-overlay.active { opacity: 1; pointer-events: auto; }
+    .modal-content { background: var(--bg); width: 100%; max-width: 700px; max-height: 90vh; border-radius: 1.5rem; padding: 2rem; display: flex; flex-direction: column; position: relative; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); overflow: hidden; box-sizing: border-box; }
+    [data-theme="dark"] .modal-content { background: #0f172a; border: 1px solid #334155; }
+    .btn-close { position: absolute; top: 1.2rem; right: 1.2rem; background: var(--surface-hover); border: none; font-size: 1.5rem; cursor: pointer; color: var(--text-muted); width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; z-index: 10; }
+    .modal-header { flex-shrink: 0; margin-bottom: 1.5rem; padding-right: 3rem; border-bottom: 2px solid var(--border); padding-bottom: 1rem;}
+    .modal-body { overflow-y: auto; flex: 1; padding-right: 0.5rem;}
+    .quiz-question { background: var(--surface-hover); padding: 1.5rem; border-radius: 0.75rem; border: 1px solid var(--border); margin-bottom: 1.5rem; }
+    .quiz-options { display: flex; flex-direction: column; gap: 0.8rem; }
+    .quiz-option { display: flex; align-items: center; gap: 0.8rem; cursor: pointer; padding: 0.8rem; border-radius: 0.5rem; border: 1px solid var(--border); transition: background 0.2s; font-weight: 500; }
+    .quiz-option:hover { background: var(--surface); border-color: var(--primary); }
+    .quiz-option input[type="radio"] { width: 1.2rem; height: 1.2rem; cursor: pointer; accent-color: var(--primary); }
+    .result-summary { text-align: center; margin-top: 1rem; font-weight: bold; font-size: 1.1rem; }
+    .loading { position: fixed; inset: 0; background: rgba(255,255,255,0.9); display: flex; justify-content: center; align-items: center; z-index: 9999; }
+    [data-theme="dark"] .loading { background: rgba(11,17,32,0.9); }
+  </style>
+</head>
+<body>
+  <div id="userbar"></div>
+  <div id="loading" class="loading">Cargando...</div>
+
+  <header class="app-container mt-4">
+    <a href="../../pages/clases.html" class="btn btn-ghost back-btn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><path d="M19 12H5"/><polyline points="12 19 5 12 12 5"/></svg>
+      Volver a Clases
+    </a>
+    <div class="class-header">
+      <h1 class="class-title">Calculando la potencia al levantar un objeto</h1>
+      <p class="class-meta">Unidad 2 • Lección 4 • Ciencias 8°</p>
+    </div>
+  </header>
+
+  <main class="app-container">
+
+    <section class="section section-theory">
+      <h2 class="section-title">💡 Introducción Teórica</h2>
+      <div class="content-box">
+        <p>Cuando levantamos un objeto a una altura determinada, el trabajo que realiza la fuerza depende de la masa. Sin embargo, en términos de <strong>potencia</strong>, podemos aplicar una potencia similar a objetos de diferentes masas si los movemos más rápido o más lento.</p>
+        
+        <div class="formula-box">
+          <p><strong>Fórmulas clave para el experimento:</strong></p>
+          <ul style="margin: 0; padding-left: 1.5rem;">
+            <li><strong>Fuerza ($F$):</strong> Para levantar una masa a velocidad constante, $F = m \cdot g$ (usaremos $g = 9.8 \text{ m/s}^2$).</li>
+            <li><strong>Trabajo ($W$):</strong> $W = F \cdot d$ (donde $d$ es la altura de $1.5\text{ m}$). Se mide en Julios (J).</li>
+            <li><strong>Potencia ($P$):</strong> $P = \frac{W}{t}$. Se mide en Vatios o Watts (W).</li>
+            <li><strong>Momento Lineal ($p$):</strong> $p = m \cdot v$. También se puede calcular como $p = \frac{P}{g}$. Se mide en $\text{kg}\cdot\text{m/s}$.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-sim">
+      <h2 class="section-title">⚙️ Simulador del Experimento</h2>
+      <div class="content-box">
+        <p>Utiliza el simulador para levantar las tres bolsas de arena. Observa la fuerza aplicada (medida por el dinamómetro virtual) y el tiempo que tarda en subir la bolsa $1.5\text{ m}$. Anota estos datos para usarlos en la siguiente sección.</p>
+
+        <div class="sim-container">
+          <div class="sim-controls">
+            <button class="btn-bag active" id="btn-bag-1" onclick="selectBag(1)">Bolsa 1 (0.5 kg)</button>
+            <button class="btn-bag" id="btn-bag-2" onclick="selectBag(2)">Bolsa 2 (1.0 kg)</button>
+            <button class="btn-bag" id="btn-bag-3" onclick="selectBag(3)">Bolsa 3 (2.0 kg)</button>
+          </div>
+
+          <div class="pulley-system">
+            <div class="pulley-wheel"></div>
+            <div class="rope-left" id="rope-left"></div>
+            <div class="rope-right" id="rope-right"></div>
+            <div class="bag" id="sim-bag">0.5kg</div>
+            <div class="hand" id="sim-hand">✊</div>
+          </div>
+
+          <button class="btn-submit" id="btn-lift" onclick="liftBag()" style="margin:0;">Levantar Bolsa</button>
+
+          <div class="data-display">
+            <div class="data-card">
+              <div class="data-label">Fuerza Aplicada (N)</div>
+              <div class="data-value" id="val-force">0.0</div>
+            </div>
+            <div class="data-card">
+              <div class="data-label">Tiempo de subida (s)</div>
+              <div class="data-value" id="val-time">0.0</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-wb">
+      <h2 class="section-title">📝 Cuaderno de Trabajo: Tabla de Resultados</h2>
+      <div class="content-box">
+        <p><strong>a.</strong> Completa la tabla. Usa los datos de Fuerza y Tiempo que te dio el simulador para cada bolsa. Luego, calcula el Trabajo ($W$) y la Potencia ($P$). <em>(Usa 1 o 2 decimales según corresponda).</em></p>
+
+        <div class="table-container">
+          <table class="wb-table">
+            <thead>
+              <tr>
+                <th>Bolsa</th>
+                <th>Masa (kg)</th>
+                <th>Altura (m)</th>
+                <th>Fuerza (N)</th>
+                <th>Tiempo (s)</th>
+                <th>Trabajo (J)</th>
+                <th>Potencia (W)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>1</strong></td>
+                <td>0.5</td>
+                <td>1.5</td>
+                <td><input type="text" class="gap-input" id="t-f-1"></td>
+                <td><input type="text" class="gap-input" id="t-t-1"></td>
+                <td><input type="text" class="gap-input" id="t-w-1"></td>
+                <td><input type="text" class="gap-input" id="t-p-1"></td>
+              </tr>
+              <tr>
+                <td><strong>2</strong></td>
+                <td>1.0</td>
+                <td>1.5</td>
+                <td><input type="text" class="gap-input" id="t-f-2"></td>
+                <td><input type="text" class="gap-input" id="t-t-2"></td>
+                <td><input type="text" class="gap-input" id="t-w-2"></td>
+                <td><input type="text" class="gap-input" id="t-p-2"></td>
+              </tr>
+              <tr>
+                <td><strong>3</strong></td>
+                <td>2.0</td>
+                <td>1.5</td>
+                <td><input type="text" class="gap-input" id="t-f-3"></td>
+                <td><input type="text" class="gap-input" id="t-t-3"></td>
+                <td><input type="text" class="gap-input" id="t-w-3"></td>
+                <td><input type="text" class="gap-input" id="t-p-3"></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        
+        <div style="text-align: right;">
+          <button class="btn-submit" id="btn-verify-table" onclick="validateTable()" style="background: linear-gradient(135deg, #3b82f6, #2563eb);">✅ Verificar Tabla</button>
+        </div>
+        <div id="res-table" class="result-summary"></div>
+      </div>
+
+      <div class="content-box">
+        <p><strong>b.</strong> Calcula el momento lineal ($p$) de cada una de las bolsas justo antes de llegar a la altura máxima. Considera la masa y la velocidad ($v = \frac{d}{t}$), o usa la relación $p = \frac{P}{g}$. Escribe el resultado final en $\text{kg}\cdot\text{m/s}$.</p>
+        
+        <div class="momentum-box">
+          <h4>Bolsa 1:</h4>
+          $p_1 =$ <input type="text" class="gap-input" id="mom-1" style="width:120px; display:inline-block;"> $\text{ kg}\cdot\text{m/s}$
+        </div>
+        <div class="momentum-box">
+          <h4>Bolsa 2:</h4>
+          $p_2 =$ <input type="text" class="gap-input" id="mom-2" style="width:120px; display:inline-block;"> $\text{ kg}\cdot\text{m/s}$
+        </div>
+        <div class="momentum-box">
+          <h4>Bolsa 3:</h4>
+          $p_3 =$ <input type="text" class="gap-input" id="mom-3" style="width:120px; display:inline-block;"> $\text{ kg}\cdot\text{m/s}$
+        </div>
+
+        <div style="text-align: right;">
+          <button class="btn-submit" id="btn-verify-mom" onclick="validateMomentum()" style="background: linear-gradient(135deg, #8b5cf6, #6d28d9);">✅ Verificar Momento</button>
+        </div>
+        <div id="res-mom" class="result-summary"></div>
+      </div>
+    </section>
+
+    <section class="section section-eval" id="evaluation-area">
+      <h2 class="section-title">📝 Evaluación Aleatoria</h2>
+      <div class="content-box" style="text-align: center;">
+        <p style="margin-bottom: 1rem; color: var(--text-muted);">Demuestra lo que has aprendido. Completa los ejercicios del cuaderno para desbloquear este botón.</p>
+        <div id="eval-btn-container">
+            <button class="btn-submit" id="btn-start-quiz" onclick="openQuizModal()" disabled style="margin: 0; background: linear-gradient(135deg, #f59e0b, #d97706); width: auto;">🔒 Bloqueado: Completa las actividades</button>
+            <p style="font-size: 0.85rem; color: #ef4444; font-weight: bold; margin-top: 1rem;">
+            ⚠️ ADVERTENCIA ANTI-TRAMPAS: Al iniciar, no debes cambiar de pestaña ni minimizar tu navegador.
+            </p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <div class="modal-overlay" id="quiz-modal">
+    <div class="modal-content">
+      <button class="btn-close" onclick="closeQuizModal()">×</button>
+      
+      <div class="modal-header">
+        <h2 class="modal-title" style="color: var(--primary); margin:0;">Cuestionario: Trabajo y Potencia</h2>
+        <p style="color: #ef4444; font-weight: bold; margin: 0.5rem 0 0 0; font-size: 0.9rem;">Si cambias de pestaña o minimizas la ventana, tu progreso se perderá.</p>
+      </div>
+
+      <div class="modal-body" id="quiz-container">
+        </div>
+      
+      <div class="modal-footer" style="margin-top: 1.5rem; flex-shrink: 0;">
+        <button class="btn-submit" id="btn-submit-quiz" style="width: 100%; margin: 0; background: linear-gradient(135deg, #8b5cf6, #6d28d9);" onclick="submitQuiz()">Enviar Respuestas</button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initUserBar } from '../../js/userbar.js';
+    import { initFirebase } from '../../js/initFirebase.js';
+    import { doc, getDoc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js";
+    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-auth.js";
+    
+    initUserBar('#userbar');
+    const { db, auth } = initFirebase();
+
+    // ID CORREGIDO
+    const CLASS_ID = '8cie-u2-l4-c4';
+    const MATERIA_ID = 'ciencia'; 
+    
+    let currentUser = null, isClassClosed = false, isQuizActive = false;
+    let selectedQuestions = [];
+
+    // --- ESTADO LOCAL TEMPORAL ---
+    let localState = {
+      tablePassed: false,
+      momPassed: false
+    };
+
+    function saveLocalState() {
+      localStorage.setItem('8cie_u2_l4_c4_state', JSON.stringify(localState));
+      checkUnlockQuiz();
+    }
+
+    function loadLocalState() {
+      let saved = localStorage.getItem('8cie_u2_l4_c4_state');
+      if(saved) {
+        localState = JSON.parse(saved);
+        if(localState.tablePassed) forcePassTable();
+        if(localState.momPassed) forcePassMom();
+        checkUnlockQuiz();
+      }
+    }
+
+    function checkUnlockQuiz() {
+      if (localState.tablePassed && localState.momPassed) {
+        const btn = document.getElementById('btn-start-quiz');
+        if(btn && !isClassClosed) {
+          btn.disabled = false;
+          btn.innerHTML = `Comenzar Evaluación (5 Preguntas)`;
+        }
+      }
+    }
+
+    // --- LÓGICA DEL SIMULADOR ---
+    let currentBag = 1;
+    let isLifting = false;
+    
+    // Constantes físicas del simulador
+    const phys = {
+      1: { mass: 0.5, time: 1.5, f: 4.9 },
+      2: { mass: 1.0, time: 2.0, f: 9.8 },
+      3: { mass: 2.0, time: 3.0, f: 19.6 }
+    };
+
+    window.selectBag = (b) => {
+      if (isLifting) return;
+      currentBag = b;
+      document.querySelectorAll('.btn-bag').forEach(btn => btn.classList.remove('active'));
+      document.getElementById(`btn-bag-${b}`).classList.add('active');
+      
+      const bagEl = document.getElementById('sim-bag');
+      bagEl.innerText = `${phys[b].mass}kg`;
+      
+      // Reset visual state
+      document.getElementById('rope-left').style.height = '200px';
+      bagEl.style.bottom = '0px';
+      document.getElementById('rope-right').style.height = '100px';
+      document.getElementById('sim-hand').style.bottom = '100px';
+      
+      document.getElementById('val-force').innerText = '0.0';
+      document.getElementById('val-time').innerText = '0.0';
+    };
+
+    window.liftBag = () => {
+      if(isLifting) return;
+      isLifting = true;
+      
+      const p = phys[currentBag];
+      
+      // Animations
+      document.getElementById('rope-left').style.transitionDuration = `${p.time}s`;
+      document.getElementById('sim-bag').style.transitionDuration = `${p.time}s`;
+      document.getElementById('rope-right').style.transitionDuration = `${p.time}s`;
+      document.getElementById('sim-hand').style.transitionDuration = `${p.time}s`;
+      
+      document.getElementById('rope-left').style.height = '50px';
+      document.getElementById('sim-bag').style.bottom = '150px';
+      
+      document.getElementById('rope-right').style.height = '250px';
+      document.getElementById('sim-hand').style.bottom = '-50px';
+
+      document.getElementById('val-force').innerText = p.f.toFixed(1);
+      
+      // Timer effect
+      let startTime = Date.now();
+      let timerInterval = setInterval(() => {
+        let elapsed = (Date.now() - startTime) / 1000;
+        if(elapsed >= p.time) {
+          clearInterval(timerInterval);
+          document.getElementById('val-time').innerText = p.time.toFixed(1);
+          isLifting = false;
+        } else {
+          document.getElementById('val-time').innerText = elapsed.toFixed(1);
+        }
+      }, 50);
+    };
+
+    // --- LÓGICA DE VALIDACIÓN ---
+    function cleanNum(val) { return parseFloat(val.replace(',', '.')); }
+
+    const correctAns = {
+      table: {
+        f1: 4.9, t1: 1.5, w1: 7.35, p1: 4.9,
+        f2: 9.8, t2: 2.0, w2: 14.7, p2: 7.35,
+        f3: 19.6, t3: 3.0, w3: 29.4, p3: 9.8
+      },
+      mom: {
+        m1: 0.5, m2: 0.75, m3: 1.0
+      }
+    };
+
+    function isClose(val, expected, margin = 0.1) {
+      if(isNaN(val)) return false;
+      return Math.abs(val - expected) <= margin;
+    }
+
+    window.validateTable = () => {
+      let correct = 0;
+      const ids = ['t-f-1','t-t-1','t-w-1','t-p-1', 't-f-2','t-t-2','t-w-2','t-p-2', 't-f-3','t-t-3','t-w-3','t-p-3'];
+      const keys = ['f1','t1','w1','p1', 'f2','t2','w2','p2', 'f3','t3','w3','p3'];
+      
+      for(let i=0; i<ids.length; i++) {
+        let el = document.getElementById(ids[i]);
+        let val = cleanNum(el.value);
+        if(isClose(val, correctAns.table[keys[i]])) {
+          el.classList.add('correct'); el.classList.remove('incorrect');
+          correct++;
+        } else {
+          el.classList.add('incorrect'); el.classList.remove('correct');
+        }
+      }
+
+      if(correct === 12) {
+        forcePassTable();
+        localState.tablePassed = true;
+        saveLocalState();
+      } else {
+        document.getElementById('res-table').innerHTML = `<span style="color: #ea580c;">Tienes ${correct}/12 correctas. ¡Revisa tus cálculos (W=F*d, P=W/t)!</span>`;
+      }
+    };
+
+    function forcePassTable() {
+      const ids = ['t-f-1','t-t-1','t-w-1','t-p-1', 't-f-2','t-t-2','t-w-2','t-p-2', 't-f-3','t-t-3','t-w-3','t-p-3'];
+      const keys = ['f1','t1','w1','p1', 'f2','t2','w2','p2', 'f3','t3','w3','p3'];
+      for(let i=0; i<ids.length; i++) {
+        let el = document.getElementById(ids[i]);
+        if(el) { el.value = correctAns.table[keys[i]]; el.classList.add('correct'); el.disabled = true; }
+      }
+      document.getElementById('btn-verify-table').style.display = 'none';
+      document.getElementById('res-table').innerHTML = `<span style="color: #059669; font-weight: bold;">¡Tabla Completada!</span>`;
+    }
+
+    window.validateMomentum = () => {
+      let correct = 0;
+      for(let i=1; i<=3; i++) {
+        let el = document.getElementById(`mom-${i}`);
+        let val = cleanNum(el.value);
+        if(isClose(val, correctAns.mom[`m${i}`])) {
+          el.classList.add('correct'); el.classList.remove('incorrect');
+          correct++;
+        } else {
+          el.classList.add('incorrect'); el.classList.remove('correct');
+        }
+      }
+
+      if(correct === 3) {
+        forcePassMom();
+        localState.momPassed = true;
+        saveLocalState();
+      } else {
+        document.getElementById('res-mom').innerHTML = `<span style="color: #ea580c;">Tienes ${correct}/3 correctas. ¡Revisa tu fórmula (p=m*v o p=P/g)!</span>`;
+      }
+    };
+
+    function forcePassMom() {
+      for(let i=1; i<=3; i++) {
+        let el = document.getElementById(`mom-${i}`);
+        if(el) { el.value = correctAns.mom[`m${i}`]; el.classList.add('correct'); el.disabled = true; }
+      }
+      document.getElementById('btn-verify-mom').style.display = 'none';
+      document.getElementById('res-mom').innerHTML = `<span style="color: #6d28d9; font-weight: bold;">¡Cálculos Completados!</span>`;
+    }
+
+    // --- BANCO DE PREGUNTAS ---
+    const quizBank = [
+      { q: "¿Qué fórmula se utiliza para calcular el trabajo mecánico?", options: ["W = F x d", "W = m x v", "W = P / t"], ans: 0 },
+      { q: "¿Cuál es la unidad de medida de la potencia en el Sistema Internacional?", options: ["Julios (J)", "Newtons (N)", "Vatios o Watts (W)"], ans: 2 },
+      { q: "Si levantamos un objeto de 1 kg a 1.5 m de altura, ¿cuál es el trabajo realizado aproximado (g=9.8)?", options: ["9.8 J", "14.7 J", "1.5 J"], ans: 1 },
+      { q: "¿Qué relación hay entre el tiempo y la potencia si el trabajo realizado es el mismo?", options: ["A menor tiempo, mayor potencia", "A mayor tiempo, mayor potencia", "No tienen relación"], ans: 0 },
+      { q: "¿Cómo se puede calcular la magnitud del momento lineal (p) en este experimento usando la potencia (P) y la gravedad (g)?", options: ["p = P x g", "p = P / g", "p = g / P"], ans: 1 },
+      { q: "Si la potencia aplicada es de 9.8 W al levantar una masa, ¿cuál es su momento lineal justo antes de alcanzar la altura máxima (g=9.8)?", options: ["1.0 kg·m/s", "96.04 kg·m/s", "0.5 kg·m/s"], ans: 0 },
+      { q: "El trabajo necesario para levantar la bolsa de 2.0 kg a 1.5 m es de:", options: ["14.7 J", "29.4 J", "19.6 J"], ans: 1 },
+      { q: "¿Qué magnitud física se obtiene al multiplicar la masa por la velocidad de un objeto?", options: ["Trabajo", "Potencia", "Momento Lineal"], ans: 2 },
+      { q: "Para levantar la bolsa de 0.5 kg a velocidad constante, ¿cuál es la fuerza aproximada necesaria?", options: ["4.9 N", "9.8 N", "0.5 N"], ans: 0 },
+      { q: "Si un objeto se levanta más rápido aplicando la misma fuerza, ¿qué sucede con la potencia?", options: ["Disminuye", "Aumenta", "Se mantiene igual"], ans: 1 }
+    ];
+
+    function selectRandomQuestions() {
+      let shuffled = quizBank.sort(() => 0.5 - Math.random());
+      return shuffled.slice(0, 5); 
+    }
+
+    function applyCheatPenalty() {
+      if (isQuizActive) {
+        isQuizActive = false;
+        document.getElementById('quiz-modal').classList.remove('active');
+        document.getElementById('quiz-container').innerHTML = '';
+        sessionStorage.setItem('cheat_penalty', 'true'); 
+        window.location.reload(); 
+      }
+    }
+
+    document.addEventListener("visibilitychange", () => { if (document.hidden) applyCheatPenalty(); });
+    window.addEventListener("blur", applyCheatPenalty);
+    
+    window.addEventListener('load', () => {
+      if (sessionStorage.getItem('cheat_penalty') === 'true') {
+        sessionStorage.removeItem('cheat_penalty');
+        setTimeout(() => { alert("⚠️ PENALIZACIÓN ANTI-TRAMPAS ⚠️\n\nEl sistema detectó un cambio de ventana o pérdida de foco. Tu cuestionario fue reiniciado."); }, 500);
+      }
+      loadLocalState(); 
+    });
+
+    window.openQuizModal = () => {
+      if (isClassClosed) return;
+      selectedQuestions = selectRandomQuestions();
+      
+      let html = '';
+      selectedQuestions.forEach((qObj, index) => {
+        let optionsHtml = '';
+        qObj.options.forEach((opt, optIndex) => {
+          optionsHtml += `
+            <label class="quiz-option">
+              <input type="radio" name="q${index}" value="${optIndex}">
+              ${opt}
+            </label>
+          `;
+        });
+        
+        html += `
+          <div class="quiz-question">
+            <p>${index + 1}. ${qObj.q}</p>
+            <div class="quiz-options">
+              ${optionsHtml}
+            </div>
+          </div>
+        `;
+      });
+      
+      document.getElementById('quiz-container').innerHTML = html;
+      document.getElementById('quiz-modal').classList.add('active');
+      isQuizActive = true;
+    };
+
+    window.closeQuizModal = () => {
+      if (confirm("¿Seguro que deseas salir? Tus respuestas se perderán.")) {
+        document.getElementById('quiz-modal').classList.remove('active');
+        isQuizActive = false;
+      }
+    };
+
+    window.submitQuiz = async () => {
+      if (!currentUser || isClassClosed) return;
+      
+      let correctAnswers = 0;
+      let allAnswered = true;
+
+      selectedQuestions.forEach((qObj, index) => {
+        const radios = document.getElementsByName(`q${index}`);
+        let answered = false;
+        for (let radio of radios) {
+          if (radio.checked) {
+            answered = true;
+            if (parseInt(radio.value) === qObj.ans) correctAnswers++;
+            break;
+          }
+        }
+        if (!answered) allAnswered = false;
+      });
+
+      if (!allAnswered) {
+        alert("Por favor responde todas las preguntas.");
+        return;
+      }
+
+      let score = correctAnswers * 2; 
+      isQuizActive = false;
+      
+      document.getElementById('btn-submit-quiz').disabled = true;
+      document.getElementById('btn-submit-quiz').innerHTML = "Guardando...";
+
+      const docRef = doc(db, 'clases', MATERIA_ID, 'entregas', CLASS_ID);
+      const snap = await getDoc(docRef);
+      const fechaLocal = new Date().toLocaleString('en-GB', { timeZone: 'America/El_Salvador' }).replace(',', '');
+      let existingObj = (snap.exists() && snap.data().respuestas) ? snap.data().respuestas[currentUser.uid] || {} : {};
+      
+      existingObj = { ...existingObj, nombre: currentUser.displayName || currentUser.email, email: currentUser.email, fechaLocal, notaAdicional: score };
+      existingObj.nota = score; 
+
+      await setDoc(docRef, { grado: 8, año: new Date().getFullYear(), materia: MATERIA_ID, updatedAt: serverTimestamp(), respuestas: { [currentUser.uid]: existingObj } }, { merge: true });
+
+      localStorage.removeItem('8cie_u2_l4_c4_state');
+
+      document.getElementById('quiz-modal').classList.remove('active');
+      showQuizGrade(score);
+    };
+
+    function showQuizGrade(score) {
+        document.getElementById('evaluation-area').innerHTML = `
+        <h2 class="section-title">📝 Evaluación Aleatoria</h2>
+        <div class="result-summary" style="margin-top: 0; padding: 2rem;">
+          <p style="margin:0; font-weight: bold; color: var(--text-muted);">Nota Final:</p>
+          <h2 style="font-size: 3.5rem; color: var(--primary); margin: 0.5rem 0;">${score}/10</h2>
+          <p style="margin-top: 1rem; font-weight: 600; color: var(--text-muted);">¡Tu evaluación ha sido guardada con éxito!</p>
+        </div>
+      `;
+    }
+
+    function lockClassAsExpired() {
+      isClassClosed = true;
+      document.getElementById('eval-btn-container').innerHTML = `
+        <div class="result-summary" style="border-color: #ef4444; background: #fef2f2; padding: 1.5rem; margin: 0;">
+          <h3 style="color: #ef4444; margin: 0;">⏳ Tiempo Agotado para Evaluar (0/10)</h3>
+        </div>
+      `;
+      let b1 = document.getElementById('btn-verify-table'); if(b1) b1.disabled = true;
+      let b2 = document.getElementById('btn-verify-mom'); if(b2) b2.disabled = true;
+      let b3 = document.getElementById('btn-start-quiz'); if(b3) b3.disabled = true;
+    }
+
+    // INIT
+    onAuthStateChanged(auth, async (user) => {
+      const loadingEl = document.getElementById('loading');
+      if (user) {
+        currentUser = user;
+        const snap = await getDoc(doc(db, 'clases', MATERIA_ID, 'entregas', CLASS_ID));
+        
+        if (!snap.exists()) {
+          alert("La clase no ha sido configurada.");
+          window.location.href = "../../pages/clases.html";
+          return;
+        }
+
+        const docData = snap.data();
+        const now = new Date();
+        const startDate = new Date(docData.inicio);
+        const endDate = new Date(docData.fin);
+
+        if (now < startDate) {
+          alert("Esta clase aún no está disponible.");
+          window.location.href = "../../pages/clases.html";
+          return;
+        }
+
+        let hasEval = false;
+        if (docData.respuestas && docData.respuestas[user.uid]) {
+          const userData = docData.respuestas[user.uid];
+          if (userData.notaAdicional !== undefined) {
+             showQuizGrade(userData.notaAdicional);
+             hasEval = true;
+          }
+        }
+
+        if (now > endDate && !hasEval) {
+           lockClassAsExpired();
+        }
+
+      } else {
+        document.getElementById('evaluation-area').innerHTML = `
+          <div class="result-summary">
+            <h2>Sesión Requerida</h2>
+            <p>Debes iniciar sesión para realizar la actividad.</p>
+            <a href="../../index.html" class="btn-submit" style="text-decoration:none; display:inline-flex; width:auto;">Ir al Inicio</a>
+          </div>`;
+      }
+      loadingEl.style.display = 'none';
+    });
+  </script>
+</body>
+</html>

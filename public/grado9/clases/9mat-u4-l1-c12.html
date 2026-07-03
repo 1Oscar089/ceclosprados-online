@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+  <title>1.2 Proporcionalidad directa con el cuadrado, parte 2 | Matemática 9°</title>
+  <link rel="stylesheet" href="../../css/styles.css">
+
+  <script defer src="https://cdn.jsdelivr.net/npm/mathlive@0.98.0/dist/mathlive.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mathlive@0.98.0/dist/mathlive-fonts.css">
+  <script>
+    MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] } };
+  </script>
+  <script id="MathJax-script" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js"></script>
+
+  <style>
+    :root { --keyboard-zindex: 999999 !important; }
+    .back-btn { display: inline-flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem; color: var(--text-muted); font-weight: 500; transition: color 0.2s; }
+    .back-btn:hover { color: var(--primary); text-decoration: none; }
+    .class-header { margin-bottom: 2rem; }
+    .class-title { font-size: 1.5rem; margin-bottom: 0.5rem; color: var(--primary); font-weight: 800; line-height: 1.3;}
+    .class-meta { font-size: 0.95rem; color: var(--text-muted); font-weight: 500;}
+    
+    .section { margin-bottom: 2.5rem; }
+    .section-title { font-size: 1.25rem; font-weight: 800; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; border-bottom: 2px solid var(--border); padding-bottom: 0.5rem; }
+    
+    .section-P { border-left: 5px solid #0284c7; padding-left: 1rem; }
+    .section-S { border-left: 5px solid #16a34a; padding-left: 1rem; }
+    .section-C { border-left: 5px solid #d946ef; padding-left: 1rem; }
+    .section-E { border-left: 5px solid #ea580c; padding-left: 1rem; }
+
+    .content-box { background: var(--surface); border: 1px solid var(--border); border-radius: 1rem; padding: 1.5rem; margin-bottom: 1.5rem; line-height: 1.8; box-shadow: 0 4px 6px rgba(0,0,0,0.02); }
+    [data-theme="dark"] .content-box { background: #1e293b; border-color: #334155; }
+
+    /* CAJAS DE TIPS DEL LIBRO */
+    .tip-box { background: #ecfccb; border: 1px solid #a3e635; border-radius: 0.5rem; padding: 1rem; font-size: 0.95rem; color: #166534; margin: 1rem 0; }
+    [data-theme="dark"] .tip-box { background: rgba(22, 163, 74, 0.1); border-color: #16a34a; color: #a7f3d0; }
+    
+    .info-box { background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 0.5rem; padding: 1rem; font-size: 0.95rem; color: #334155; margin: 1rem 0; }
+    [data-theme="dark"] .info-box { background: #0f172a; border-color: #334155; color: #cbd5e1; }
+
+    /* MATHLIVE INPUTS - Hiding the problematic menu and standardizing styles */
+    math-field { 
+      font-size: 1.2rem; padding: 0.4rem; border: 2px solid var(--border); border-radius: 0.5rem; 
+      background: white; width: 100%; box-sizing: border-box; transition: border-color 0.2s; min-width: 100px;
+    }
+    math-field::part(menu-toggle) { display: none !important; } /* Oculta las 3 lineas que causan el error de idioma */
+    
+    math-field:focus-within { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2); }
+    math-field.correct { border-color: #10b981; background: #ecfdf5; }
+    math-field.incorrect { border-color: #ef4444; background: #fef2f2; }
+    math-field:disabled { opacity: 0.7; cursor: not-allowed; }
+    [data-theme="dark"] math-field { background: #0f172a; border-color: #475569; color: white; }
+    [data-theme="dark"] math-field.correct { background: #064e3b; border-color: #10b981; }
+    [data-theme="dark"] math-field.incorrect { background: #450a0a; border-color: #ef4444; }
+
+    .input-row { display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; margin-top: 1rem; margin-bottom: 1.5rem; }
+    .input-group { flex: 1; min-width: 150px; display: flex; align-items: center; gap: 0.5rem; }
+    .input-group label { font-weight: 600; font-size: 1.1rem; color: var(--primary); white-space: nowrap; }
+
+    /* BOTONES */
+    .btn-submit { display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 0.8rem 2rem; background: linear-gradient(135deg, #0284c7, #2563eb); color: white; border: none; border-radius: 0.75rem; font-weight: 800; font-size: 1rem; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; margin-top: 1rem; }
+    .btn-submit:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(37, 99, 235, 0.4); }
+    .btn-submit:disabled { opacity: 0.5; cursor: not-allowed; filter: grayscale(1); transform: none; box-shadow: none; }
+    
+    .btn-cancel { background: var(--surface-hover); color: var(--text); border: 1px solid var(--border); }
+    .btn-cancel:hover:not(:disabled) { background: var(--border); transform: translateY(-2px); box-shadow: none; color: var(--text); }
+
+    /* MODALS */
+    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(4px); z-index: 10000; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.3s; padding: 1rem; }
+    .modal-overlay.active { opacity: 1; pointer-events: auto; }
+    .modal-content { background: var(--bg); width: 100%; max-width: 700px; max-height: 90vh; border-radius: 1.5rem; padding: 2rem; display: flex; flex-direction: column; position: relative; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); overflow: hidden; box-sizing: border-box; }
+    [data-theme="dark"] .modal-content { background: #0f172a; border: 1px solid #334155; }
+    
+    #confirm-modal { z-index: 10001; } 
+    #confirm-modal .modal-content { max-width: 450px; text-align: center; }
+
+    .btn-close { position: absolute; top: 1.2rem; right: 1.2rem; background: var(--surface-hover); border: none; font-size: 1.5rem; cursor: pointer; color: var(--text-muted); width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; z-index: 10; }
+    .modal-header { flex-shrink: 0; margin-bottom: 1.5rem; padding-right: 3rem; border-bottom: 2px solid var(--border); padding-bottom: 1rem;}
+    .modal-body { overflow-y: auto; flex: 1; padding-right: 0.5rem;}
+    
+    .result-summary { text-align: center; margin-top: 1rem; font-weight: bold; font-size: 1.2rem; padding: 1rem; border-radius: 0.5rem; }
+    .loading { position: fixed; inset: 0; background: rgba(255,255,255,0.9); display: flex; justify-content: center; align-items: center; z-index: 9999; }
+    [data-theme="dark"] .loading { background: rgba(11,17,32,0.9); }
+
+    /* SVG Containers */
+    .svg-container { display: flex; justify-content: center; align-items: center; padding: 1rem; background: var(--surface-hover); border-radius: 0.75rem; border: 1px solid var(--border); margin-bottom: 1.5rem; }
+    [data-theme="dark"] .svg-container { background: #0f172a; }
+  </style>
+</head>
+<body>
+  <div id="userbar"></div>
+  <div id="loading" class="loading">Cargando...</div>
+
+  <header class="app-container mt-4">
+    <a href="../../pages/clases.html" class="btn btn-ghost back-btn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><path d="M19 12H5"/><polyline points="12 19 5 12 12 5"/></svg>
+      Volver a Clases
+    </a>
+    <div class="class-header">
+      <h1 class="class-title">1.2 Proporcionalidad directa con el cuadrado, parte 2</h1>
+      <p class="class-meta">Unidad 4 • Lección 1 • Matemática 9°</p>
+    </div>
+  </header>
+
+  <main class="app-container">
+
+    <section class="section section-P">
+      <h2 class="section-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+        Problema Inicial
+      </h2>
+      <div class="content-box">
+        <p>La variable $y$ es directamente proporcional al cuadrado de la variable $x$. Además, si $x = 3$, entonces $y = 18$.</p>
+        <p>Plantea <strong>$y = ax^2$</strong> encontrando el valor de la constante $a$.</p>
+      </div>
+    </section>
+
+    <section class="section section-S">
+      <h2 class="section-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        Solución
+      </h2>
+      <div class="content-box">
+        <p>De acuerdo al enunciado del problema, $y = ax^2$.</p>
+        <p>Para encontrar el valor de la constante $a$ se sustituyen $x = 3$ y $y = 18$ y se resuelve la ecuación:</p>
+        
+        <div style="text-align: center; font-size: 1.2rem; margin: 1.5rem 0; line-height: 2;">
+          $18 = a(3)^2$<br>
+          $18 = 9a$<br>
+          $a = \frac{18}{9}$<br>
+          $a = 2$
+        </div>
+        
+        <p>Por lo tanto, la ecuación que modela la relación es: <strong>$y = 2x^2$</strong>.</p>
+      </div>
+    </section>
+
+    <section class="section section-C">
+      <h2 class="section-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+        Conclusión
+      </h2>
+      <div class="content-box" style="display: flex; flex-wrap: wrap; gap: 1.5rem; background: #fdf4ff; border-color: #f5d0fe;">
+        <div style="flex: 2; min-width: 300px;">
+          <p style="font-size: 1.1rem; color: #86198f;">Si $y = ax^2$, entonces el valor de la constante $a$ puede encontrarse sustituyendo un par de valores particulares de $x$ y $y$, luego se resuelve la ecuación.</p>
+          <p style="font-weight: bold; color: #701a75;">Si $y$ es directamente proporcional al cuadrado de $x$, entonces se dice que $y$ es función de $x$, pues cada valor de $x$ determina un único valor de $y$.</p>
+        </div>
+        <div style="flex: 1; min-width: 250px;">
+          <div class="info-box" style="margin:0;">
+            En general, la función $y = ax^2 + bx + c$, donde $a$, $b$ y $c$ son números reales ($a \neq 0$) se llama <strong>función cuadrática</strong>. Las funciones $y = ax^2$ y $y = ax^2 + c$ son casos especiales que se estudiarán en esta unidad.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-E">
+      <h2 class="section-title">✏️ Práctica 1: Cuaderno de Trabajo</h2>
+      <div class="content-box">
+        <p>Resuelve los ejercicios y envía tus respuestas. Esta sección será calificada sobre una nota base de <strong>10 puntos</strong> y se guardará en tu progreso.</p>
+
+        <div style="background: #f8fafc; border: 1px solid #cbd5e1; padding: 1.5rem; border-radius: 0.5rem; margin-bottom: 2rem;">
+          <p><strong>1.</strong> En cada literal, $y$ es directamente proporcional a $x^2$. Calcula el valor de la constante $a$ y escribe la ecuación ($y=ax^2$) en los siguientes casos:</p>
+          
+          <div style="margin-top: 1.5rem;">
+            <p style="color: var(--primary); font-weight: bold; margin-bottom: 0.5rem;">a) Cuando $x = 2$ entonces $y = 12$.</p>
+            <div class="input-row">
+              <div class="input-group"><label>$a =$</label> <math-field id="e1-a-const" virtual-keyboard-mode="onfocus"></math-field></div>
+              <div class="input-group" style="flex: 2;"><label>Ecuación:</label> <math-field id="e1-a-eq" virtual-keyboard-mode="onfocus"></math-field></div>
+            </div>
+          </div>
+
+          <div style="margin-top: 1.5rem; border-top: 1px dashed var(--border); padding-top: 1rem;">
+            <p style="color: var(--primary); font-weight: bold; margin-bottom: 0.5rem;">b) Cuando $x = 3$ entonces $y = 18$.</p>
+            <div class="input-row">
+              <div class="input-group"><label>$a =$</label> <math-field id="e1-b-const" virtual-keyboard-mode="onfocus"></math-field></div>
+              <div class="input-group" style="flex: 2;"><label>Ecuación:</label> <math-field id="e1-b-eq" virtual-keyboard-mode="onfocus"></math-field></div>
+            </div>
+          </div>
+
+          <div style="margin-top: 1.5rem; border-top: 1px dashed var(--border); padding-top: 1rem;">
+            <p style="color: var(--primary); font-weight: bold; margin-bottom: 0.5rem;">c) Cuando $x = 6$ entonces $y = 18$.</p>
+            <div class="input-row">
+              <div class="input-group"><label>$a =$</label> <math-field id="e1-c-const" virtual-keyboard-mode="onfocus"></math-field></div>
+              <div class="input-group" style="flex: 2;"><label>Ecuación:</label> <math-field id="e1-c-eq" virtual-keyboard-mode="onfocus"></math-field></div>
+            </div>
+          </div>
+        </div>
+
+        <div style="background: #f8fafc; border: 1px solid #cbd5e1; padding: 1.5rem; border-radius: 0.5rem;">
+          <div style="display: flex; flex-wrap: wrap; gap: 1.5rem; align-items: center;">
+            <div style="flex: 2; min-width: 250px;">
+              <p><strong>2.</strong> El volumen de un prisma de base cuadrada y altura constante varía proporcionalmente al cuadrado del lado de su base. Si el lado de la base mide $2\text{ cm}$ el volumen es igual a $12\text{ cm}^3$, ¿cuánto mide su altura?</p>
+              
+              <div class="input-row" style="margin-top: 1rem;">
+                <div class="input-group"><label>Altura $a =$</label> <math-field id="e2-h" virtual-keyboard-mode="onfocus"></math-field> <span style="font-weight: bold; color: var(--text-muted);">cm</span></div>
+              </div>
+            </div>
+            <div style="flex: 1; min-width: 200px; display: flex; flex-direction: column; align-items: center;">
+               <div class="svg-container" style="background: transparent; border: none; padding: 0;">
+                <svg viewBox="0 0 150 180" width="120" height="144">
+                  <polygon points="75,20 125,50 75,80 25,50" fill="#e0e7ff" stroke="#6366f1" stroke-width="2"/>
+                  <polygon points="25,50 75,80 75,150 25,120" fill="#c7d2fe" stroke="#6366f1" stroke-width="2"/>
+                  <polygon points="75,80 125,50 125,120 75,150" fill="#a5b4fc" stroke="#6366f1" stroke-width="2"/>
+                  <text x="25" y="145" font-size="14" fill="#333">2 cm</text>
+                  <text x="85" y="145" font-size="14" fill="#333">2 cm</text>
+                  <path d="M 130,50 Q 145,85 130,120" fill="none" stroke="#333" stroke-width="1" stroke-dasharray="3"/>
+                  <text x="140" y="90" font-size="14" fill="#333">a</text>
+                </svg>
+              </div>
+              <div class="tip-box" style="margin: 0; font-size: 0.85rem; padding: 0.5rem; text-align: center; width: 100%;">
+                El volumen de un prisma es igual al producto de su altura por el área de su base.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div style="text-align: right;">
+          <button class="btn-submit" id="btn-submit-p1" onclick="openConfirmModal('p1')" style="background: linear-gradient(135deg, #8b5cf6, #6d28d9);">✅ Guardar y Enviar Práctica 1</button>
+        </div>
+        <div id="res-p1" class="result-summary"></div>
+      </div>
+    </section>
+
+    <section class="section section-eval" id="evaluation-area">
+      <h2 class="section-title">📝 Evaluación Aleatoria</h2>
+      <div class="content-box" style="text-align: center;">
+        <p style="margin-bottom: 1rem; color: var(--text-muted);">Completa la Práctica 1 para desbloquear la evaluación final.</p>
+        <div id="eval-btn-container">
+            <button class="btn-submit" id="btn-start-eval" onclick="openEvalModal()" disabled style="margin: 0; background: linear-gradient(135deg, #f59e0b, #d97706); width: auto;">🔒 Bloqueado: Completa la Práctica 1</button>
+            <p style="font-size: 0.85rem; color: #ef4444; font-weight: bold; margin-top: 1rem;">
+            ⚠️ ADVERTENCIA ANTI-TRAMPAS: Al iniciar, no debes cambiar de pestaña ni minimizar tu navegador. Si lo haces, tu evaluación será anulada y reiniciada.
+            </p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <div class="modal-overlay" id="eval-modal">
+    <div class="modal-content">
+      <button class="btn-close" onclick="closeEvalModal()">×</button>
+      
+      <div class="modal-header">
+        <h2 class="modal-title" style="color: var(--primary); margin:0;">Evaluación: Calculando la Constante</h2>
+        <p style="color: #ef4444; font-weight: bold; margin: 0.5rem 0 0 0; font-size: 0.9rem;">Si cambias de pestaña o minimizas la ventana, tu progreso será penalizado.</p>
+      </div>
+
+      <div class="modal-body" id="eval-container">
+        <p>Aplica la regla que aprendiste hoy para encontrar la constante de proporcionalidad.</p>
+        
+        <div style="background: #e0f2fe; border: 1px solid #bae6fd; padding: 1.5rem; border-radius: 0.5rem; margin-bottom: 1.5rem;">
+          <p id="problem-text" style="font-size: 1.2rem; color: #0369a1; font-weight: bold; text-align: center; margin: 0;"></p>
+        </div>
+        
+        <div class="input-row" style="justify-content: center;">
+          <div class="input-group" style="flex: 0 1 250px;">
+            <label>Valor de la constante $a$:</label>
+            <math-field id="prac2-a" virtual-keyboard-mode="onfocus"></math-field>
+          </div>
+        </div>
+      </div>
+      
+      <div class="modal-footer" style="margin-top: 1.5rem; flex-shrink: 0;">
+        <button class="btn-submit" id="btn-submit-eval" style="width: 100%; margin: 0; background: linear-gradient(135deg, #10b981, #059669);" onclick="openConfirmModal('eval')">Enviar Respuestas y Finalizar</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="confirm-modal">
+    <div class="modal-content" style="max-width: 400px; text-align: center; padding: 2.5rem;">
+      <h2 style="color: var(--primary); margin-top: 0;">¿Estás seguro?</h2>
+      <p style="font-size: 1.05rem; margin-bottom: 1.5rem;">Una vez enviado, no podrás modificar tus respuestas. ¿Deseas continuar y guardar tu calificación de forma permanente?</p>
+      <div style="display: flex; gap: 1rem; justify-content: center;">
+        <button class="btn-submit btn-cancel" onclick="closeConfirmModal()">Cancelar</button>
+        <button class="btn-submit" id="btn-confirm-yes" onclick="confirmAction()">Sí, Enviar</button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initUserBar } from '../../js/userbar.js';
+    import { initFirebase } from '../../js/initFirebase.js';
+    import { doc, getDoc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js";
+    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-auth.js";
+    
+    initUserBar('#userbar');
+    const { db, auth } = initFirebase();
+
+    const CLASS_ID = '9mat-u4-l1-c12';
+    const MATERIA_ID = 'matematica'; 
+    let currentUser = null, isClassClosed = false, isEvalActive = false;
+
+    // --- CORRECCIÓN DE TECLADO MATHLIVE (Previene Bug es-41 y Fuerza Teclado Virtual) ---
+    window.addEventListener('DOMContentLoaded', () => {
+      // 1. Evita que crashee si no detecta bien el idioma 'es-419'
+      if (window.mathVirtualKeyboard) {
+          try { window.mathVirtualKeyboard.layouts = ['default']; } catch(e) {}
+      }
+      
+      // 2. Bloquea el teclado físico para forzar el uso del teclado virtual en pantalla
+      setTimeout(() => {
+        document.querySelectorAll('math-field').forEach(mf => {
+          mf.addEventListener('keydown', (e) => {
+            const allowedKeys = ['Backspace', 'ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Tab', 'Delete', 'Enter'];
+            if (!allowedKeys.includes(e.key) && !e.ctrlKey && !e.metaKey) {
+              e.preventDefault();
+            }
+          });
+        });
+      }, 500); 
+    });
+
+    // --- LÓGICA DE CONFIRMACIÓN MODAL ---
+    let pendingAction = '';
+    
+    window.openConfirmModal = (action) => {
+      if(isClassClosed) return;
+      pendingAction = action;
+      document.getElementById('confirm-modal').classList.add('active');
+    };
+    
+    window.closeConfirmModal = () => {
+      pendingAction = '';
+      document.getElementById('confirm-modal').classList.remove('active');
+    };
+    
+    window.confirmAction = () => {
+      document.getElementById('confirm-modal').classList.remove('active');
+      if(pendingAction === 'p1') submitPractice1();
+      if(pendingAction === 'eval') submitEval();
+    };
+
+    // --- LÓGICA DE GUARDADO EN FIREBASE ---
+    async function saveToFirebase(updates) {
+      if (!currentUser || isClassClosed) return;
+      const docRef = doc(db, 'clases', MATERIA_ID, 'entregas', CLASS_ID);
+      const snap = await getDoc(docRef);
+      const fechaLocal = new Date().toLocaleString('en-GB', { timeZone: 'America/El_Salvador' }).replace(',', '');
+      let existingObj = (snap.exists() && snap.data().respuestas) ? snap.data().respuestas[currentUser.uid] || {} : {};
+
+      existingObj = { ...existingObj, nombre: currentUser.displayName || currentUser.email, email: currentUser.email, fechaLocal, ...updates };
+
+      // Calcular nota global promediando (Cada parte vale 10 puntos sumando un total de 10)
+      let finalNota = 0, count = 0;
+      if (existingObj.notaPractica !== undefined) { finalNota += existingObj.notaPractica; count++; }
+      if (existingObj.notaAdicional !== undefined) { finalNota += existingObj.notaAdicional; count++; }
+      existingObj.nota = count > 0 ? Number((finalNota / count).toFixed(1)) : 0;
+
+      await setDoc(docRef, { grado: 9, año: new Date().getFullYear(), materia: MATERIA_ID, updatedAt: serverTimestamp(), respuestas: { [currentUser.uid]: existingObj } }, { merge: true });
+    }
+
+    // --- LÓGICA PRÁCTICA 1 CON MATHLIVE Y DEBUGGING MEJORADO ---
+    
+    // Función invencible para parsear lo que arroja MathLive
+    function cleanMath(str) {
+      if (!str) return '';
+      let s = str.toLowerCase().replace(/\s/g, ''); // Quitar espacios
+      
+      // Eliminar TODAS las llaves y modificadores de LaTeX
+      s = s.replace(/\\cdot/g, '').replace(/\\left/g, '').replace(/\\right/g, '').replace(/\\mleft/g, '').replace(/\\mright/g, '');
+      s = s.replace(/\{/g, '').replace(/\}/g, ''); // ¡Elimina llaves! Hace que \frac{1}{2} pase a ser \frac12
+      
+      // Estandarizar potencias a x^2 simple
+      s = s.replace(/x\^2/g, 'x^2'); 
+      
+      // Convertir fracciones a decimal (0.5)
+      s = s.replace(/\\frac12/g, '0.5'); // Convertido desde LaTeX limpio
+      s = s.replace(/1\/2/g, '0.5');     // Convertido si usan barra inclinada normal
+      
+      // Casos donde la fracción incluye el x^2 arriba
+      s = s.replace(/\\fracx\^22/g, '0.5x^2');
+      s = s.replace(/x\^2\/2/g, '0.5x^2');
+
+      // Eliminar parentesis que rodean un numero decimal puro ej: (0.5)x^2 -> 0.5x^2
+      s = s.replace(/\(0\.5\)/g, '0.5');
+
+      return s;
+    }
+
+    function checkEq(val, expectedA) {
+       // val ya viene procesado por cleanMath
+       // expectedA es un string: '3', '2', '0.5'
+       return val === `y=${expectedA}x^2` || val === `${expectedA}x^2` || val === `y=${expectedA}*x^2`;
+    }
+
+    window.submitPractice1 = async () => {
+      let score = 0; // Sobre 10 puntos
+      console.log("=== INICIANDO VALIDACIÓN PRÁCTICA 1 (Base 10) ===");
+      
+      // 1a) a = 3 (1.5 pts) | Eq = y=3x^2 (1.5 pts)
+      let valA1 = cleanMath(document.getElementById('e1-a-const').value);
+      console.log(`[1a Constante] Ingresado(Limpio): "${valA1}" | Esperado: "3"`);
+      if (valA1 === '3') {
+        score += 1.5; document.getElementById('e1-a-const').classList.add('correct');
+      } else { document.getElementById('e1-a-const').classList.add('incorrect'); }
+
+      let eqA1 = cleanMath(document.getElementById('e1-a-eq').value);
+      console.log(`[1a Ecuación] Ingresado(Limpio): "${eqA1}" | Esperado: "y=3x^2"`);
+      if (checkEq(eqA1, '3')) {
+        score += 1.5; document.getElementById('e1-a-eq').classList.add('correct');
+      } else { document.getElementById('e1-a-eq').classList.add('incorrect'); }
+
+      // 1b) a = 2 (1.5 pts) | Eq = y=2x^2 (1.5 pts)
+      let valB1 = cleanMath(document.getElementById('e1-b-const').value);
+      console.log(`[1b Constante] Ingresado(Limpio): "${valB1}" | Esperado: "2"`);
+      if (valB1 === '2') {
+        score += 1.5; document.getElementById('e1-b-const').classList.add('correct');
+      } else { document.getElementById('e1-b-const').classList.add('incorrect'); }
+
+      let eqB1 = cleanMath(document.getElementById('e1-b-eq').value);
+      console.log(`[1b Ecuación] Ingresado(Limpio): "${eqB1}" | Esperado: "y=2x^2"`);
+      if (checkEq(eqB1, '2')) {
+        score += 1.5; document.getElementById('e1-b-eq').classList.add('correct');
+      } else { document.getElementById('e1-b-eq').classList.add('incorrect'); }
+
+      // 1c) a = 0.5 (1.0 pts) | Eq = y=0.5x^2 (1.0 pts)
+      let valC1 = cleanMath(document.getElementById('e1-c-const').value);
+      console.log(`[1c Constante] Ingresado(Limpio): "${valC1}" | Esperado: "0.5"`);
+      if (valC1 === '0.5') {
+        score += 1.0; document.getElementById('e1-c-const').classList.add('correct');
+      } else { document.getElementById('e1-c-const').classList.add('incorrect'); }
+
+      let eqC1 = cleanMath(document.getElementById('e1-c-eq').value);
+      console.log(`[1c Ecuación] Ingresado(Limpio): "${eqC1}" | Esperado: "y=0.5x^2"`);
+      if (checkEq(eqC1, '0.5')) {
+        score += 1.0; document.getElementById('e1-c-eq').classList.add('correct');
+      } else { document.getElementById('e1-c-eq').classList.add('incorrect'); }
+
+      // Ejercicio 2) a = 3 (2.0 pts)
+      let valH2 = cleanMath(document.getElementById('e2-h').value);
+      console.log(`[2 Altura] Ingresado(Limpio): "${valH2}" | Esperado: "3"`);
+      if (valH2 === '3') {
+        score += 2.0; document.getElementById('e2-h').classList.add('correct');
+      } else { document.getElementById('e2-h').classList.add('incorrect'); }
+
+      score = Number(score.toFixed(1));
+      console.log(`=== PUNTAJE FINAL PRÁCTICA 1: ${score}/10.0 ===`);
+
+      document.getElementById('btn-submit-p1').disabled = true;
+      document.getElementById('btn-submit-p1').innerHTML = "Guardando...";
+      
+      await saveToFirebase({ notaPractica: score });
+      showPractice1Result(score);
+    };
+
+    function showPractice1Result(score) {
+      const allIds = ['e1-a-const', 'e1-a-eq', 'e1-b-const', 'e1-b-eq', 'e1-c-const', 'e1-c-eq', 'e2-h'];
+      allIds.forEach(id => {
+        let el = document.getElementById(id);
+        if(el) { el.disabled = true; }
+      });
+      document.getElementById('btn-submit-p1').style.display = 'none';
+      
+      const res = document.getElementById('res-p1');
+      res.innerHTML = `<span style="color: #059669; font-weight: bold;">¡Práctica 1 Guardada! Obtuviste ${score}/10.0 puntos en esta parte.</span>`;
+      res.style.background = "#ecfdf5";
+      res.style.border = "1px solid #a7f3d0";
+
+      // Unlocks evaluation
+      const evalBtn = document.getElementById('btn-start-eval');
+      if(evalBtn && !isClassClosed) {
+        evalBtn.disabled = false;
+        evalBtn.innerHTML = `Comenzar Evaluación`;
+      }
+    }
+
+    // --- LÓGICA DE LA EVALUACIÓN (MODAL) ---
+    let dynAnsA = 0;
+    
+    function applyCheatPenalty() {
+      if (isEvalActive) {
+        isEvalActive = false;
+        document.getElementById('eval-modal').classList.remove('active');
+        sessionStorage.setItem('cheat_penalty', 'true'); 
+        window.location.reload(); 
+      }
+    }
+
+    document.addEventListener("visibilitychange", () => { if (document.hidden) applyCheatPenalty(); });
+    window.addEventListener("blur", applyCheatPenalty);
+    
+    window.addEventListener('load', () => {
+      if (sessionStorage.getItem('cheat_penalty') === 'true') {
+        sessionStorage.removeItem('cheat_penalty');
+        setTimeout(() => { alert("⚠️ PENALIZACIÓN ANTI-TRAMPAS ⚠️\n\nEl sistema detectó un cambio de ventana o pérdida de foco. Tu evaluación fue reiniciada y los datos del problema han cambiado."); }, 500);
+      }
+    });
+
+    window.openEvalModal = () => {
+      if (isClassClosed) return;
+      
+      // Generate problem data
+      let a = Math.floor(Math.random() * 8) + 2; // a between 2 and 9
+      let x = Math.floor(Math.random() * 4) + 2; // x between 2 and 5
+      let y = a * (x * x); 
+      
+      dynAnsA = a;
+      
+      const probText = document.getElementById('problem-text');
+      probText.innerHTML = `Sabiendo que \\(y\\) es directamente proporcional a \\(x^2\\).<br><br>Si \\(x = ${x}\\), entonces \\(y = ${y}\\).`;
+      
+      // Forzar a MathJax a renderizar el nuevo contenido del modal
+      if (window.MathJax) {
+          MathJax.typesetPromise([probText]).catch((err) => console.log('MathJax error:', err));
+      }
+      
+      document.getElementById('prac2-a').value = '';
+      document.getElementById('prac2-a').classList.remove('correct', 'incorrect');
+
+      document.getElementById('eval-modal').classList.add('active');
+      isEvalActive = true;
+    };
+
+    window.closeEvalModal = () => {
+      if (confirm("¿Seguro que deseas salir? Tus respuestas se perderán.")) {
+        document.getElementById('eval-modal').classList.remove('active');
+        isEvalActive = false;
+      }
+    };
+
+    window.submitEval = async () => {
+      isEvalActive = false; // Disable anti-cheat while saving
+      let p2score = 0; // Sobre 10 puntos
+
+      console.log("=== INICIANDO VALIDACIÓN EVALUACIÓN (Base 10) ===");
+
+      let valA = cleanMath(document.getElementById('prac2-a').value);
+      console.log(`[Eval Constante] Ingresado(Limpio): "${valA}" | Esperado: "${dynAnsA}"`);
+
+      if (valA === dynAnsA.toString()) {
+        p2score = 10;
+        document.getElementById('prac2-a').classList.add('correct');
+      } else {
+        document.getElementById('prac2-a').classList.add('incorrect');
+      }
+
+      document.getElementById('btn-submit-eval').disabled = true;
+      document.getElementById('btn-submit-eval').innerHTML = "Guardando...";
+      
+      await saveToFirebase({ notaAdicional: p2score });
+      
+      document.getElementById('eval-modal').classList.remove('active');
+      showEvalResult(p2score);
+    };
+
+    function showEvalResult(score) {
+      document.getElementById('evaluation-area').innerHTML = `
+        <h2 class="section-title">📝 Evaluación Final</h2>
+        <div class="result-summary" style="margin-top: 0; padding: 2rem;">
+          <p style="margin:0; font-weight: bold; color: var(--text-muted);">Puntaje de Evaluación:</p>
+          <h2 style="font-size: 3.5rem; color: var(--primary); margin: 0.5rem 0;">${score}/10.0</h2>
+          <p style="margin-top: 1rem; font-weight: 600; color: var(--text-muted);">¡Tu evaluación ha sido guardada con éxito!</p>
+        </div>
+      `;
+    }
+
+    function lockClassAsExpired() {
+      isClassClosed = true;
+      document.getElementById('eval-btn-container').innerHTML = `
+        <div class="result-summary" style="border-color: #ef4444; background: #fef2f2; padding: 1.5rem; margin: 0;">
+          <h3 style="color: #ef4444; margin: 0;">⏳ Tiempo Agotado para Evaluar</h3>
+        </div>
+      `;
+      let b1 = document.getElementById('btn-submit-p1'); if(b1) b1.disabled = true;
+    }
+
+    // INIT
+    onAuthStateChanged(auth, async (user) => {
+      const loadingEl = document.getElementById('loading');
+      if (user) {
+        currentUser = user;
+        const snap = await getDoc(doc(db, 'clases', MATERIA_ID, 'entregas', CLASS_ID));
+        
+        if (!snap.exists()) {
+          alert("La clase no ha sido configurada.");
+          window.location.href = "../../pages/clases.html";
+          return;
+        }
+
+        const docData = snap.data();
+        const now = new Date();
+        const startDate = new Date(docData.inicio);
+        const endDate = new Date(docData.fin);
+
+        if (now < startDate) {
+          alert("Esta clase aún no está disponible.");
+          window.location.href = "../../pages/clases.html";
+          return;
+        }
+
+        let hasEval = false;
+        if (docData.respuestas && docData.respuestas[user.uid]) {
+          const userData = docData.respuestas[user.uid];
+          
+          if (userData.notaPractica !== undefined) {
+             showPractice1Result(userData.notaPractica);
+          }
+          if (userData.notaAdicional !== undefined) {
+             showEvalResult(userData.notaAdicional);
+             hasEval = true;
+          }
+        } 
+        
+        if (now > endDate && !hasEval) {
+           lockClassAsExpired();
+        }
+
+      } else {
+        document.getElementById('evaluation-area').innerHTML = `
+          <div class="result-summary">
+            <h2>Sesión Requerida</h2>
+            <p>Debes iniciar sesión para guardar tu avance.</p>
+            <a href="../../index.html" class="btn-submit" style="text-decoration:none; display:inline-flex; width:auto;">Ir al Inicio</a>
+          </div>`;
+      }
+      loadingEl.style.display = 'none';
+    });
+  </script>
+</body>
+</html>

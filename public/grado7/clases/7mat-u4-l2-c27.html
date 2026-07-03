@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+  <title>2.7 Reducción de expresiones algebraicas | Matemática 7°</title>
+  <link rel="stylesheet" href="../../css/styles.css">
+
+  <script defer src="https://cdn.jsdelivr.net/npm/mathlive@0.98.0/dist/mathlive.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mathlive@0.98.0/dist/mathlive-fonts.css">
+  
+  <script>
+    MathJax = { 
+      tex: { inlineMath: [['$', '$'], ['\\(', '\\)']], packages: {'[+]': ['cancel']} },
+      loader: {load: ['[tex]/cancel']}
+    };
+  </script>
+  <script id="MathJax-script" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js"></script>
+
+  <style>
+    :root { --keyboard-zindex: 100010 !important; }
+    .back-btn { display: inline-flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem; color: var(--text-muted); font-weight: 500; transition: color 0.2s; }
+    .back-btn:hover { color: var(--primary); text-decoration: none; }
+    .class-header { margin-bottom: 2rem; border-bottom: 2px solid var(--border); padding-bottom: 1rem; }
+    .class-title { font-size: 1.5rem; margin-bottom: 0.5rem; color: var(--primary); font-weight: 800; line-height: 1.3;}
+    .class-meta { font-size: 0.95rem; color: var(--text-muted); font-weight: 500;}
+    
+    .section { margin-bottom: 2.5rem; }
+    .section-title { font-size: 1.25rem; font-weight: 800; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; border-bottom: 2px solid var(--border); padding-bottom: 0.5rem; }
+    
+    .section-P { border-left: 5px solid #0284c7; padding-left: 1rem; }
+    .section-S { border-left: 5px solid #16a34a; padding-left: 1rem; }
+    .section-C { border-left: 5px solid #d946ef; padding-left: 1rem; }
+    .section-L { border-left: 5px solid #ef4444; padding-left: 1rem; }
+    .section-eval { border-left: 5px solid #f59e0b; padding-left: 1rem; }
+
+    .content-box { background: var(--surface); border: 1px solid var(--border); border-radius: 1rem; padding: 1.5rem; margin-bottom: 1.5rem; line-height: 1.8; box-shadow: 0 4px 6px rgba(0,0,0,0.02); }
+    [data-theme="dark"] .content-box { background: #1e293b; border-color: #334155; }
+
+    /* MATH WRAPPERS (Para abrir la ventanita) */
+    .math-wrapper { cursor: pointer; border-radius: 0.5rem; transition: transform 0.2s, box-shadow 0.2s; display: block; width: 100%; margin-top: 0.5rem; }
+    .math-wrapper:hover { transform: scale(1.02); box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+    .math-wrapper math-field { pointer-events: none; }
+
+    /* MATHLIVE INPUTS */
+    math-field { font-size: 1.2rem; padding: 0.5rem; border: 2px solid var(--border); border-radius: 0.5rem; background: white; width: 100%; box-sizing: border-box; transition: border-color 0.2s; min-width: 100px; }
+    math-field.correct { border-color: #10b981; background: #ecfdf5; }
+    math-field.incorrect { border-color: #ef4444; background: #fef2f2; }
+    [data-theme="dark"] math-field { background: #0f172a; border-color: #475569; color: white; }
+    [data-theme="dark"] math-field.correct { background: #064e3b; border-color: #10b981; }
+    [data-theme="dark"] math-field.incorrect { background: #450a0a; border-color: #ef4444; }
+
+    #active-math-editor { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2); font-size: 1.5rem; padding: 0.8rem; pointer-events: auto; }
+
+    .input-group { display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 1.5rem; background: #f8fafc; padding: 1.5rem; border-radius: 0.75rem; border: 1px solid #e2e8f0;}
+    [data-theme="dark"] .input-group { background: #1e293b; border-color: #334155; }
+    .input-group label { font-size: 1.05rem; color: var(--text); }
+
+    /* BOTONES */
+    .btn-submit { display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 0.8rem 2rem; background: linear-gradient(135deg, #0284c7, #2563eb); color: white; border: none; border-radius: 0.75rem; font-weight: 800; font-size: 1rem; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; margin-top: 1rem; }
+    .btn-submit:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(37, 99, 235, 0.4); }
+    .btn-submit:disabled { opacity: 0.5; cursor: not-allowed; filter: grayscale(1); transform: none; box-shadow: none; }
+    .btn-cancel { background: var(--surface-hover); color: var(--text); border: 1px solid var(--border); }
+    .btn-cancel:hover:not(:disabled) { background: var(--border); transform: translateY(-2px); box-shadow: none; color: var(--text); }
+
+    /* MODALS */
+    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(4px); z-index: 10000; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.3s; padding: 1rem; }
+    .modal-overlay.active { opacity: 1; pointer-events: auto; }
+    .modal-content { background: var(--bg); width: 100%; max-width: 700px; max-height: 90vh; border-radius: 1.5rem; padding: 2rem; display: flex; flex-direction: column; position: relative; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); overflow: hidden; box-sizing: border-box; }
+    [data-theme="dark"] .modal-content { background: #0f172a; border: 1px solid #334155; }
+    
+    /* Z-INDEX ESTRICTOS */
+    #eval-modal { z-index: 10000; }
+    #math-editor-modal { z-index: 10005; align-items: flex-start; padding-top: 10vh; }
+    #confirm-modal { z-index: 10010 !important; } 
+
+    #math-editor-modal .modal-content { max-width: 500px; overflow: visible;}
+    #confirm-modal .modal-content { max-width: 450px; text-align: center; }
+
+    .btn-close { position: absolute; top: 1.2rem; right: 1.2rem; background: var(--surface-hover); border: none; font-size: 1.5rem; cursor: pointer; color: var(--text-muted); width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; z-index: 10; }
+    .modal-header { flex-shrink: 0; margin-bottom: 1.5rem; padding-right: 3rem; border-bottom: 2px solid var(--border); padding-bottom: 1rem;}
+    .modal-body { overflow-y: auto; flex: 1; padding-right: 0.5rem;}
+    
+    .result-summary { text-align: center; margin-top: 1rem; font-weight: bold; font-size: 1.2rem; padding: 1rem; border-radius: 0.5rem; }
+    .loading { position: fixed; inset: 0; background: rgba(255,255,255,0.9); display: flex; justify-content: center; align-items: center; z-index: 9999; }
+    [data-theme="dark"] .loading { background: rgba(11,17,32,0.9); }
+
+    .math-step { text-align: center; font-size: 1.15rem; line-height: 2.2; margin: 1rem 0; overflow-x: auto; background: var(--bg); padding: 1rem; border-radius: 0.5rem; border: 1px solid var(--border);}
+  </style>
+</head>
+<body>
+  <div id="userbar"></div>
+  <div id="loading" class="loading">Cargando...</div>
+
+  <header class="app-container mt-4">
+    <a href="../../pages/clases.html" class="btn btn-ghost back-btn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><path d="M19 12H5"/><polyline points="12 19 5 12 12 5"/></svg>
+      Volver a Clases
+    </a>
+    <div class="class-header">
+      <h1 class="class-title">2.7 Reducción de expresiones algebraicas</h1>
+      <p class="class-meta">Unidad 4 • Lección 2 • Matemática 7°</p>
+    </div>
+  </header>
+
+  <main class="app-container">
+
+    <section class="section section-P">
+      <h2 class="section-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+        Problema Inicial
+      </h2>
+      <div class="content-box">
+        <p>En una venta de frutas, una sandía cuesta $x$ dólares. María compra 5 y Carlos compra 3. Escribe la expresión algebraica del gasto total de María y Carlos.</p>
+        <p style="text-align: center; font-weight: bold; margin-top: 1.5rem; color: var(--primary);">
+          Escribe la expresión algebraica de dos formas diferentes.
+        </p>
+      </div>
+    </section>
+
+    <section class="section section-S">
+      <h2 class="section-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        Solución
+      </h2>
+      <div class="content-box">
+        <p>Existen dos formas de representar el gasto total:</p>
+        
+        <div class="math-step" style="text-align: left;">
+            <strong>Forma 1:</strong> Sumando el gasto de cada uno.<br>
+            Gasto de María: $5x$<br>
+            Gasto de Carlos: $3x$<br>
+            Gasto Total: <strong>$5x + 3x$</strong>
+        </div>
+
+        <div class="math-step" style="text-align: left;">
+            <strong>Forma 2:</strong> Multiplicando el total de sandías por el costo.<br>
+            Total de sandías: $5 + 3 = 8$<br>
+            Costo de cada una: $x$<br>
+            Gasto Total: <strong>$(5 + 3)x = 8x$</strong>
+        </div>
+        
+        <p style="text-align: center; font-weight: bold; color: #16a34a; margin-top: 1rem;">
+            Por lo tanto: $5x + 3x = (5 + 3)x = 8x$
+        </p>
+      </div>
+    </section>
+
+    <section class="section section-C">
+      <h2 class="section-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+        Conclusión
+      </h2>
+      <div class="content-box" style="background: #fdf4ff; border-color: #f5d0fe;">
+        <p>Para determinar la expresión algebraica equivalente a otra dada, se operan los coeficientes de los términos que tienen la misma variable (a esto se le llama <strong>términos semejantes</strong>).</p>
+        <p>A este proceso se le llama <strong>reducción de expresiones algebraicas</strong> y se aplica la <em>propiedad distributiva</em>:</p>
+        <div class="math-step" style="font-weight: bold;">
+            $ax + bx = (a + b)x$
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-L">
+      <h2 class="section-title">✏️ Práctica 1: Reduce las expresiones</h2>
+      <div class="content-box">
+        <p>Suma los términos semejantes y escribe la expresión reducida. Toca el recuadro gris para escribir tu respuesta.</p>
+
+        <div style="margin-top: 2rem; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+          
+          <div class="input-group" style="margin-bottom: 0;">
+            <label><strong>a)</strong> $4x + 3x =$</label>
+            <div class="math-wrapper" onclick="openMathEditor('e1-a')">
+                <math-field id="e1-a" read-only></math-field>
+            </div>
+          </div>
+          
+          <div class="input-group" style="margin-bottom: 0;">
+            <label><strong>b)</strong> $x + 3x =$</label>
+            <div class="math-wrapper" onclick="openMathEditor('e1-b')">
+                <math-field id="e1-b" read-only></math-field>
+            </div>
+          </div>
+
+          <div class="input-group" style="margin-bottom: 0;">
+            <label><strong>c)</strong> $5y + 2y =$</label>
+            <div class="math-wrapper" onclick="openMathEditor('e1-c')">
+                <math-field id="e1-c" read-only></math-field>
+            </div>
+          </div>
+
+          <div class="input-group" style="margin-bottom: 0;">
+            <label><strong>d)</strong> $2y + y =$</label>
+            <div class="math-wrapper" onclick="openMathEditor('e1-d')">
+                <math-field id="e1-d" read-only></math-field>
+            </div>
+          </div>
+
+        </div>
+
+        <div style="text-align: right; margin-top: 2rem;">
+          <button class="btn-submit" id="btn-submit-p1" onclick="openConfirmModal('p1')" style="background: linear-gradient(135deg, #ef4444, #b91c1c);">✅ Guardar y Enviar Práctica</button>
+        </div>
+        <div id="res-p1" class="result-summary"></div>
+      </div>
+    </section>
+
+    <section class="section section-eval" id="evaluation-area">
+      <h2 class="section-title">📝 Evaluación Aleatoria (2 Ejercicios)</h2>
+      <div class="content-box" style="text-align: center;">
+        <p style="margin-bottom: 1rem; color: var(--text-muted);">Completa la Práctica para desbloquear la evaluación final.</p>
+        <div id="eval-btn-container">
+            <button class="btn-submit" id="btn-start-eval" onclick="openEvalModal()" disabled style="margin: 0; background: linear-gradient(135deg, #f59e0b, #d97706); width: auto;">🔒 Bloqueado: Completa la Práctica</button>
+            <p style="font-size: 0.85rem; color: #ef4444; font-weight: bold; margin-top: 1rem;">
+            ⚠️ ADVERTENCIA ANTI-TRAMPAS: Al iniciar, no debes cambiar de pestaña ni minimizar tu navegador.
+            </p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <div class="modal-overlay" id="math-editor-modal">
+    <div class="modal-content">
+      <h3 style="color: var(--primary); margin-top: 0; font-size: 1.3rem;">Escribe tu expresión</h3>
+      <p style="font-size: 0.9rem; color: var(--text-muted); margin-top: 0;">Usa el teclado en pantalla.</p>
+      
+      <math-field id="active-math-editor"></math-field>
+      
+      <div style="display: flex; gap: 1rem; justify-content: flex-end; margin-top: 1.5rem;">
+        <button class="btn-submit btn-cancel" style="margin: 0; padding: 0.6rem 1.5rem;" onclick="closeMathEditor()">Cancelar</button>
+        <button class="btn-submit" style="margin: 0; padding: 0.6rem 1.5rem;" onclick="saveMathEditor()">✅ Aceptar</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="eval-modal">
+    <div class="modal-content" style="max-width: 600px;">
+      <button class="btn-close" onclick="closeEvalModal()">×</button>
+      
+      <div class="modal-header" style="display: flex; flex-direction: column;">
+        <h2 class="modal-title" style="color: var(--primary); margin:0;">Evaluación Final</h2>
+        <p style="color: #ef4444; font-weight: bold; margin: 0.5rem 0 1rem 0; font-size: 0.9rem;">Si cambias de pestaña o minimizas la ventana, tu progreso será penalizado.</p>
+        <button class="btn-submit" id="btn-submit-eval" style="margin: 0; width: 100%; background: linear-gradient(135deg, #10b981, #059669);" onclick="openConfirmModal('eval')">Enviar Evaluación</button>
+      </div>
+
+      <div class="modal-body" id="eval-container">
+        <p style="margin-bottom: 1.5rem; text-align: center;">Reduce las siguientes expresiones sumando los términos semejantes.</p>
+        <div id="eval-questions-box" style="display: flex; flex-direction: column; gap: 1.5rem;">
+            </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="confirm-modal">
+    <div class="modal-content">
+      <h2 style="color: var(--primary); margin-top: 0;">¿Estás seguro?</h2>
+      <p style="font-size: 1.05rem; margin-bottom: 1.5rem;">Una vez enviado, no podrás modificar tus respuestas. ¿Deseas continuar y guardar tu calificación?</p>
+      <div style="display: flex; gap: 1rem; justify-content: center;">
+        <button class="btn-submit btn-cancel" onclick="closeConfirmModal()">Cancelar</button>
+        <button class="btn-submit" id="btn-confirm-yes" onclick="confirmAction()">Sí, Enviar</button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initUserBar } from '../../js/userbar.js';
+    import { initFirebase } from '../../js/initFirebase.js';
+    import { doc, getDoc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js";
+    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-auth.js";
+    
+    initUserBar('#userbar');
+    const { db, auth } = initFirebase();
+
+    const CLASS_ID = '7mat-u4-l2-c27';
+    const MATERIA_ID = 'matematica'; 
+    let currentUser = null, isClassClosed = false, isEvalActive = false;
+
+    // --- MANEJO INTELIGENTE DEL TECLADO MATHLIVE ---
+    let currentEditingId = null;
+
+    document.getElementById('active-math-editor').addEventListener('keydown', (e) => {
+        const allowedKeys = ['Backspace', 'ArrowLeft', 'ArrowRight', 'Tab', 'Delete', 'Enter'];
+        if (!allowedKeys.includes(e.key) && !e.ctrlKey && !e.metaKey) {
+            e.preventDefault();
+        }
+    });
+
+    window.openMathEditor = (id) => {
+        const originalField = document.getElementById(id);
+        if(isClassClosed || originalField.disabled || originalField.hasAttribute('read-only') === false && originalField.parentElement.style.cursor === 'default') return;
+
+        currentEditingId = id;
+        const editor = document.getElementById('active-math-editor');
+        editor.value = originalField.value;
+        
+        document.getElementById('math-editor-modal').classList.add('active');
+        
+        setTimeout(() => {
+            editor.focus();
+            if(window.mathVirtualKeyboard) {
+                window.mathVirtualKeyboard.show();
+            }
+        }, 100);
+    };
+
+    window.closeMathEditor = () => {
+        document.getElementById('math-editor-modal').classList.remove('active');
+        if(window.mathVirtualKeyboard) {
+            window.mathVirtualKeyboard.hide();
+        }
+        currentEditingId = null;
+    };
+
+    window.saveMathEditor = () => {
+        if(currentEditingId) {
+            const originalField = document.getElementById(currentEditingId);
+            const editor = document.getElementById('active-math-editor');
+            originalField.value = editor.value;
+            originalField.classList.remove('correct', 'incorrect');
+        }
+        closeMathEditor();
+    };
+
+    // --- LÓGICA DE CONFIRMACIÓN MODAL ---
+    let pendingAction = '';
+    
+    window.openConfirmModal = (action) => {
+      if(isClassClosed) return;
+      pendingAction = action;
+      document.getElementById('confirm-modal').classList.add('active');
+    };
+    
+    window.closeConfirmModal = () => {
+      pendingAction = '';
+      document.getElementById('confirm-modal').classList.remove('active');
+    };
+    
+    window.confirmAction = () => {
+      document.getElementById('confirm-modal').classList.remove('active');
+      if(pendingAction === 'p1') submitPractice1();
+      if(pendingAction === 'eval') submitEval();
+    };
+
+    // --- LÓGICA DE GUARDADO EN FIREBASE ---
+    async function saveToFirebase(updates) {
+      if (!currentUser || isClassClosed) return;
+      const docRef = doc(db, 'clases', MATERIA_ID, 'entregas', CLASS_ID);
+      const snap = await getDoc(docRef);
+      const fechaLocal = new Date().toLocaleString('en-GB', { timeZone: 'America/El_Salvador' }).replace(',', '');
+      let existingObj = (snap.exists() && snap.data().respuestas) ? snap.data().respuestas[currentUser.uid] || {} : {};
+
+      existingObj = { ...existingObj, nombre: currentUser.displayName || currentUser.email, email: currentUser.email, fechaLocal, ...updates };
+
+      let finalNota = 0, count = 0;
+      if (existingObj.notaPractica !== undefined) { finalNota += existingObj.notaPractica; count++; }
+      if (existingObj.notaAdicional !== undefined) { finalNota += existingObj.notaAdicional; count++; }
+      existingObj.nota = count > 0 ? Number((finalNota / count).toFixed(1)) : 0;
+
+      await setDoc(docRef, { grado: 7, año: new Date().getFullYear(), materia: MATERIA_ID, updatedAt: serverTimestamp(), respuestas: { [currentUser.uid]: existingObj } }, { merge: true });
+    }
+
+    // --- LIMPIADOR EXACTO PARA MATHLIVE ---
+    function cleanMath(str) {
+        if(!str) return "";
+        let s = str.toLowerCase();
+        s = s.replace(/\s/g, "").replace(/\\cdot/g, "").replace(/\\times/g, "").replace(/\\left/g, "").replace(/\\right/g, "").replace(/\\mleft/g, "").replace(/\\mright/g, "");
+        s = s.replace(/\\frac([0-9a-z])([0-9a-z])/g, "\\frac{$1}{$2}");
+        s = s.replace(/\\frac\{([^{}]+)\}\{1\}/g, "$1");
+        s = s.replace(/\/1(?![0-9.])/g, ""); 
+        s = s.replace(/\\frac\{-([^{}]+)\}\{([^{}]+)\}/g, "-\\frac{$1}{$2}");
+        s = s.replace(/(^|[^0-9a-z])1([a-z])/g, "$1$2");
+        if (s.startsWith('+')) s = s.substring(1);
+        return s;
+    }
+
+    // --- LÓGICA PRÁCTICA 1 ---
+    const ansP1 = {
+      'e1-a': ['7x'],
+      'e1-b': ['4x'],
+      'e1-c': ['7y'],
+      'e1-d': ['3y']
+    };
+
+    function validateField(id, expectedArray) {
+      const mf = document.getElementById(id);
+      if(!mf) return false;
+      const val = cleanMath(mf.value);
+      const correctOnes = expectedArray.map(s => cleanMath(s));
+
+      if (correctOnes.includes(val)) {
+          mf.classList.add('correct'); return true;
+      } else {
+          mf.classList.add('incorrect'); return false;
+      }
+    }
+
+    window.submitPractice1 = async () => {
+      let correctCount = 0;
+      const ids = Object.keys(ansP1);
+      
+      ids.forEach(id => {
+         if (validateField(id, ansP1[id])) correctCount++;
+      });
+
+      let score = (correctCount / 4) * 10;
+      score = Number(score.toFixed(1));
+
+      document.getElementById('btn-submit-p1').disabled = true;
+      document.getElementById('btn-submit-p1').innerHTML = "Guardando...";
+      
+      await saveToFirebase({ notaPractica: score });
+      showPractice1Result(score);
+    };
+
+    function showPractice1Result(score) {
+      Object.keys(ansP1).forEach(id => { 
+        document.getElementById(id).disabled = true; 
+        document.getElementById(id).parentElement.style.cursor = 'default'; 
+      });
+      document.getElementById('btn-submit-p1').style.display = 'none';
+      
+      const res = document.getElementById('res-p1');
+      res.innerHTML = `<span style="color: #059669; font-weight: bold;">¡Práctica Guardada! Obtuviste ${score}/10.0 puntos.</span>`;
+      res.style.background = "#ecfdf5";
+      res.style.border = "1px solid #a7f3d0";
+
+      const evalBtn = document.getElementById('btn-start-eval');
+      if(evalBtn && !isClassClosed) {
+        evalBtn.disabled = false;
+        evalBtn.innerHTML = `Comenzar Evaluación`;
+      }
+    }
+
+    // --- LÓGICA EVALUACIÓN (2 ADICIONALES ALEATORIOS) ---
+    let evalExpected = [];
+    
+    function applyCheatPenalty() {
+      if (isEvalActive) {
+        isEvalActive = false;
+        document.getElementById('eval-modal').classList.remove('active');
+        sessionStorage.setItem('cheat_penalty', 'true'); 
+        window.location.reload(); 
+      }
+    }
+
+    document.addEventListener("visibilitychange", () => { if (document.hidden) applyCheatPenalty(); });
+    window.addEventListener("blur", applyCheatPenalty);
+    
+    window.addEventListener('load', () => {
+      if (sessionStorage.getItem('cheat_penalty') === 'true') {
+        sessionStorage.removeItem('cheat_penalty');
+        setTimeout(() => { alert("⚠️ PENALIZACIÓN ANTI-TRAMPAS ⚠️\n\nEl sistema detectó un cambio de ventana o pérdida de foco. Tu evaluación fue reiniciada y los problemas cambiaron."); }, 500);
+      }
+    });
+
+    const evalBank = [
+        { q: "$5a + 4a =$", ans: ["9a"] },
+        { q: "$m + 6m =$", ans: ["7m"] },
+        { q: "$8x + 2x =$", ans: ["10x"] },
+        { q: "$4y + y =$", ans: ["5y"] },
+        { q: "$2b + 7b =$", ans: ["9b"] },
+        { q: "$3n + 5n =$", ans: ["8n"] }
+    ];
+
+    window.openEvalModal = () => {
+      if (isClassClosed) return;
+      
+      let shuffled = evalBank.sort(() => 0.5 - Math.random());
+      let selected = shuffled.slice(0, 2); // 2 PREGUNTAS
+      evalExpected = selected;
+      
+      let html = "";
+      selected.forEach((item, index) => {
+        html += `
+          <div class="input-group" style="margin-bottom: 0;">
+            <label style="font-weight: normal; margin-bottom: 0.5rem; font-size: 1.2rem;">${index + 1}. ${item.q}</label>
+            <div class="math-wrapper" onclick="openMathEditor('eval-q${index}')">
+                <math-field id="eval-q${index}" read-only></math-field>
+            </div>
+          </div>
+        `;
+      });
+      
+      const box = document.getElementById('eval-questions-box');
+      box.innerHTML = html;
+
+      if(window.MathJax) { MathJax.typesetPromise([box]).catch((err) => console.log(err)); }
+
+      document.getElementById('eval-modal').classList.add('active');
+      isEvalActive = true;
+    };
+
+    window.closeEvalModal = () => {
+      if (confirm("¿Seguro que deseas salir? Tus respuestas se perderán.")) {
+        document.getElementById('eval-modal').classList.remove('active');
+        isEvalActive = false;
+      }
+    };
+
+    window.submitEval = async () => {
+      isEvalActive = false; 
+      let correct = 0; 
+
+      for(let i=0; i<2; i++) {
+        if (validateField(`eval-q${i}`, evalExpected[i].ans)) {
+            correct++;
+        }
+        document.getElementById(`eval-q${i}`).disabled = true;
+        document.getElementById(`eval-q${i}`).parentElement.style.cursor = 'default';
+      }
+
+      // 2 ejercicios, cada uno vale 5 puntos
+      let p2score = correct * 5.0;
+
+      document.getElementById('btn-submit-eval').disabled = true;
+      document.getElementById('btn-submit-eval').innerHTML = "Guardando...";
+      
+      await saveToFirebase({ notaAdicional: p2score });
+      
+      document.getElementById('eval-modal').classList.remove('active');
+      showEvalResult(p2score);
+    };
+
+    function showEvalResult(score) {
+      document.getElementById('evaluation-area').innerHTML = `
+        <h2 class="section-title">📝 Evaluación Final</h2>
+        <div class="result-summary" style="margin-top: 0; padding: 2rem;">
+          <p style="margin:0; font-weight: bold; color: var(--text-muted);">Puntaje de Evaluación:</p>
+          <h2 style="font-size: 3.5rem; color: var(--primary); margin: 0.5rem 0;">${score}/10.0</h2>
+          <p style="margin-top: 1rem; font-weight: 600; color: var(--text-muted);">¡Tu evaluación ha sido guardada con éxito!</p>
+        </div>
+      `;
+    }
+
+    function lockClassAsExpired() {
+      isClassClosed = true;
+      document.getElementById('eval-btn-container').innerHTML = `
+        <div class="result-summary" style="border-color: #ef4444; background: #fef2f2; padding: 1.5rem; margin: 0;">
+          <h3 style="color: #ef4444; margin: 0;">⏳ Tiempo Agotado</h3>
+        </div>
+      `;
+      let b1 = document.getElementById('btn-submit-p1'); if(b1) b1.disabled = true;
+    }
+
+    // INIT
+    onAuthStateChanged(auth, async (user) => {
+      const loadingEl = document.getElementById('loading');
+      if (user) {
+        currentUser = user;
+        const snap = await getDoc(doc(db, 'clases', MATERIA_ID, 'entregas', CLASS_ID));
+        
+        if (!snap.exists()) {
+          alert("La clase no ha sido configurada.");
+          window.location.href = "../../pages/clases.html";
+          return;
+        }
+
+        const docData = snap.data();
+        const now = new Date();
+        const startDate = new Date(docData.inicio);
+        const endDate = new Date(docData.fin);
+
+        if (now < startDate) {
+          alert("Esta clase aún no está disponible.");
+          window.location.href = "../../pages/clases.html";
+          return;
+        }
+
+        let hasEval = false;
+        if (docData.respuestas && docData.respuestas[user.uid]) {
+          const userData = docData.respuestas[user.uid];
+          
+          if (userData.notaPractica !== undefined) {
+             showPractice1Result(userData.notaPractica);
+          }
+          if (userData.notaAdicional !== undefined) {
+             showEvalResult(userData.notaAdicional);
+             hasEval = true;
+          }
+        } 
+        
+        if (now > endDate && !hasEval) {
+           lockClassAsExpired();
+        }
+
+      } else {
+        document.getElementById('evaluation-area').innerHTML = `
+          <div class="result-summary">
+            <h2>Sesión Requerida</h2>
+            <p>Debes iniciar sesión para guardar tu avance.</p>
+            <a href="../../index.html" class="btn-submit" style="text-decoration:none; display:inline-flex; width:auto;">Ir al Inicio</a>
+          </div>`;
+      }
+      loadingEl.style.display = 'none';
+    });
+  </script>
+</body>
+</html>

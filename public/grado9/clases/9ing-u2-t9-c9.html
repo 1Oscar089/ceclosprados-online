@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+  <title>Holidays & Birthdays | English 9th</title>
+  <link rel="stylesheet" href="../../css/styles.css">
+  
+  <style>
+    :root {
+      --duo-green: #58cc02;
+      --duo-blue: #1cb0f6;
+      --duo-purple: #ce82ff;
+      --duo-border: #e5e5e5;
+      --duo-gray: #f7f7f7;
+    }
+
+    /* Blur wrapper transition */
+    #app-wrapper {
+      transition: filter 0.3s ease;
+    }
+
+    /* Hover Translation Style */
+    .trans {
+      position: relative;
+      cursor: help;
+      border-bottom: 1px dashed #ccc;
+      display: inline-block;
+    }
+    .trans::after {
+      content: attr(data-es);
+      position: absolute;
+      bottom: 120%;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #333;
+      color: white;
+      padding: 6px 10px;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      white-space: nowrap;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s;
+      z-index: 1000;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+    .trans:hover::after {
+      opacity: 1;
+    }
+
+    .back-btn { display: inline-flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem; color: var(--text-muted); font-weight: 500; }
+    .class-header { margin-bottom: 2rem; border-bottom: 3px solid var(--duo-purple); padding-bottom: 1rem; }
+    .class-title { font-size: 1.8rem; color: var(--duo-purple); font-weight: 800; }
+    
+    .section { margin-bottom: 3rem; background: white; padding: 1.5rem; border-radius: 1rem; box-shadow: 0 4px 0 var(--duo-border); border: 2px solid var(--duo-border); }
+    [data-theme="dark"] .section { background: var(--surface); border-color: #334155; box-shadow: 0 4px 0 #334155; }
+    
+    .section-title { font-size: 1.4rem; font-weight: 800; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem; color: #4b4b4b; }
+    [data-theme="dark"] .section-title { color: #e2e8f0; }
+
+    .alert-box { background: #fff3cd; color: #856404; padding: 1rem; border-radius: 0.5rem; margin-bottom: 1.5rem; border-left: 5px solid #ffeeba; line-height: 1.5; }
+    [data-theme="dark"] .alert-box { background: #422006; color: #fde047; border-left-color: #b45309; }
+    
+    .alert-unique { background: #dbeafe; border-left: 4px solid #3b82f6; padding: 1rem; border-radius: 0.5rem; color: #1e40af; margin-bottom: 1.5rem; font-weight: 600; font-size: 0.95rem; line-height: 1.5; }
+    [data-theme="dark"] .alert-unique { background: #1e3a8a; color: #bfdbfe; border-left-color: #60a5fa; }
+
+    /* Match Game (Pre Activity) */
+    .match-container { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; margin-bottom: 1.5rem; }
+    .match-col { display: flex; flex-direction: column; gap: 0.8rem; flex: 1; min-width: 140px; max-width: 250px; }
+    .match-btn { background: white; border: 2px solid var(--duo-border); border-bottom: 4px solid var(--duo-border); border-radius: 0.8rem; padding: 1rem 0.5rem; font-weight: 700; cursor: pointer; transition: all 0.1s; text-align: center; user-select: none; color: #333; }
+    .match-btn:active { transform: translateY(2px); border-bottom-width: 2px; }
+    .match-btn.selected { border-color: var(--duo-blue); border-bottom-color: var(--duo-blue); background: #e0f2fe; color: #0284c7; }
+    .match-btn.matched { opacity: 0; pointer-events: none; visibility: hidden; }
+    .match-btn.error-shake { animation: shake 0.4s; background: #fee2e2; border-color: #ef4444; color: #b91c1c; }
+
+    [data-theme="dark"] .match-btn { background: #1e293b; color: #e2e8f0; border-color: #334155; border-bottom-color: #0f172a; }
+    [data-theme="dark"] .match-btn.selected { background: #0c4a6e; border-color: var(--duo-blue); color: #bae6fd; }
+
+    @keyframes shake {
+      0% { transform: translateX(0); }
+      25% { transform: translateX(-5px); }
+      50% { transform: translateX(5px); }
+      75% { transform: translateX(-5px); }
+      100% { transform: translateX(0); }
+    }
+
+    /* Conversation Style */
+    .chat-container { max-width: 600px; margin: 0 auto; }
+    .chat-bubble { padding: 1rem; border-radius: 1rem; margin-bottom: 1rem; display: flex; align-items: flex-start; gap: 1rem; border: 2px solid var(--duo-border); color: #333; }
+    .bubble-a { background: #fdf4ff; align-self: flex-start; border-color: #f5d0fe; }
+    .bubble-b { background: #fff; align-self: flex-end; }
+    
+    [data-theme="dark"] .chat-bubble { color: #f8fafc; }
+    [data-theme="dark"] .bubble-a { background: #3b0764; border-color: #581c87; }
+    [data-theme="dark"] .bubble-b { background: #1e293b; border-color: #334155; }
+
+    .btn-audio { background: var(--duo-purple); color: white; border: none; border-radius: 50%; width: 40px; height: 40px; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: transform 0.1s; margin-top: 0.2rem;}
+    .btn-audio:active { transform: scale(0.9); }
+
+    /* Table Style */
+    .worksheet-table { width: 100%; border-collapse: collapse; margin-top: 1rem; text-align: center; color: #333; }
+    .worksheet-table th, .worksheet-table td { border: 2px solid var(--duo-border); padding: 0.8rem; }
+    .worksheet-table th { background: var(--duo-gray); font-weight: 800; }
+    .worksheet-table td { background: white; font-weight: 500; }
+
+    [data-theme="dark"] .worksheet-table { color: #e2e8f0; }
+    [data-theme="dark"] .worksheet-table th, [data-theme="dark"] .worksheet-table td { border-color: #334155; }
+    [data-theme="dark"] .worksheet-table th { background: #0f172a; }
+    [data-theme="dark"] .worksheet-table td { background: #1e293b; }
+
+    /* Buttons */
+    .btn-submit { display: block; width: 100%; padding: 1rem; background: var(--duo-green); color: white; border: none; border-radius: 1rem; font-weight: 800; font-size: 1.2rem; cursor: pointer; border-bottom: 4px solid #46a302; transition: transform 0.1s; }
+    .btn-submit:active { transform: translateY(4px); border-bottom-width: 0; }
+    .btn-submit:disabled { opacity: 0.6; cursor: not-allowed; transform: none; border-bottom-width: 4px; }
+    .btn-open-modal { background: var(--duo-blue); border-bottom: 4px solid #0284c7; width: auto; padding: 1rem 3rem; margin: 0 auto; display: inline-block; }
+
+    /* Quiz & Modals */
+    .quiz-card { background: var(--surface); padding: 1.5rem; border-radius: 1rem; margin-bottom: 1rem; border: 2px solid var(--duo-border); text-align: left; }
+    [data-theme="dark"] .quiz-card { border-color: #334155; }
+    
+    .quiz-option-label { display: block; margin: 10px 0; cursor: pointer; padding: 0.8rem; border: 2px solid var(--duo-border); border-radius: 0.5rem; transition: background 0.2s; font-weight: 500; color: var(--text); }
+    .quiz-option-label:hover { background: #f0f8ff; border-color: var(--duo-blue); }
+    
+    [data-theme="dark"] .quiz-option-label { border-color: #334155; }
+    [data-theme="dark"] .quiz-option-label:hover { background: #0f172a; border-color: var(--duo-blue); }
+    
+    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 10000; display: flex; justify-content: center; align-items: flex-start; padding: 2rem 1rem; overflow-y: auto; opacity: 0; pointer-events: none; transition: opacity 0.3s; }
+    .modal-overlay.active { opacity: 1; pointer-events: auto; }
+    .modal-content { background: var(--bg); width: 100%; max-width: 700px; border-radius: 1rem; padding: 2.5rem; position: relative; margin-bottom: 2rem; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
+    [data-theme="dark"] .modal-content { background: #0f172a; }
+    .btn-close { position: absolute; top: 1rem; right: 1rem; background: none; border: none; font-size: 2rem; cursor: pointer; color: #999; line-height: 1; padding: 0 0.5rem; border-radius: 50%; }
+    .btn-close:hover { color: #333; background: #eee; }
+
+    .result-summary { text-align: center; padding: 3rem; background: var(--surface); border: 2px solid var(--border); border-radius: 1rem; margin: 2rem auto; }
+    .loading { position: fixed; inset: 0; background: rgba(255,255,255,0.9); display: flex; justify-content: center; align-items: center; z-index: 9999; }
+    [data-theme="dark"] .loading { background: rgba(11,17,32,0.9); }
+  </style>
+
+  <script>
+    window.playTTS = function(text) {
+      if ('speechSynthesis' in window) {
+        // Cancelar cola para evitar bloqueos del sistema
+        window.speechSynthesis.cancel(); 
+        
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = 'en-US';
+        utterance.rate = 0.9;
+        
+        // Forzar la búsqueda de una voz en inglés (soluciona problemas de acento hispano)
+        const voices = window.speechSynthesis.getVoices();
+        const englishVoice = voices.find(v => v.lang === 'en-US' || v.lang.startsWith('en'));
+        if (englishVoice) {
+          utterance.voice = englishVoice;
+        }
+        
+        window.speechSynthesis.speak(utterance);
+      } else {
+        alert("Sorry, your browser doesn't support Text-to-Speech. / Lo siento, tu navegador no soporta lectura de texto en voz alta.");
+      }
+    };
+
+    // Forzar la carga de voces en Safari/Chrome al iniciar
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.onvoiceschanged = () => { window.speechSynthesis.getVoices(); };
+    }
+  </script>
+</head>
+<body>
+  <div id="userbar"></div>
+  <div id="loading" class="loading">Loading...</div>
+
+  <div id="app-wrapper">
+    <header class="app-container mt-4">
+      <a href="../../pages/clases.html" class="back-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><path d="M19 12H5"/><polyline points="12 19 5 12 12 5"/></svg>
+        <span class="trans" data-es="Volver a Clases">Back to Classes</span>
+      </a>
+      <div class="class-header">
+        <h1 class="class-title"><span class="trans" data-es="Días Festivos">Holidays</span></h1>
+        <p class="class-meta"><span class="trans" data-es="Unidad 2 • Lección 9 • Clase 9 • 9no Grado">Unit 2 • Lesson 9 • Class 9 • 9th Grade</span></p>
+      </div>
+    </header>
+
+    <main class="app-container">
+
+      <div class="alert-unique">
+        ℹ️ <span class="trans" data-es="El sistema ha generado un orden único para tus ejercicios. Si recargas la página, tu evaluación seguirá siendo la misma.">The system has generated a unique order for your exercises. If you reload the page, your evaluation will remain the same.</span>
+      </div>
+
+      <section class="section">
+        <h2 class="section-title">
+          <span class="trans" data-es="Actividad Inicial: Emparejar Días Festivos">Pre-Activity: Match the Holidays</span>
+        </h2>
+        
+        <p class="mb-4" style="text-align: center; color: var(--text-muted);">
+          <span class="trans" data-es="Toca un día festivo y luego toca su fecha correspondiente.">Tap a holiday, then tap its corresponding date.</span>
+        </p>
+
+        <div class="match-container">
+          <div class="match-col" id="col-holidays"></div>
+          <div class="match-col" id="col-dates"></div>
+        </div>
+
+        <div id="match-success" style="display: none; text-align: center; color: var(--duo-green); font-weight: bold; font-size: 1.2rem; margin-top: 1rem;">
+          🎉 <span class="trans" data-es="¡Excelente! Has emparejado todos los días festivos.">Excellent! You matched all the holidays.</span>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2 class="section-title">
+          <span class="trans" data-es="Durante: ¡Hora de Conversar!">During: Conversation Time!</span>
+        </h2>
+        <p class="mb-4"><span class="trans" data-es="Escucha la conversación y repite cada línea para practicar. Presta atención a las fechas.">Listen to the conversation and repeat each line to practice. Pay attention to the dates.</span></p>
+
+        <div class="chat-container">
+          <div class="chat-bubble bubble-a">
+            <button class="btn-audio" onclick="playTTS('Hi, Andrea! I heard that your birthday was yesterday.')">▶</button>
+            <div>
+              <p><strong><span class="trans" data-es="Eduardo">Eduardo</span>:</strong> <span class="trans" data-es="¡Hola, Andrea! Escuché que tu cumpleaños fue ayer.">Hi, Andrea! I heard that your birthday was yesterday.</span></p>
+            </div>
+          </div>
+          <div class="chat-bubble bubble-b">
+            <button class="btn-audio" onclick="playTTS('Good afternoon, Eduardo. Yes, April 16th is my birthday. In fact, I was born on April 16th, 2010.')">▶</button>
+            <div>
+              <p><strong><span class="trans" data-es="Andrea">Andrea</span>:</strong> <span class="trans" data-es="Buenas tardes, Eduardo. Sí, el 16 de abril es mi cumpleaños. De hecho, nací el 16/04/2010.">Good afternoon, Eduardo. Yes, April 16th is my birthday. In fact, I was born on 04/16/2010.</span></p>
+            </div>
+          </div>
+          <div class="chat-bubble bubble-a">
+            <button class="btn-audio" onclick="playTTS('Happy belated birthday!')">▶</button>
+            <div>
+              <p><strong><span class="trans" data-es="Eduardo">Eduardo</span>:</strong> <span class="trans" data-es="¡Feliz cumpleaños atrasado!">Happy belated birthday!</span></p>
+            </div>
+          </div>
+          <div class="chat-bubble bubble-b">
+            <button class="btn-audio" onclick="playTTS('Thank you so much! What about you, Eduardo? When were you born?')">▶</button>
+            <div>
+              <p><strong><span class="trans" data-es="Andrea">Andrea</span>:</strong> <span class="trans" data-es="¡Muchas gracias! ¿Y tú, Eduardo? ¿Cuándo naciste?">Thank you so much! What about you, Eduardo? When were you born?</span></p>
+            </div>
+          </div>
+          <div class="chat-bubble bubble-a">
+            <button class="btn-audio" onclick="playTTS('I was born on December 27th, 2011.')">▶</button>
+            <div>
+              <p><strong><span class="trans" data-es="Eduardo">Eduardo</span>:</strong> <span class="trans" data-es="Nací el 27 de diciembre de 2011.">I was born on 12/27/2011.</span></p>
+            </div>
+          </div>
+          <div class="chat-bubble bubble-b">
+            <button class="btn-audio" onclick="playTTS('Oh! It is very close to Christmas.')">▶</button>
+            <div>
+              <p><strong><span class="trans" data-es="Andrea">Andrea</span>:</strong> <span class="trans" data-es="¡Oh! Está muy cerca de la Navidad.">Oh! It's very close to Christmas.</span></p>
+            </div>
+          </div>
+          <div class="chat-bubble bubble-a">
+            <button class="btn-audio" onclick="playTTS('Yes, it is. Well, I have to go. Glad to see you!')">▶</button>
+            <div>
+              <p><strong><span class="trans" data-es="Eduardo">Eduardo</span>:</strong> <span class="trans" data-es="Sí, lo está. Bueno, me tengo que ir. ¡Me alegra verte!">Yes, it is. Well, I have to go. Glad to see you!</span></p>
+            </div>
+          </div>
+          <div class="chat-bubble bubble-b">
+            <button class="btn-audio" onclick="playTTS('Take care, Eduardo!')">▶</button>
+            <div>
+              <p><strong><span class="trans" data-es="Andrea">Andrea</span>:</strong> <span class="trans" data-es="¡Cuídate, Eduardo!">Take care, Eduardo!</span></p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2 class="section-title">
+          <span class="trans" data-es="Post-Actividad: Fechas Importantes">Post-Activity: Important Dates</span>
+        </h2>
+        
+        <div class="alert-box">
+          <p><strong>📝 <span class="trans" data-es="Tarea de Cuaderno">Notebook Task</span>:</strong> <span class="trans" data-es="Copia esta tabla en tu cuaderno. Luego, levántate y pregúntale a 5 compañeros las fechas de su cumpleaños para completarla.">Copy this table in your notebook. Then, stand up and ask 5 classmates for their birthday dates to fill it out.</span></p>
+        </div>
+
+        <div style="overflow-x: auto;">
+          <table class="worksheet-table">
+            <thead>
+              <tr>
+                <th>Questions</th>
+                <th>When were you born?<br><span style="font-size: 0.8rem; font-weight: normal;">(Month + Ordinal number, year)</span></th>
+                <th>When is your birthday this year?<br><span style="font-size: 0.8rem; font-weight: normal;">(Day, Month + ordinal number, year)</span></th>
+                <th>When was your birthday last year?<br><span style="font-size: 0.8rem; font-weight: normal;">(MM/DD/YYYY)</span></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>Classmate 1</td><td><em>e.g. April 16th, 2010</em></td><td><em>e.g. Tuesday, April 16th, 2026</em></td><td><em>e.g. 04/16/2025</em></td></tr>
+              <tr><td>Classmate 2</td><td></td><td></td><td></td></tr>
+              <tr><td>Classmate 3</td><td></td><td></td><td></td></tr>
+              <tr><td>Classmate 4</td><td></td><td></td><td></td></tr>
+              <tr><td>Classmate 5</td><td></td><td></td><td></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="section" id="evaluation-area">
+        <h2 class="section-title">
+          <span class="trans" data-es="Evaluación de la Clase">Class Evaluation</span>
+        </h2>
+        <div style="text-align: center;">
+          <button class="btn-submit btn-open-modal" onclick="openQuizModal()">
+            <span class="trans" data-es="Comenzar Evaluación">Start Evaluation</span>
+          </button>
+          <p style="font-size: 0.85rem; color: #ef4444; font-weight: bold; margin-top: 1rem;">
+            <span class="trans" data-es="⚠️ ADVERTENCIA: Una vez iniciada, si la cierras sin enviar, tus preguntas cambiarán como penalización.">⚠️ WARNING: Once started, if you close it without submitting, your questions will change as a penalty.</span>
+          </p>
+        </div>
+      </section>
+
+    </main>
+  </div> <div class="modal-overlay" id="quiz-modal">
+    <div class="modal-content">
+      <button class="btn-close" onclick="closeQuizModal()">×</button>
+      <div style="text-align: center; margin-bottom: 2rem;">
+        <h2 style="color: var(--duo-purple); font-size: 1.8rem; font-weight: 800;">
+          <span class="trans" data-es="Evaluación en progreso">Evaluation in progress</span>
+        </h2>
+        <p style="color: #ef4444; font-size: 0.9rem; font-weight: bold;">
+          <span class="trans" data-es="Si cierras esta ventana, tus preguntas cambiarán como penalización.">If you close this window, your questions will change as a penalty.</span>
+        </p>
+      </div>
+
+      <div id="quiz-container"></div>
+      
+      <button class="btn-submit" id="btn-submit-quiz" onclick="submitEnglishQuiz()">
+        <span class="trans" data-es="Terminar y Enviar">Finish and Submit</span>
+      </button>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initUserBar } from '../../js/userbar.js';
+    import { initFirebase } from '../../js/initFirebase.js';
+    import { doc, getDoc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js";
+    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-auth.js";
+    
+    initUserBar('#userbar');
+    const { db, auth } = initFirebase();
+
+    const CLASS_ID = '9u2-l9-c9';
+    const MATERIA_ID = 'ingles';
+
+    let currentUser = null;
+    let seededRNG; 
+    let quizPenalty = 0; 
+    let isQuizActive = false;
+
+    // --- GENERADOR DE NÚMEROS ALEATORIOS (Mulberry32) ---
+    function mulberry32(a) {
+      return function() {
+        var t = a += 0x6D2B79F5;
+        t = Math.imul(t ^ t >>> 15, t | 1);
+        t ^= t + Math.imul(t ^ t >>> 7, t | 61);
+        return ((t ^ t >>> 14) >>> 0) / 4294967296;
+      }
+    }
+
+    function seededShuffle(array, rngFunc) {
+      let arr = [...array];
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(rngFunc() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      return arr;
+    }
+
+    function initSeed() {
+      const storageKey = `seed_${CLASS_ID}`;
+      let mySeed = localStorage.getItem(storageKey);
+      if (!mySeed) {
+        mySeed = Math.floor(Math.random() * 1000000);
+        localStorage.setItem(storageKey, mySeed);
+      }
+      return parseInt(mySeed);
+    }
+
+    // --- 1. PRE ACTIVITY: MATCHING GAME LOGIC ---
+    const holidaysPairs = [
+      { id: 1, name: "Independence Day", date: "September 15th" },
+      { id: 2, name: "Christmas", date: "December 25th" },
+      { id: 3, name: "Mother's Day", date: "May 10th" },
+      { id: 4, name: "Valentine's Day", date: "February 14th" },
+      { id: 5, name: "New Year's Eve", date: "December 31st" }
+    ];
+
+    let selectedHolidayId = null;
+    let selectedDateId = null;
+    let matchesCount = 0;
+
+    window.renderMatchingGame = function() {
+      const baseSeed = initSeed();
+      const scrambleRNG = mulberry32(baseSeed);
+
+      const colHolidays = document.getElementById('col-holidays');
+      const colDates = document.getElementById('col-dates');
+      
+      colHolidays.innerHTML = '';
+      colDates.innerHTML = '';
+      matchesCount = 0;
+      document.getElementById('match-success').style.display = 'none';
+
+      // Shuffling independently
+      const shuffledHolidays = seededShuffle(holidaysPairs, scrambleRNG);
+      const shuffledDates = seededShuffle(holidaysPairs, scrambleRNG);
+
+      shuffledHolidays.forEach(h => {
+        const btn = document.createElement('div');
+        btn.className = 'match-btn holiday-item';
+        btn.id = `hol-${h.id}`;
+        btn.innerText = h.name;
+        btn.onclick = () => handleMatchClick('holiday', h.id, btn);
+        colHolidays.appendChild(btn);
+      });
+
+      shuffledDates.forEach(d => {
+        const btn = document.createElement('div');
+        btn.className = 'match-btn date-item';
+        btn.id = `dat-${d.id}`;
+        btn.innerText = d.date;
+        btn.onclick = () => handleMatchClick('date', d.id, btn);
+        colDates.appendChild(btn);
+      });
+    }
+
+    window.handleMatchClick = function(type, id, el) {
+      if (type === 'holiday') {
+        document.querySelectorAll('.holiday-item').forEach(b => b.classList.remove('selected'));
+        if (selectedHolidayId === id) {
+          selectedHolidayId = null; 
+        } else {
+          selectedHolidayId = id;
+          el.classList.add('selected');
+        }
+      } else {
+        document.querySelectorAll('.date-item').forEach(b => b.classList.remove('selected'));
+        if (selectedDateId === id) {
+          selectedDateId = null; 
+        } else {
+          selectedDateId = id;
+          el.classList.add('selected');
+        }
+      }
+
+      checkMatch();
+    }
+
+    function checkMatch() {
+      if (selectedHolidayId && selectedDateId) {
+        const btnH = document.getElementById(`hol-${selectedHolidayId}`);
+        const btnD = document.getElementById(`dat-${selectedDateId}`);
+
+        if (selectedHolidayId === selectedDateId) {
+          // MATCH!
+          btnH.classList.add('matched');
+          btnD.classList.add('matched');
+          matchesCount++;
+
+          if (matchesCount === 5) {
+            document.getElementById('match-success').style.display = 'block';
+          }
+        } else {
+          // NO MATCH
+          btnH.classList.remove('selected');
+          btnD.classList.remove('selected');
+          btnH.classList.add('error-shake');
+          btnD.classList.add('error-shake');
+          
+          setTimeout(() => {
+            btnH.classList.remove('error-shake');
+            btnD.classList.remove('error-shake');
+          }, 400);
+        }
+
+        selectedHolidayId = null;
+        selectedDateId = null;
+      }
+    }
+
+
+    // --- 3. MODAL Y LÓGICA DEL QUIZ ---
+    const allQuizBank = [
+      { q: "When is Independence Day in El Salvador?", o: [{t:"September 15th", c:true}, {t:"October 15th", c:false}, {t:"May 10th", c:false}] },
+      { q: "When is Christmas?", o: [{t:"December 24th", c:false}, {t:"December 25th", c:true}, {t:"December 31st", c:false}] },
+      { q: "Complete: 'I was born ___ 12/27/2011.'", o: [{t:"in", c:false}, {t:"on", c:true}, {t:"at", c:false}] },
+      { q: "When is Valentine's Day?", o: [{t:"January 14th", c:false}, {t:"February 14th", c:true}, {t:"March 14th", c:false}] },
+      { q: "Complete: 'My birthday is ___ October.'", o: [{t:"in", c:true}, {t:"on", c:false}, {t:"at", c:false}] },
+      { q: "How do you say 'Día de la Madre' in English?", o: [{t:"Women's Day", c:false}, {t:"Mother's Day", c:true}, {t:"Father's Day", c:false}] },
+      { q: "How do you read the date '04/16' in English?", o: [{t:"Four sixteen", c:false}, {t:"April sixteenth", c:true}, {t:"Sixteenth of April", c:false}] },
+      { q: "What is the correct format for 'Month + Ordinal'?", o: [{t:"April 16th", c:true}, {t:"16th April", c:false}, {t:"04/16", c:false}] },
+      { q: "Complete: 'Happy ___ birthday!' (When you missed the date)", o: [{t:"late", c:false}, {t:"belated", c:true}, {t:"delayed", c:false}] },
+      { q: "When is New Year's Eve?", o: [{t:"December 31st", c:true}, {t:"January 1st", c:false}, {t:"December 25th", c:false}] }
+    ];
+
+    let userActiveQuiz = [];
+
+    window.addEventListener('beforeunload', function (e) {
+      if (isQuizActive) {
+        e.preventDefault();
+        e.returnValue = '';
+      }
+    });
+
+    window.openQuizModal = () => {
+      const baseSeed = initSeed();
+      seededRNG = mulberry32(baseSeed + quizPenalty);
+      
+      generateQuizUI();
+      
+      document.getElementById('quiz-modal').classList.add('active');
+      document.getElementById('app-wrapper').style.filter = 'blur(5px)';
+      isQuizActive = true;
+    };
+
+    window.closeQuizModal = () => {
+      const confirmClose = confirm("Are you sure? Your questions will change as a penalty. \n\n¿Estás seguro? Tus preguntas cambiarán como penalización al cerrar.");
+      if (confirmClose) {
+        document.getElementById('quiz-modal').classList.remove('active');
+        document.getElementById('app-wrapper').style.filter = 'none';
+        quizPenalty++; 
+        document.getElementById('quiz-container').innerHTML = ''; 
+        isQuizActive = false;
+      }
+    };
+
+    function generateQuizUI() {
+      userActiveQuiz = seededShuffle(allQuizBank, seededRNG).slice(0, 5);
+      const container = document.getElementById('quiz-container');
+      container.innerHTML = ''; 
+
+      userActiveQuiz.forEach((item, idx) => {
+        const shuffledOptions = seededShuffle(item.o, seededRNG);
+        container.innerHTML += `
+          <div class="quiz-card">
+            <p style="margin-bottom:1rem; font-size:1.1rem; color: var(--text);"><strong>${idx + 1}. ${item.q}</strong></p>
+            ${shuffledOptions.map(opt => `
+              <label class="quiz-option-label">
+                <input type="radio" name="q${idx}" value="${opt.c}"> <span style="margin-left:8px;">${opt.t}</span>
+              </label>
+            `).join('')}
+          </div>
+        `;
+      });
+    }
+
+    window.submitEnglishQuiz = async () => {
+      if (!currentUser) return alert("Please login first");
+      
+      const btn = document.getElementById('btn-submit-quiz');
+
+      let score = 0;
+      for (let i = 0; i < 5; i++) {
+        const selected = document.querySelector(`input[name="q${i}"]:checked`);
+        if (!selected) {
+          return alert("Please answer all questions before submitting. \n\nPor favor, responde todas las preguntas antes de enviar.");
+        }
+        if (selected.value === "true") score += 2; 
+      }
+
+      isQuizActive = false;
+      btn.disabled = true;
+      btn.innerHTML = 'Saving...';
+
+      try {
+        const docRef = doc(db, 'clases', MATERIA_ID, 'entregas', CLASS_ID);
+        
+        const fechaLocal = new Date().toLocaleString('en-GB', { 
+            timeZone: 'America/El_Salvador',
+            day: '2-digit', month: '2-digit', year: 'numeric',
+            hour: '2-digit', minute: '2-digit', second: '2-digit',
+            hour12: false 
+        }).replace(',', '');
+        
+        await setDoc(docRef, {
+          grado: 9,
+          año: new Date().getFullYear(),
+          materia: MATERIA_ID,
+          updatedAt: serverTimestamp(),
+          respuestas: {
+            [currentUser.uid]: {
+              nombre: currentUser.displayName || currentUser.email,
+              email: currentUser.email,
+              nota: score,
+              fechaLocal: fechaLocal
+            }
+          }
+        }, { merge: true });
+
+        document.getElementById('quiz-modal').classList.remove('active');
+        document.getElementById('app-wrapper').style.filter = 'none';
+        showFinalGrade(score);
+      } catch (e) {
+        alert("Error saving: " + e.message);
+        btn.disabled = false;
+        btn.innerHTML = `<span class="trans" data-es="Terminar y Enviar">Finish and Submit</span>`;
+        isQuizActive = true;
+      }
+    };
+
+    function showFinalGrade(score) {
+      document.getElementById('evaluation-area').innerHTML = `
+        <div class="result-summary" style="text-align:center; padding: 2rem;">
+          <h2 style="font-size: 4rem; color: var(--duo-purple); margin: 0;">${score}/10</h2>
+          <p style="margin-top: 1rem;"><span class="trans" data-es="¡Excelente trabajo! Tu nota ha sido guardada.">Great job! Your grade has been saved.</span></p>
+          <a href="../../pages/clases.html" class="btn-submit" style="display:inline-block; width:auto; text-decoration:none; margin-top:1.5rem; background: var(--duo-purple); border-bottom-color: #a855f7;">
+            <span class="trans" data-es="Volver a Clases">Back to Classes</span>
+          </a>
+        </div>
+      `;
+    }
+
+    // INIT
+    onAuthStateChanged(auth, async (user) => {
+      const loadingEl = document.getElementById('loading');
+      if (user) {
+        currentUser = user;
+        initSeed(); 
+        renderMatchingGame();
+
+        const snap = await getDoc(doc(db, 'clases', MATERIA_ID, 'entregas', CLASS_ID));
+        if (snap.exists() && snap.data().respuestas && snap.data().respuestas[user.uid]) {
+          showFinalGrade(snap.data().respuestas[user.uid].nota);
+        }
+      } else {
+        document.getElementById('evaluation-area').innerHTML = `
+          <div class="result-summary">
+            <h2>Session Required</h2>
+            <p>Please log in to take the evaluation.</p>
+            <a href="../../index.html" class="btn-submit" style="text-decoration:none;">Go to Home</a>
+          </div>`;
+      }
+      loadingEl.style.display = 'none';
+    });
+
+  </script>
+</body>
+</html>

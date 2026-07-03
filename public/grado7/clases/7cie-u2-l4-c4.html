@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+  <title>C. Evolución en patógenos | Ciencias 7°</title>
+  <link rel="stylesheet" href="../../css/styles.css">
+
+  <style>
+    .back-btn { display: inline-flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem; color: var(--text-muted); font-weight: 500; transition: color 0.2s; }
+    .back-btn:hover { color: var(--primary); text-decoration: none; }
+    .class-header { margin-bottom: 2rem; }
+    .class-title { font-size: 1.5rem; margin-bottom: 0.5rem; color: var(--primary); font-weight: 800; line-height: 1.3;}
+    .class-meta { font-size: 0.95rem; color: var(--text-muted); font-weight: 500;}
+    
+    .section { margin-bottom: 2.5rem; }
+    .section-title { font-size: 1.25rem; font-weight: 800; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; border-bottom: 2px solid var(--border); padding-bottom: 0.5rem; }
+    
+    .section-theory { border-left: 5px solid #0ea5e9; padding-left: 1rem; }
+    .section-sim { border-left: 5px solid #8b5cf6; padding-left: 1rem; }
+    .section-wb { border-left: 5px solid #10b981; padding-left: 1rem; }
+
+    .content-box { background: var(--surface); border: 1px solid var(--border); border-radius: 1rem; padding: 1.5rem; margin-bottom: 1.5rem; line-height: 1.8; box-shadow: 0 4px 6px rgba(0,0,0,0.02); }
+    [data-theme="dark"] .content-box { background: #1e293b; border-color: #334155; }
+
+    /* LECTURA BOX */
+    .reading-box { background: #f0f9ff; border: 1px solid #bae6fd; border-radius: 0.75rem; padding: 1.5rem; color: #0369a1; font-size: 1rem; columns: 2; column-gap: 2rem; }
+    @media (max-width: 768px) { .reading-box { columns: 1; } }
+    [data-theme="dark"] .reading-box { background: rgba(14, 165, 233, 0.1); border-color: rgba(14, 165, 233, 0.3); color: #e0f2fe; }
+
+    /* SVG EXPERIMENTO STYLES */
+    .exp-grid { display: flex; flex-direction: column; gap: 1.5rem; margin-top: 2rem; }
+    .exp-row { display: flex; align-items: center; justify-content: flex-start; gap: 1.5rem; background: var(--surface-hover); padding: 1.5rem; border-radius: 1rem; border: 1px solid var(--border); flex-wrap: wrap; }
+    [data-theme="dark"] .exp-row { background: #0f172a; }
+    
+    .exp-step-label { font-weight: bold; font-size: 1.2rem; color: var(--primary); min-width: 30px; }
+    
+    .exp-visuals { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
+    .flask-container { position: relative; width: 60px; height: 80px; display: flex; justify-content: center; align-items: flex-end; }
+    
+    .mouse { font-size: 2.5rem; line-height: 1; }
+    .mouse-dead { transform: rotate(180deg) scaleX(-1); filter: grayscale(100%); }
+    
+    .arrow { color: #ef4444; font-weight: bold; font-size: 1.5rem; }
+    
+    .exp-desc { flex: 1; min-width: 250px; font-size: 0.95rem; color: var(--text); }
+    .exp-desc strong { color: var(--text-muted); }
+
+    /* WORKBOOK QUESTIONS */
+    .wb-grid { display: flex; flex-direction: column; gap: 1.5rem; }
+    .wb-item { background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 0.75rem; padding: 1.5rem; }
+    [data-theme="dark"] .wb-item { background: #0f172a; border-color: #334155; }
+    .wb-item p { margin: 0; font-weight: 600; color: var(--text); line-height: 1.5; }
+
+    .loading { position: fixed; inset: 0; background: rgba(255,255,255,0.9); display: flex; justify-content: center; align-items: center; z-index: 9999; }
+    [data-theme="dark"] .loading { background: rgba(11,17,32,0.9); }
+  </style>
+</head>
+<body>
+  <div id="userbar"></div>
+  <div id="loading" class="loading">Cargando...</div>
+
+  <header class="app-container mt-4">
+    <a href="../../pages/clases.html" class="btn btn-ghost back-btn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><path d="M19 12H5"/><polyline points="12 19 5 12 12 5"/></svg>
+      Volver a Clases
+    </a>
+    <div class="class-header">
+      <h1 class="class-title">Evolución en patógenos - Creatividad</h1>
+      <p class="class-meta">Unidad 2 • Lección 4 • Ciencias 7°</p>
+    </div>
+  </header>
+
+  <main class="app-container">
+
+    <section class="section section-theory">
+      <h2 class="section-title">🦠 Evolución en patógenos</h2>
+      <div class="content-box">
+        <p>Las enfermedades causadas por bacterias son comunes, y no solo afectan humanos. De hecho, hay bacterias que son capaces de infectar diferentes especies. Ahora estudiaremos un caso experimental en el que el fenómeno evolutivo genera una adaptación favorable a las poblaciones bacterianas.</p>
+        
+        <div class="reading-box">
+          <p>En el decenio de 1920 se descubrió que algunas bacterias pueden formar dos clases de colonias distinguibles: <strong>S y R</strong>. Las colonias S estaban rodeadas por una capa de consistencia gelatinosa, de la cual carecían las colonias R. Esta diferencia se debía a la cápsula bacteriana. La cápsula protege a las bacterias de las defensas del hospedero, lo que explica por qué las células R, sin cápsula, no provocan infección en animales de laboratorio.</p>
+          <p>Por su gran efecto sobre la salud, las bacterias <em>Streptococcus pneumoniae</em>, causantes de neumonía, son desde hace mucho tiempo foco de atención. En 1928, <strong>Frederick Griffith</strong> demostró que los neumococos también crecen como S o R y que sus formas son interconvertibles, es decir, una bacteria R podía convertirse en S, o viceversa.</p>
+          <p>Griffith hizo un descubrimiento sorprendente cuando inyectó varias preparaciones bacterianas en un ratón. La inyección de bacterias R vivas no causó daño. Sin embargo, cuando inyectó preparaciones juntas (S muertas por calor + R vivas), el ratón desarrolló neumonía y murió.</p>
+          <p>Puesto que era imposible que las bacterias muertas por calor volvieran a la vida, Griffith concluyó que las células muertas habían suministrado "algo" a las bacterias R no encapsuladas que las transformó. Cuando creció en cultivo, la bacteria transformada continuó su producción de células tipo S, en consecuencia <strong>el cambio era estable y permanente</strong>.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-sim">
+      <h2 class="section-title">🔬 El Experimento de Griffith (1928)</h2>
+      <div class="content-box">
+        <p>Analiza detenidamente la siguiente representación gráfica de los pasos del experimento para poder responder tu cuaderno de trabajo.</p>
+        
+        <div class="exp-grid">
+          
+          <div class="exp-row">
+            <div class="exp-step-label">(a)</div>
+            <div class="exp-visuals">
+              <div class="flask-container">
+                <svg viewBox="0 0 60 80" width="60" height="80">
+                  <path d="M25,5 L35,5 L35,30 L55,65 Q55,75 30,75 Q5,75 5,65 L25,30 Z" fill="#f0f9ff" stroke="#94a3b8" stroke-width="2"/>
+                  <circle cx="30" cy="65" r="4" fill="#fde047" stroke="#15803d" stroke-width="1"/>
+                  <circle cx="20" cy="60" r="4" fill="#fde047" stroke="#15803d" stroke-width="1"/>
+                  <circle cx="40" cy="60" r="4" fill="#fde047" stroke="#15803d" stroke-width="1"/>
+                  <circle cx="15" cy="50" r="4" fill="#fde047" stroke="#15803d" stroke-width="1"/>
+                  <circle cx="30" cy="50" r="4" fill="#fde047" stroke="#15803d" stroke-width="1"/>
+                  <circle cx="45" cy="50" r="4" fill="#fde047" stroke="#15803d" stroke-width="1"/>
+                </svg>
+              </div>
+              <div class="arrow">→</div>
+              <div class="flask-container" style="width: 80px;">
+                <svg viewBox="0 0 80 30" width="80" height="30">
+                  <rect x="20" y="5" width="40" height="15" fill="#fde047" stroke="#334155" stroke-width="1.5"/>
+                  <line x1="60" y1="12.5" x2="80" y2="12.5" stroke="#94a3b8" stroke-width="2"/>
+                  <rect x="10" y="10" width="10" height="5" fill="#334155"/>
+                  <line x1="15" y1="0" x2="15" y2="25" stroke="#334155" stroke-width="2"/>
+                </svg>
+              </div>
+              <div class="arrow">→</div>
+              <div class="mouse mouse-dead">🐁</div>
+            </div>
+            <div class="exp-desc">
+              <strong>El ratón muere.</strong> Inyección de Bacterias S (virulentas, encapsuladas, vivas).
+            </div>
+          </div>
+
+          <div class="exp-row">
+            <div class="exp-step-label">(b)</div>
+            <div class="exp-visuals">
+              <div class="flask-container">
+                <svg viewBox="0 0 60 80" width="60" height="80">
+                  <path d="M25,5 L35,5 L35,30 L55,65 Q55,75 30,75 Q5,75 5,65 L25,30 Z" fill="#f0f9ff" stroke="#94a3b8" stroke-width="2"/>
+                  <circle cx="30" cy="65" r="3" fill="#ef4444"/>
+                  <circle cx="20" cy="60" r="3" fill="#ef4444"/>
+                  <circle cx="40" cy="60" r="3" fill="#ef4444"/>
+                  <circle cx="15" cy="50" r="3" fill="#ef4444"/>
+                  <circle cx="30" cy="50" r="3" fill="#ef4444"/>
+                  <circle cx="45" cy="50" r="3" fill="#ef4444"/>
+                </svg>
+              </div>
+              <div class="arrow">→</div>
+              <div class="flask-container" style="width: 80px;">
+                <svg viewBox="0 0 80 30" width="80" height="30">
+                  <rect x="20" y="5" width="40" height="15" fill="#ef4444" stroke="#334155" stroke-width="1.5"/>
+                  <line x1="60" y1="12.5" x2="80" y2="12.5" stroke="#94a3b8" stroke-width="2"/>
+                  <rect x="10" y="10" width="10" height="5" fill="#334155"/>
+                  <line x1="15" y1="0" x2="15" y2="25" stroke="#334155" stroke-width="2"/>
+                </svg>
+              </div>
+              <div class="arrow">→</div>
+              <div class="mouse">🐁</div>
+            </div>
+            <div class="exp-desc">
+              <strong>El ratón vive.</strong> Inyección de Bacterias R (no virulentas, no encapsuladas, vivas).
+            </div>
+          </div>
+
+          <div class="exp-row">
+            <div class="exp-step-label">(c)</div>
+            <div class="exp-visuals">
+              <div class="flask-container">
+                <svg viewBox="0 0 60 80" width="60" height="80">
+                  <path d="M25,5 L35,5 L35,30 L55,65 Q55,75 30,75 Q5,75 5,65 L25,30 Z" fill="#f0f9ff" stroke="#94a3b8" stroke-width="2"/>
+                  <ellipse cx="30" cy="65" rx="5" ry="3" fill="#7e22ce"/>
+                  <ellipse cx="20" cy="60" rx="4" ry="2" fill="#7e22ce"/>
+                  <ellipse cx="40" cy="60" rx="5" ry="3" fill="#7e22ce"/>
+                  <ellipse cx="30" cy="50" rx="6" ry="2" fill="#7e22ce"/>
+                  <path d="M20,80 Q30,60 40,80 Z" fill="#f97316"/>
+                </svg>
+              </div>
+              <div class="arrow">→</div>
+              <div class="flask-container" style="width: 80px;">
+                <svg viewBox="0 0 80 30" width="80" height="30">
+                  <rect x="20" y="5" width="40" height="15" fill="#7e22ce" stroke="#334155" stroke-width="1.5"/>
+                  <line x1="60" y1="12.5" x2="80" y2="12.5" stroke="#94a3b8" stroke-width="2"/>
+                  <rect x="10" y="10" width="10" height="5" fill="#334155"/>
+                </svg>
+              </div>
+              <div class="arrow">→</div>
+              <div class="mouse">🐁</div>
+            </div>
+            <div class="exp-desc">
+              <strong>El ratón vive.</strong> Inyección de Bacterias S virulentas, pero <em>muertas por calor</em>.
+            </div>
+          </div>
+
+          <div class="exp-row">
+            <div class="exp-step-label">(d)</div>
+            <div class="exp-visuals">
+              <div class="flask-container">
+                <svg viewBox="0 0 60 80" width="60" height="80">
+                  <path d="M25,5 L35,5 L35,30 L55,65 Q55,75 30,75 Q5,75 5,65 L25,30 Z" fill="#f0f9ff" stroke="#94a3b8" stroke-width="2"/>
+                  <ellipse cx="20" cy="65" rx="5" ry="3" fill="#7e22ce"/>
+                  <ellipse cx="40" cy="60" rx="4" ry="2" fill="#7e22ce"/>
+                  <circle cx="30" cy="55" r="3" fill="#ef4444"/>
+                  <circle cx="20" cy="50" r="3" fill="#ef4444"/>
+                  <circle cx="45" cy="65" r="3" fill="#ef4444"/>
+                </svg>
+              </div>
+              <div class="arrow">→</div>
+              <div class="flask-container" style="width: 80px;">
+                <svg viewBox="0 0 80 30" width="80" height="30">
+                  <rect x="20" y="5" width="40" height="15" fill="#f43f5e" stroke="#334155" stroke-width="1.5"/>
+                  <line x1="60" y1="12.5" x2="80" y2="12.5" stroke="#94a3b8" stroke-width="2"/>
+                  <rect x="10" y="10" width="10" height="5" fill="#334155"/>
+                </svg>
+              </div>
+              <div class="arrow">→</div>
+              <div class="mouse mouse-dead">🐁</div>
+            </div>
+            <div class="exp-desc">
+              <strong>El ratón muere.</strong> Inyección de mezcla (bacterias S muertas + bacterias R vivas). ¡Algo transformó a las bacterias R!
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-wb">
+      <h2 class="section-title">📝 Práctica en el Cuaderno de Trabajo</h2>
+      <div class="content-box">
+        <div style="background: #f0fdf4; border-left: 4px solid #16a34a; padding: 1.25rem; border-radius: 0.5rem; margin-bottom: 1.5rem;">
+          <p style="margin: 0; color: #166534; font-weight: 600; font-size: 1.05rem;">📝 Actividad en Cuaderno: Esta lección no requiere entrega en línea. Desarrolla las siguientes interrogantes en la <strong>página 39</strong> de tu Cuaderno de Trabajo.</p>
+        </div>
+        
+        <p style="color: var(--text-muted); margin-bottom: 1.5rem;">Toma en cuenta que ahora sabemos que las bacterias pueden donar parte de su ADN a otras bacterias afines.</p>
+        
+        <div class="wb-grid">
+          <div class="wb-item">
+            <p>a. ¿Cuál o cuáles de los rasgos mencionados para las poblaciones de neumococos deberían estar controlados por alelos?</p>
+          </div>
+          <div class="wb-item">
+            <p>b. Considerando que las bacterias viven por tiempos muy cortos, ¿qué permite que las formas R y S sean «interconvertibles»?</p>
+          </div>
+          <div class="wb-item">
+            <p>c. Al combinar las cepas, ¿se incrementó la biodiversidad en la población final de bacterias? ¿Por qué?</p>
+          </div>
+          <div class="wb-item">
+            <p>d. Considera la siguiente situación. En una subpoblación de las bacterias patógenas ocurre una mutación que les confiere resistencia a la penicilina, pero a su vez disminuye su virulencia, volviéndolas R. Ante estas bacterias, un paciente ingiere penicilina, lo que da como resultado una nueva población de bacterias R. ¿Incrementó o disminuyó la biodiversidad de bacterias? ¿Por qué?</p>
+          </div>
+          <div class="wb-item">
+            <p>e. ¿Qué crees que tuvo que pasar para que los neumococos tipo II se volvieran virulentos al final del experimento?</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <script type="module">
+    import { initUserBar } from '../../js/userbar.js';
+    import { initFirebase } from '../../js/initFirebase.js';
+    import { doc, getDoc } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js";
+    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-auth.js";
+    
+    initUserBar('#userbar');
+    const { db, auth } = initFirebase();
+
+    const CLASS_ID = '7cie-u2-l4-c4';
+    const MATERIA_ID = 'ciencia'; 
+
+    onAuthStateChanged(auth, async (user) => {
+      const loadingEl = document.getElementById('loading');
+      if (user) {
+        try {
+          const snap = await getDoc(doc(db, 'clases', MATERIA_ID, 'entregas', CLASS_ID));
+          if (!snap.exists()) {
+            alert("La clase no ha sido configurada en la base de datos.");
+            window.location.href = "../../pages/clases.html";
+            return;
+          }
+
+          const docData = snap.data();
+          const now = new Date();
+          const startDate = new Date(docData.inicio);
+
+          if (now < startDate) {
+            alert("Esta clase aún no está disponible.");
+            window.location.href = "../../pages/clases.html";
+            return;
+          }
+        } catch (error) {
+          console.error("Error validando acceso:", error);
+        }
+      } else {
+        alert("Debes iniciar sesión para acceder a las clases.");
+        window.location.href = "../../index.html";
+      }
+      loadingEl.style.display = 'none';
+    });
+  </script>
+</body>
+</html>

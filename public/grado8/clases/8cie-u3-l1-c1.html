@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+  <title>Energía mecánica en el movimiento armónico simple | Ciencias 8°</title>
+  <link rel="stylesheet" href="../../css/styles.css">
+
+  <script>
+    MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] } };
+  </script>
+  <script id="MathJax-script" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js"></script>
+
+  <style>
+    .back-btn { display: inline-flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem; color: var(--text-muted); font-weight: 500; transition: color 0.2s; }
+    .back-btn:hover { color: var(--primary); text-decoration: none; }
+    .class-header { margin-bottom: 2rem; }
+    .class-title { font-size: 1.5rem; margin-bottom: 0.5rem; color: var(--primary); font-weight: 800; line-height: 1.3;}
+    .class-meta { font-size: 0.95rem; color: var(--text-muted); font-weight: 500;}
+    
+    .section { margin-bottom: 2.5rem; }
+    .section-title { font-size: 1.25rem; font-weight: 800; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; border-bottom: 2px solid var(--border); padding-bottom: 0.5rem; }
+    
+    .section-theory { border-left: 5px solid #0ea5e9; padding-left: 1rem; }
+    .section-prac { border-left: 5px solid #8b5cf6; padding-left: 1rem; }
+    .section-eval { border-left: 5px solid #f59e0b; padding-left: 1rem; }
+
+    .content-box { background: var(--surface); border: 1px solid var(--border); border-radius: 1rem; padding: 1.5rem; margin-bottom: 1.5rem; line-height: 1.8; box-shadow: 0 4px 6px rgba(0,0,0,0.02); }
+    [data-theme="dark"] .content-box { background: #1e293b; border-color: #334155; }
+
+    /* BOTONES */
+    .btn-submit { display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 0.8rem 2rem; background: linear-gradient(135deg, #f59e0b, #d97706); color: white; border: none; border-radius: 0.75rem; font-weight: 800; font-size: 1.1rem; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; margin-top: 1rem; }
+    .btn-submit:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(245, 158, 11, 0.4); }
+    .btn-submit:disabled { opacity: 0.5; cursor: not-allowed; filter: grayscale(1); transform: none; box-shadow: none; }
+    .btn-action { background: #0ea5e9; color: white; border: none; padding: 0.6rem 1.5rem; border-radius: 0.5rem; font-weight: bold; cursor: pointer; transition: 0.2s; }
+    .btn-action:hover { background: #0284c7; }
+
+    /* MODALS */
+    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(4px); z-index: 10000; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.3s; padding: 1rem; }
+    .modal-overlay.active { opacity: 1; pointer-events: auto; }
+    .modal-content { background: var(--bg); width: 100%; max-width: 700px; max-height: 90vh; border-radius: 1.5rem; padding: 2rem; display: flex; flex-direction: column; position: relative; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); overflow: hidden; box-sizing: border-box; }
+    [data-theme="dark"] .modal-content { background: #0f172a; border: 1px solid #334155; }
+    
+    .modal-header { flex-shrink: 0; margin-bottom: 1.5rem; padding-right: 3rem; border-bottom: 2px solid var(--border); padding-bottom: 1rem;}
+    .modal-body { overflow-y: auto; flex: 1; padding-right: 0.5rem;}
+    .btn-close { position: absolute; top: 1.2rem; right: 1.2rem; background: var(--surface-hover); border: none; font-size: 1.5rem; cursor: pointer; color: var(--text-muted); width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; z-index: 10; }
+
+    .quiz-question { background: var(--surface-hover); padding: 1.5rem; border-radius: 0.75rem; border: 1px solid var(--border); margin-bottom: 1.5rem; }
+    .quiz-options { display: flex; flex-direction: column; gap: 0.8rem; }
+    .quiz-option { display: flex; align-items: center; gap: 0.8rem; cursor: pointer; padding: 0.8rem; border-radius: 0.5rem; border: 1px solid var(--border); transition: background 0.2s; font-weight: 500; }
+    .quiz-option:hover { background: var(--surface); border-color: var(--primary); }
+    .quiz-option input[type="radio"] { width: 1.2rem; height: 1.2rem; cursor: pointer; accent-color: var(--primary); }
+
+    .result-summary { text-align: center; margin-top: 1rem; font-weight: bold; font-size: 1.2rem; padding: 1rem; border-radius: 0.5rem; }
+    .loading { position: fixed; inset: 0; background: rgba(255,255,255,0.9); display: flex; justify-content: center; align-items: center; z-index: 9999; }
+    [data-theme="dark"] .loading { background: rgba(11,17,32,0.9); }
+
+    /* SIMULATION CONTAINER */
+    .sim-container { background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 1rem; padding: 1rem; text-align: center; position: relative; overflow: hidden; height: 350px; display: flex; flex-direction: column; justify-content: center; align-items: center;}
+    [data-theme="dark"] .sim-container { background: #0f172a; border-color: #334155; }
+    .sim-svg { width: 100%; max-width: 400px; height: 250px; }
+
+    /* WORKBOOK LINES */
+    .workbook-question { margin-bottom: 2rem; }
+    .workbook-question p { font-weight: 600; color: var(--text); margin-bottom: 0.5rem; }
+    .writing-line { border-bottom: 2px solid #cbd5e1; height: 1.5rem; margin-bottom: 1rem; width: 100%; }
+    [data-theme="dark"] .writing-line { border-bottom-color: #475569; }
+  </style>
+</head>
+<body>
+  <div id="userbar"></div>
+  <div id="loading" class="loading">Cargando...</div>
+
+  <header class="app-container mt-4">
+    <a href="../../pages/clases.html" class="btn btn-ghost back-btn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><path d="M19 12H5"/><polyline points="12 19 5 12 12 5"/></svg>
+      Volver a Clases
+    </a>
+    <div class="class-header">
+      <h1 class="class-title">Energía mecánica en el movimiento armónico simple</h1>
+      <p class="class-meta">Unidad 3 • Lección 1 • Ciencias 8°</p>
+    </div>
+  </header>
+
+  <main class="app-container">
+
+    <section class="section section-theory">
+      <h2 class="section-title">🔍 Indagación y Simulación</h2>
+      <div class="content-box">
+        <p>¿Te has preguntado por qué es tan importante el péndulo? Está presente en relojes de pared, juegos mecánicos y hasta en los sensores de nuestros teléfonos y drones para estabilizarlos.</p>
+        <p>En un sistema ideal, si desplazas la lenteja de un péndulo hacia arriba, acumula <strong>energía potencial gravitatoria</strong>. Al soltarla, esa energía se transforma en <strong>energía cinética</strong> (movimiento). Matemáticamente, la energía mecánica total se mantendría constante y el péndulo oscilaría infinitamente alcanzando siempre la misma altura inicial.</p>
+        
+        <div style="background: #fef2f2; border-left: 4px solid #ef4444; padding: 1rem; border-radius: 0.5rem; margin: 1.5rem 0;">
+          <strong>Pero en la realidad...</strong> existe la fricción (arrastre del aire). Esta fuerza realiza un <em>trabajo negativo</em>, quitando energía mecánica al sistema y transformándola en energía no mecánica (calor). ¡Comprobémoslo en la simulación!
+        </div>
+
+        <div class="sim-container">
+          <h3 style="margin-top: 0; color: var(--primary);">Simulador: Péndulo Real (con fricción del aire)</h3>
+          <svg class="sim-svg" viewBox="0 0 400 250">
+            <line x1="150" y1="20" x2="250" y2="20" stroke="#64748b" stroke-width="4"/>
+            <circle cx="200" cy="20" r="4" fill="#334155"/>
+            <path d="M 60 70 Q 70 120 40 180" fill="none" stroke="#fca5a5" stroke-width="3"/>
+            <text x="10" y="100" fill="#ef4444" font-size="12" font-weight="bold">Mentón</text>
+            <line x1="60" y1="70" x2="65" y2="70" stroke="#fca5a5" stroke-width="2"/>
+            
+            <line id="sim-string" x1="200" y1="20" x2="70" y2="95" stroke="#94a3b8" stroke-width="2"/>
+            <circle id="sim-bob" cx="70" cy="95" r="15" fill="#3b82f6"/>
+            
+            <line id="sim-height-marker" x1="60" y1="95" x2="340" y2="95" stroke="#10b981" stroke-width="1" stroke-dasharray="5,5" opacity="0"/>
+          </svg>
+          <div style="margin-top: 1rem;">
+            <button class="btn-action" id="btn-simular" onclick="startSimulation()">Soltar Lenteja</button>
+          </div>
+        </div>
+        <p style="text-align: center; font-size: 0.9rem; color: var(--text-muted);">Observa cómo, tras cada ciclo, la lenteja pierde altura (debido a la fricción) y ya no logra volver a tocar el "mentón" rojo.</p>
+      </div>
+    </section>
+
+    <section class="section section-prac">
+      <h2 class="section-title">✏️ A. ¿Es constante la energía mecánica del péndulo?</h2>
+      <div class="content-box">
+        <div style="background: #fdf4ff; border: 1px solid #f5d0fe; padding: 1rem; border-radius: 0.5rem; text-align: center; margin-bottom: 2rem;">
+          <h4 style="color: #a21caf; margin: 0 0 0.5rem 0;">⚠️ Instrucción Importante</h4>
+          <p style="margin: 0; color: #701a75;">Abre tu <strong>Cuaderno de Trabajo físico</strong> en la página correspondiente y responde a mano las siguientes interrogantes. <em>(No necesitas escribir las respuestas en esta pantalla)</em>.</p>
+        </div>
+
+        <div style="padding: 0 1rem;">
+          <div class="workbook-question">
+            <p>a. Si soltara la lenteja sin empujarla, ¿volverá a tocar el mentón? ¿Por qué?</p>
+            <div class="writing-line"></div>
+            <div class="writing-line"></div>
+          </div>
+
+          <div class="workbook-question">
+            <p>b. Escribe tu explicación del fenómeno. Relaciona las variables «altura desde la cual se suelta la lenteja del péndulo» y «trabajo realizado por la fuerza de fricción del aire».</p>
+            <div class="writing-line"></div>
+            <div class="writing-line"></div>
+            <div class="writing-line"></div>
+          </div>
+
+          <div class="workbook-question">
+            <p>c. ¿Escribe el nombre de la energía no mecánica en la que se transforma parte de la energía potencial gravitatoria inicial durante el trayecto de ida y vuelta de la lenteja, después de haber sido liberada?</p>
+            <div class="writing-line"></div>
+            <div class="writing-line"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-eval" id="evaluation-area">
+      <h2 class="section-title">📝 Evaluación Aleatoria (Quiz)</h2>
+      <div class="content-box" style="text-align: center;">
+        <p style="margin-bottom: 1rem; color: var(--text-muted); font-size: 1.1rem;">Pon a prueba tu conocimiento. Esta evaluación representa la calificación completa de esta sesión.</p>
+        <div id="eval-btn-container">
+            <button class="btn-submit" id="btn-start-eval" onclick="openEvalModal()" style="margin: 0; width: auto;">Comenzar Cuestionario (5 Preguntas)</button>
+            <p style="font-size: 0.85rem; color: #ef4444; font-weight: bold; margin-top: 1rem;">
+            ⚠️ ADVERTENCIA ANTI-TRAMPAS: Al iniciar, no debes cambiar de pestaña ni minimizar tu navegador.
+            </p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <div class="modal-overlay" id="confirm-modal" style="z-index: 10001;">
+    <div class="modal-content" style="max-width: 400px; text-align: center; padding: 2.5rem;">
+      <h2 style="color: var(--primary); margin-top: 0;">¿Terminaste el Quiz?</h2>
+      <p style="font-size: 1.05rem; margin-bottom: 1.5rem;">Asegúrate de haber seleccionado una respuesta para todas las preguntas. ¿Deseas enviar y calificar?</p>
+      <div style="display: flex; gap: 1rem; justify-content: center;">
+        <button class="btn-submit btn-cancel" onclick="closeModal('confirm-modal')">Cancelar</button>
+        <button class="btn-submit" id="btn-confirm-yes">Sí, Enviar</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="quiz-modal">
+    <div class="modal-content">
+      <button class="btn-close" onclick="closeQuizModal()">×</button>
+      <div class="modal-header">
+        <h2 class="modal-title" style="color: var(--primary); margin:0;">Cuestionario Final</h2>
+        <p style="color: #ef4444; font-weight: bold; margin: 0.5rem 0 0 0; font-size: 0.9rem;">Si cambias de pestaña, el quiz se anulará y las preguntas cambiarán.</p>
+      </div>
+      <div class="modal-body" id="quiz-container"></div>
+      <div class="modal-footer" style="margin-top: 1.5rem; flex-shrink: 0;">
+        <button class="btn-submit" id="btn-submit-quiz" style="width: 100%; margin: 0;" onclick="openConfirmModal()">Enviar Respuestas del Quiz</button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initUserBar } from '../../js/userbar.js';
+    import { initFirebase } from '../../js/initFirebase.js';
+    import { doc, getDoc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js";
+    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-auth.js";
+    
+    initUserBar('#userbar');
+    const { db, auth } = initFirebase();
+
+    const CLASS_ID = '8cie-u3-l1-c1';
+    const MATERIA_ID = 'ciencia'; 
+    let currentUser = null, isClassClosed = false, isQuizActive = false;
+    let selectedQuestions = [];
+
+    // --- SIMULACIÓN DEL PÉNDULO (JS) ---
+    let simTime = 0;
+    let isSwinging = false;
+    let animFrame;
+    const L = 150; // Longitud del péndulo
+    const pivotX = 200, pivotY = 20;
+
+    window.startSimulation = () => {
+      if (isSwinging) return;
+      isSwinging = true;
+      simTime = 0;
+      document.getElementById('btn-simular').disabled = true;
+      document.getElementById('sim-height-marker').style.opacity = '1';
+      animatePendulum();
+    };
+
+    function animatePendulum() {
+      simTime += 0.04;
+      // Ecuación de movimiento amortiguado: Theta(t) = Theta0 * e^(-gamma*t) * cos(w*t)
+      // Theta0 = -PI/3 (aprox -1.047 rad) para que inicie a la izquierda cerca del mentón simulado
+      const theta0 = -1.047; 
+      const gamma = 0.08; // Factor de amortiguamiento (Fricción)
+      const w = 3; // Frecuencia angular
+
+      let theta = theta0 * Math.exp(-gamma * simTime) * Math.cos(w * simTime);
+      
+      let x = pivotX + L * Math.sin(theta);
+      let y = pivotY + L * Math.cos(theta);
+
+      document.getElementById('sim-string').setAttribute('x2', x);
+      document.getElementById('sim-string').setAttribute('y2', y);
+      document.getElementById('sim-bob').setAttribute('cx', x);
+      document.getElementById('sim-bob').setAttribute('cy', y);
+
+      // Si el ángulo es muy pequeño, detener animación
+      if (Math.abs(theta) < 0.01 && simTime > 10) {
+        isSwinging = false;
+        document.getElementById('btn-simular').disabled = false;
+        document.getElementById('btn-simular').innerText = "Reiniciar Simulación";
+        cancelAnimationFrame(animFrame);
+      } else {
+        animFrame = requestAnimationFrame(animatePendulum);
+      }
+    }
+
+    // --- LÓGICA DE CONFIRMACIÓN MODAL ---
+    window.openConfirmModal = () => {
+      if(isClassClosed) return;
+      document.getElementById('confirm-modal').classList.add('active');
+      document.getElementById('btn-confirm-yes').onclick = () => {
+        closeModal('confirm-modal');
+        submitQuiz();
+      };
+    };
+    window.closeModal = (id) => document.getElementById(id).classList.remove('active');
+
+    // --- GUARDADO FIREBASE ---
+    async function saveToFirebase(updates) {
+      if (!currentUser || isClassClosed) return;
+      const docRef = doc(db, 'clases', MATERIA_ID, 'entregas', CLASS_ID);
+      const snap = await getDoc(docRef);
+      const fechaLocal = new Date().toLocaleString('en-GB', { timeZone: 'America/El_Salvador' }).replace(',', '');
+      let existingObj = (snap.exists() && snap.data().respuestas) ? snap.data().respuestas[currentUser.uid] || {} : {};
+      
+      existingObj = { ...existingObj, nombre: currentUser.displayName || currentUser.email, email: currentUser.email, fechaLocal, ...updates };
+      
+      // La nota de la clase completa es únicamente el Quiz (notaAdicional)
+      let finalNota = 0, count = 0;
+      if (existingObj.notaAdicional !== undefined) { finalNota += existingObj.notaAdicional; count++; }
+      existingObj.nota = count > 0 ? Number((finalNota / count).toFixed(1)) : 0;
+
+      await setDoc(docRef, { grado: 8, año: new Date().getFullYear(), materia: MATERIA_ID, updatedAt: serverTimestamp(), respuestas: { [currentUser.uid]: existingObj } }, { merge: true });
+    }
+
+    // --- QUIZ FINAL ---
+    const quizBank = [
+      { q: "¿Qué tipo de energía es máxima en el punto más alto del recorrido de un péndulo?", options: ["Energía Cinética", "Energía Potencial Gravitatoria", "Energía Térmica"], ans: 1 },
+      { q: "¿Qué energía es máxima en el punto más bajo (punto de equilibrio) de un péndulo?", options: ["Energía Potencial Gravitatoria", "Energía Cinética", "Energía Elástica"], ans: 1 },
+      { q: "En un péndulo real, ¿se conserva la energía mecánica total para siempre?", options: ["Sí, siempre se conserva", "No, parte se transforma en calor por la fricción", "Depende del peso de la masa"], ans: 1 },
+      { q: "¿Qué fuerza es la principal responsable de que un péndulo real se detenga eventualmente?", options: ["La fricción o resistencia del aire", "La fuerza de gravedad", "La tensión de la cuerda"], ans: 0 },
+      { q: "Al transformarse parte de la energía mecánica por la fricción del aire, ¿en qué tipo de energía se convierte?", options: ["Energía Química", "Energía Térmica (Calor)", "Energía Nuclear"], ans: 1 },
+      { q: "¿Qué nombre recibe la masa que cuelga en el extremo inferior del hilo de un péndulo?", options: ["Lenteja", "Pivote", "Amortiguador"], ans: 0 },
+      { q: "En un movimiento armónico simple IDEAL (sin fricción), la suma de la energía cinética y potencial es:", options: ["Cero", "Siempre decreciente", "Constante"], ans: 2 },
+      { q: "Si la fricción realiza un trabajo negativo sobre el péndulo, la altura máxima que alcanza en cada oscilación:", options: ["Aumenta", "Disminuye", "Permanece igual"], ans: 1 },
+      { q: "¿Cuál de estos dispositivos modernos utiliza principios físicos similares a los del péndulo para estabilización?", options: ["Sensores inerciales de drones", "Pantallas táctiles", "Baterías de litio"], ans: 0 }
+    ];
+
+    function applyCheatPenalty() {
+      if (isQuizActive) {
+        isQuizActive = false;
+        document.getElementById('quiz-modal').classList.remove('active');
+        sessionStorage.setItem('cheat_penalty', 'true'); 
+        window.location.reload(); 
+      }
+    }
+    
+    document.addEventListener("visibilitychange", () => { if (document.hidden) applyCheatPenalty(); });
+    window.addEventListener("blur", applyCheatPenalty);
+    
+    window.addEventListener('load', () => {
+      if (sessionStorage.getItem('cheat_penalty') === 'true') {
+        sessionStorage.removeItem('cheat_penalty');
+        setTimeout(() => { alert("⚠️ INTENTO ANULADO: Cambiaste de ventana durante el quiz. Las preguntas han sido cambiadas."); }, 500);
+      }
+    });
+
+    window.openEvalModal = () => {
+      if (isClassClosed) return;
+      // Seleccionar 5 preguntas aleatorias
+      selectedQuestions = quizBank.sort(() => 0.5 - Math.random()).slice(0, 5);
+      
+      let html = '';
+      selectedQuestions.forEach((qObj, index) => {
+        let opts = qObj.options.map((opt, i) => `<label class="quiz-option"><input type="radio" name="q${index}" value="${i}"> ${opt}</label>`).join('');
+        html += `<div class="quiz-question"><p><strong>${index+1}.</strong> ${qObj.q}</p><div class="quiz-options">${opts}</div></div>`;
+      });
+      document.getElementById('quiz-container').innerHTML = html;
+      document.getElementById('quiz-modal').classList.add('active');
+      isQuizActive = true;
+    };
+
+    window.closeQuizModal = () => {
+      if (confirm("¿Cerrar el quiz? Se perderá el progreso y cambiarán las preguntas.")) {
+        document.getElementById('quiz-modal').classList.remove('active');
+        isQuizActive = false;
+      }
+    };
+
+    window.submitQuiz = async () => {
+      isQuizActive = false; 
+      
+      let correct = 0, allAnswered = true;
+      selectedQuestions.forEach((q, i) => {
+        const radios = document.getElementsByName(`q${i}`);
+        let ans = Array.from(radios).find(r => r.checked);
+        if (ans) { if (parseInt(ans.value) === q.ans) correct++; }
+        else allAnswered = false;
+      });
+      
+      if (!allAnswered) { 
+        alert("Por favor, responde todas las preguntas antes de enviar."); 
+        isQuizActive = true; 
+        return; 
+      }
+      
+      // 5 preguntas, cada una vale 2 puntos = 10 puntos totales (Base 10)
+      let score = correct * 2;
+      score = Number(score.toFixed(1));
+      
+      document.getElementById('btn-submit-quiz').disabled = true;
+      document.getElementById('btn-submit-quiz').innerHTML = "Guardando...";
+      
+      await saveToFirebase({ notaAdicional: score });
+      
+      document.getElementById('quiz-modal').classList.remove('active');
+      showQuizResult(score);
+    };
+
+    function showQuizResult(score) {
+      document.getElementById('evaluation-area').innerHTML = `
+        <h2 class="section-title">📝 Evaluación Final</h2>
+        <div class="result-summary">
+          <p>Nota de la Clase:</p>
+          <h2 style="font-size: 3.5rem; color: var(--primary); margin: 0.5rem 0;">${score}/10.0</h2>
+          <p>¡Tu nota ha sido guardada en el sistema con éxito!</p>
+        </div>`;
+    }
+
+    function lockClassAsExpired() {
+      isClassClosed = true;
+      document.getElementById('eval-btn-container').innerHTML = `
+        <div class="result-summary" style="border-color: #ef4444; background: #fef2f2; padding: 1.5rem; margin: 0;">
+          <h3 style="color: #ef4444; margin: 0;">⏳ Tiempo Agotado para Evaluar</h3>
+        </div>
+      `;
+    }
+
+    // --- INIT ---
+    onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        currentUser = user;
+        const snap = await getDoc(doc(db, 'clases', MATERIA_ID, 'entregas', CLASS_ID));
+        
+        if (!snap.exists()) { 
+          alert("Clase no configurada."); 
+          window.location.href = "../../pages/clases.html"; 
+          return; 
+        }
+        
+        const data = snap.data();
+        const now = new Date();
+        const endDate = new Date(data.fin);
+        
+        if (now < new Date(data.inicio)) { 
+          alert("No disponible aún."); 
+          window.location.href = "../../pages/clases.html"; 
+          return; 
+        }
+
+        let hasEval = false;
+        if (data.respuestas && data.respuestas[user.uid]) {
+          const u = data.respuestas[user.uid];
+          // Solo comprobamos notaAdicional ya que no hay práctica web evaluada
+          if (u.notaAdicional !== undefined) { 
+            showQuizResult(u.notaAdicional); 
+            hasEval = true; 
+          }
+        }
+
+        if (now > endDate && !hasEval) lockClassAsExpired();
+      } else {
+        document.getElementById('evaluation-area').innerHTML = `
+          <div class="result-summary">
+            <h2>Sesión Requerida</h2>
+            <p>Debes iniciar sesión para guardar tu avance.</p>
+            <a href="../../index.html" class="btn-submit" style="text-decoration:none; display:inline-flex; width:auto;">Ir al Inicio</a>
+          </div>`;
+      }
+      document.getElementById('loading').style.display = 'none';
+    });
+  </script>
+</body>
+</html>
